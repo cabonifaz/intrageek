@@ -53,11 +53,12 @@ body , body  [data-bs-theme=light] {
     --bs-btn-bg: var(--bs-orange);
     --bs-btn-border-color: var(--bs-orange);
     --bs-btn-hover-color: #fff;
-    --bs-btn-hover-bg: var(--bs-black);
+    --bs-btn-hover-bg: var(--bs-gt);
     --bs-btn-hover-border-color: var(--bs-black);
     --bs-btn-focus-shadow-rgb: 49, 132, 253;
-    --bs-btn-active-bg: var(--bs-black); 
+    --bs-btn-active-bg: var(--bs-gt); 
 }
+
 
 .pagination {
     --bs-pagination-padding-x: 0.75rem;
@@ -113,9 +114,13 @@ body {
 }
 
 /* font size */
-h2,h3,h4,h5,h6 {
+h2,h3,h4,h6 {
     font-weight: 700;
     color: var(--bs-gt) !important;
+}
+
+h5{
+    color: var(--bs-white) !important;
 }
 .display-1 {
     font-size: calc(4.375rem + 4.5vw);
@@ -186,7 +191,7 @@ p.a {
 /* testimonial */
 
 .testimonial-card {
-  background: var(--bs-black);
+  background: var(--bs-gt);
   color: var(--bs-white);
 }
 

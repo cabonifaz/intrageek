@@ -51,7 +51,7 @@ body , body  [data-bs-theme=light] {
 .btn-primary {
     --bs-btn-color: var(--bs-black);
     --bs-btn-bg: var(--bs-orange);
-    --bs-btn-border-color: var(--bs-orange);
+    --bs-btn-border-color: var(--bs-black);
     --bs-btn-hover-color: #fff;
     --bs-btn-hover-bg: var(--bs-gt);
     --bs-btn-hover-border-color: var(--bs-black);
@@ -121,6 +121,11 @@ h2,h3,h4,h6 {
 
 h5{
     color: var(--bs-white) !important;
+}
+
+h7{
+    font-weight: 700;
+    color: var(--bs-gt) !important;
 }
 .display-1 {
     font-size: calc(4.375rem + 4.5vw);

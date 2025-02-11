@@ -20,7 +20,7 @@
       
 
       var testimonialSwiper = new Swiper(".testimonial-swiper", {
-        spaceBetween: 20,
+        spaceBetween: 10,
         pagination: {
             el: ".testimonial-swiper-pagination",
             clickable: true,

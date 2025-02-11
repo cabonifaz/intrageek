@@ -47,6 +47,7 @@ body , body  [data-bs-theme=light] {
     --bs-white: #FFFFFF;
     --bs-gray: #777777;   
     --bs-info: #C3C3C3;
+    --bs-geeky: #d1e9f8;
 }
 
 .btn-primary {
@@ -93,6 +94,10 @@ body , body  [data-bs-theme=light] {
 
 .bg-yellow {
     background-color: var(--bs-yellow) !important;
+}
+
+.bg-blueGT {
+    background-color: var(--bs-geeky) !important;
 }
 
 .bg-green {

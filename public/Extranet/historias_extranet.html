@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propuesta Técnica - Extranet Total Weight Digital Suite</title>
+    <style>
+        :root {
+            --primary: #004aad;
+            --secondary: #e60000;
+            --bg-light: #f4f7f6;
+            --text-dark: #202124;
+            --text-muted: #5f6368;
+            --border: #dadce0;
+            --sidebar-bg: #ffffff;
+            --card-bg: #ffffff;
+        }
+        body, html {
+            margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            height: 100vh; background-color: var(--bg-light); color: var(--text-dark);
+            overflow: hidden;
+        }
+        .app-container { display: flex; height: 100vh; flex-direction: row; position: relative; }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px; background-color: var(--sidebar-bg); border-right: 1px solid var(--border);
+            display: flex; flex-direction: column; box-shadow: 2px 0 10px rgba(0,0,0,0.03);
+            z-index: 10; flex-shrink: 0;
+        }
+        .brand { padding: 25px 20px; border-bottom: 1px solid var(--border); text-align: center; }
+        .brand p { margin: 10px 0 0; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;}
+
+        .hu-list { flex-grow: 1; overflow-y: auto; padding: 10px 0; }
+        .menu-section { padding: 15px 20px 5px 20px; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+        .hu-item { padding: 12px 20px; cursor: pointer; border-left: 4px solid transparent; transition: all 0.2s; border-bottom: 1px solid #f8f9fa; display: flex; flex-direction: column; }
+        .hu-item:hover { background-color: #f1f3f4; }
+        .hu-item.active { background-color: #eff6ff; border-left-color: var(--primary); }
+        .hu-id { font-size: 0.75rem; font-weight: 900; color: var(--primary); }
+        .hu-item.active .hu-id { color: var(--secondary); }
+        .hu-title { font-size: 0.85rem; font-weight: 600; margin-top: 4px; color: var(--text-dark); }
+
+        /* Main Content */
+        .main-content { flex-grow: 1; overflow-y: auto; padding: 40px; box-sizing: border-box; }
+        .card { background: var(--card-bg); border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); padding: 40px; width: 100%; box-sizing: border-box; display: none; border-top: 5px solid var(--primary); }
+        .card.active { display: block; animation: fadeIn 0.3s ease-out; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Typography & Layout inside Cards */
+        .detail-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid var(--border); padding-bottom: 20px; margin-bottom: 25px; }
+        .detail-header h2 { margin: 0; font-size: 1.6rem; font-weight: 800; color: var(--text-dark); }
+        .badge { background: #fee2e2; color: var(--secondary); padding: 6px 15px; border-radius: 20px; font-size: 0.9rem; font-weight: 800; letter-spacing: 0.5px; }
+
+        .story-block { background-color: #f8f9fa; border-left: 4px solid var(--secondary); padding: 20px; margin-bottom: 30px; border-radius: 0 8px 8px 0; }
+        .story-block p { margin: 8px 0; font-size: 1rem; line-height: 1.5; color: #3c4043; }
+        .story-block strong { color: var(--primary); font-weight: 800; display: inline-block; width: 70px; }
+
+        h3 { color: var(--primary); font-size: 1.1rem; margin-top: 30px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        ul.criteria { padding-left: 25px; margin-top: 15px; }
+        ul.criteria li { margin-bottom: 12px; color: #3c4043; font-size: 0.95rem; line-height: 1.6; }
+
+        .image-gallery { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 30px; justify-content: center; }
+        .img-container { flex: 1 1 calc(50% - 20px); min-width: 320px; text-align: center; background: #f1f3f4; padding: 15px; border-radius: 12px; border: 1px dashed var(--border); }
+        .img-container img { max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 8px 16px rgba(0,0,0,0.1); border: 1px solid var(--border); }
+        .img-name { font-size: 0.75rem; color: var(--text-muted); margin-top: 10px; font-family: monospace; }
+
+        /* Portada / Cover Styles */
+        .cover-page { text-align: center; padding: 40px 20px; }
+        .cover-page h1 { font-size: 2.2rem; color: var(--primary); margin-bottom: 5px; margin-top: 20px; }
+        .cover-page h2 { font-size: 1.4rem; color: var(--text-muted); font-weight: 400; margin-top: 0; margin-bottom: 50px; }
+        .cover-table { width: 100%; max-width: 600px; margin: 0 auto; border-collapse: collapse; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .cover-table th, .cover-table td { padding: 15px 20px; border: 1px solid var(--border); font-size: 1rem; }
+        .cover-table th { background-color: #f8f9fa; color: var(--primary); width: 40%; font-weight: 700; }
+
+        /* Mobile Navbar */
+        .mobile-header { display: none; background-color: var(--primary); color: white; padding: 15px 20px; align-items: center; justify-content: space-between; box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 20; }
+        .mobile-header img { height: 30px; width: auto; filter: brightness(0) invert(1); }
+        .menu-btn { background: rgba(255,255,255,0.2); color: white; border: none; padding: 8px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .app-container { flex-direction: column; }
+            .mobile-header { display: flex; }
+            .sidebar { position: fixed; top: 60px; left: -100%; width: 100%; height: calc(100vh - 60px); transition: left 0.3s ease; box-shadow: none; border-right: none; }
+            .sidebar.open { left: 0; }
+            .brand { display: none; }
+            .main-content { padding: 20px 15px; }
+            .card { padding: 25px 20px; border-radius: 8px; }
+            .detail-header { flex-direction: column; gap: 10px; align-items: flex-start; }
+            .story-block { padding: 15px; margin-bottom: 20px; }
+            .img-container { flex: 1 1 100%; max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="mobile-header">
+    <img src="totalweight-logo.png" alt="Total Weight">
+    <button class="menu-btn" onclick="toggleMenu()">☰ Menú</button>
+</div>
+
+<div class="app-container">
+    <div class="sidebar" id="sidebar">
+        <div class="brand">
+            <img src="totalweight-logo.png" alt="Logo Total Weight" style="width: 100%; max-width: 220px; height: auto;">
+            <p>Documentación Ágil v1.0</p>
+        </div>
+        <div class="hu-list" id="hu-list"></div>
+    </div>
+    <div class="main-content" id="main-content"></div>
+</div>
+
+<script>
+    const data = [
+        {
+            id: "PORTADA", titulo: "Portada de Documento", isCover: true,
+            cliente: "TOTAL WEIGHT SAC", contacto: "Jorge García", version: "1.0", creacion: "25/04/26", modificacion: "05/05/26"
+        },
+
+        // ─── MÓDULO 1: ACCESO ────────────────────────────────────────────────────
+        { seccion: "MÓDULO 1: ACCESO", id: "HU-01", titulo: "Acceso y Autenticación al Portal",
+          rol: "Cliente (Usuario Extranet)", accion: "iniciar sesión con mi correo electrónico y contraseña",
+          beneficio: "acceder de forma segura a mi entorno de extranet corporativa.",
+          criterios: [
+            "Permitir el acceso únicamente con credenciales válidas y autorizadas.",
+            "Mostrar la opción de \"Recordar mi usuario\".",
+            "Proveer enlaces funcionales para recuperación de contraseña y solicitud de nuevo acceso."
+          ],
+          imagenes: ["Login Extranet Cliente.png"] },
+
+        // ─── MÓDULO 2: PANEL PRINCIPAL ───────────────────────────────────────────
+        { seccion: "MÓDULO 2: PANEL PRINCIPAL", id: "HU-02", titulo: "Bandeja de Requerimientos y Propuestas",
+          rol: "Cliente (Usuario Extranet)", accion: "consultar el estado de mis solicitudes y visualizar las propuestas enviadas",
+          beneficio: "hacer seguimiento a mis requerimientos y descargar las ofertas económicas.",
+          criterios: [
+            "Mostrar tarjetas resumen con los requerimientos activos, enviados, pendientes y aprobados.",
+            "Proveer un buscador global y filtros por Estado y Tipo de servicio. El select solo debe mostrar los datos tal cual.",
+            "Mostrar una tabla con la Referencia, Tipo de servicio, Propuesta vinculada y Estado actual.",
+            "Permitir visualizar el detalle y descargar los documentos asociados en las acciones de la tabla."
+          ],
+          imagenes: ["Requerimientos Extranet.png"] },
+
+        { id: "HU-03", titulo: "Dashboard Principal del Cliente",
+          rol: "Cliente (Usuario Extranet)", accion: "visualizar un resumen de mi cuenta y mis acciones pendientes",
+          beneficio: "tener un panorama rápido de mis próximos servicios y documentos por revisar al iniciar sesión.",
+          criterios: [
+            "Mostrar un mensaje de bienvenida personalizado con el nombre del usuario y la empresa.",
+            "Mostrar KPIs globales: Requerimientos, Servicios programados, Visitas pendientes e Informes por revisar.",
+            "Proveer un panel destacado de \"Próximas visitas\" con la opción directa de \"Confirmar\".",
+            "Mostrar accesos directos a los \"Últimos documentos\" y al \"Soporte Inteligente (IA)\"."
+          ],
+          imagenes: ["Dashboard Extranet Cliente.png"] },
+
+        // ─── MÓDULO 3: GESTIÓN DE SERVICIOS ─────────────────────────────────────
+        { seccion: "MÓDULO 3: GESTIÓN DE SERVICIOS", id: "HU-04", titulo: "Agenda y Programación de Servicios",
+          rol: "Cliente (Usuario Extranet)", accion: "visualizar la agenda de mis servicios técnicos programados",
+          beneficio: "llevar un control de las fechas de atención y los plazos de confirmación de cada visita.",
+          criterios: [
+            "Mostrar KPIs de la programación: Total programados, Pendientes de confirmación, Confirmados y Reprogramaciones.",
+            "Incluir una advertencia sobre la importancia de confirmar la disponibilidad dentro del plazo indicado.",
+            "Mostrar una tabla con la Fecha/Horario, Equipo a intervenir, Plazo restante para confirmación y Estado.",
+            "Habilitar el botón \"Confirmar visita\" para los servicios en estado Pendiente."
+          ],
+          imagenes: ["Programación de Servicios Extranet.png"] },
+
+        { id: "HU-05", titulo: "Confirmación de Visita Técnica",
+          rol: "Cliente (Usuario Extranet)", accion: "confirmar la disponibilidad de mi planta mediante un checklist de requisitos",
+          beneficio: "asegurar que las instalaciones estén listas y autorizar el despacho del técnico.",
+          criterios: [
+            "Mostrar el resumen del servicio: Fecha, Horario, Equipo y Técnico asignado.",
+            "Exigir la validación de un \"Checklist de confirmación\" (Disponibilidad de planta, Accesibilidad al equipo, Sin restricciones, etc.).",
+            "Proveer un campo opcional para ingresar observaciones adicionales para el técnico.",
+            "Habilitar los botones de \"Confirmar visita\" o \"Solicitar reprogramación\" según la respuesta del cliente."
+          ],
+          imagenes: ["Confirmación de Visita Técnica Extranet.png"] },
+
+        { id: "HU-06", titulo: "Monitoreo de Servicios en Curso",
+          rol: "Cliente (Usuario Extranet)", accion: "consultar el avance y estado de mis servicios en tiempo real",
+          beneficio: "saber si el técnico está en camino y visualizar la hora estimada de llegada (ETA).",
+          criterios: [
+            "Mostrar el conteo de servicios Programados, En ejecución, Realizados hoy y Observaciones.",
+            "Presentar una tabla que indique el Estado operativo preciso (Ej. Técnico en camino, En ejecución, Terminado).",
+            "Mostrar la Hora Estimada de Llegada (ETA) o la última actualización de estado (Ej. \"Hace 5 min\").",
+            "Permitir ver el detalle o solicitar un nuevo servicio desde la misma bandeja."
+          ],
+          imagenes: ["Servicios en Curso Extranet.png"] },
+
+        // ─── MÓDULO 4: DOCUMENTACIÓN TÉCNICA ────────────────────────────────────
+        { seccion: "MÓDULO 4: DOCUMENTACIÓN TÉCNICA", id: "HU-07", titulo: "Repositorio de Certificados Metrológicos",
+          rol: "Cliente (Usuario Extranet)", accion: "consultar, buscar y descargar los certificados de calibración de mis equipos",
+          beneficio: "mantener mi documentación técnica actualizada para auditorías internas y normativas.",
+          criterios: [
+            "Mostrar el total de certificados disponibles y las descargas recientes.",
+            "Proveer filtros específicos de búsqueda (Estado, Fecha, Equipo, Serie). El select solo debe mostrar los datos tal cual.",
+            "Mostrar en la tabla el Alcance, la fecha de Calibración, el Estado y el registro de la Última Descarga.",
+            "Permitir la descarga individual del PDF o descargar una selección masiva."
+          ],
+          imagenes: ["Certificados Metrológicos Extranet.png"] },
+
+        { id: "HU-08", titulo: "Repositorio de Informes Técnicos",
+          rol: "Cliente (Usuario Extranet)", accion: "consultar y descargar los informes técnicos emitidos tras un servicio de mantenimiento o reparación",
+          beneficio: "conocer el diagnóstico y las recomendaciones aplicadas a mi maquinaria.",
+          criterios: [
+            "Mostrar tarjetas superiores con el estado de los informes (Disponibles, Pendientes de conformidad, Observados, Conforme).",
+            "Permitir aplicar filtros de búsqueda por Sede, Tipo de Servicio y N° de OS/OM.",
+            "Presentar la tabla listando el Equipo, Serie, Marca/Modelo, Estado del documento y estado de Conformidad.",
+            "Habilitar botones para visualizar, descargar o imprimir el listado."
+          ],
+          imagenes: ["Informes Técnicos Extranet.png"] },
+
+        { id: "HU-09", titulo: "Bandeja de Conformidad Digital",
+          rol: "Cliente (Usuario Extranet)", accion: "revisar los informes técnicos y registrar mi conformidad u observación",
+          beneficio: "aceptar formalmente el servicio realizado o indicar si existen discrepancias con el trabajo en planta.",
+          criterios: [
+            "Mostrar los registros pendientes de revisión, destacando el tiempo restante del plazo.",
+            "Advertir claramente que si no se registra acción en el plazo indicado (ej. 72 horas), el sistema aplicará una \"Aceptación Tácita\".",
+            "Mostrar una tabla con el Informe vinculado, Fecha de envío y Tiempo restante.",
+            "Permitir abrir el documento para \"Revisar\" y posteriormente emitir la decisión de conformidad."
+          ],
+          imagenes: ["Conformidad Digital Extranet.png"] },
+
+        // ─── MÓDULO 5: HERRAMIENTAS Y TRAZABILIDAD ──────────────────────────────
+        { seccion: "MÓDULO 5: HERRAMIENTAS Y TRAZABILIDAD", id: "HU-10", titulo: "Consulta Segura por Código QR",
+          rol: "Usuario Externo / Auditor (Sin iniciar sesión)", accion: "escanear el código QR físico adherido al equipo de pesaje",
+          beneficio: "verificar rápidamente su estado de certificación e historial técnico sin necesidad de credenciales.",
+          criterios: [
+            "Abrir una vista pública segura que indique que el \"Enlace es verificado\".",
+            "Mostrar datos básicos inalterables: Código TW, Serie, Último Servicio, Cliente y Sede.",
+            "Listar los \"Documentos Disponibles\" relacionados exclusivamente a ese equipo (Informe Técnico, Certificado vigente).",
+            "Permitir la descarga directa de estos documentos de acceso público para fines de auditoría in situ."
+          ],
+          imagenes: ["Consulta Segura QR Extranet.png"] },
+
+        { id: "HU-11", titulo: "Asistente Virtual Helpdesk IA",
+          rol: "Cliente (Usuario Extranet)", accion: "interactuar con un asistente de inteligencia artificial",
+          beneficio: "resolver consultas rápidas sobre mis equipos, certificados o interpretar indicadores técnicos sin esperar a un humano.",
+          criterios: [
+            "Mostrar un chat interactivo con el asistente reconociendo al usuario y su empresa.",
+            "Proveer botones de \"Acciones Rápidas\" para flujos frecuentes (Problema con indicador, Error de peso, etc.).",
+            "Mostrar un panel lateral de \"Contexto\" con la lista de Equipos Recientes del usuario (alertando si alguno tiene fallas) y Tickets Relacionados abiertos.",
+            "Habilitar la opción \"Crear ticket con especialista\" si la IA no logra resolver el incidente."
+          ],
+          imagenes: ["Helpdesk IA Extranet.png"] },
+
+        { id: "HU-12", titulo: "Trazabilidad del Flujo Operativo",
+          rol: "Cliente (Usuario Extranet)", accion: "consultar la trazabilidad y el historial completo de mis servicios",
+          beneficio: "visualizar la línea de tiempo inmutable desde que registré la solicitud hasta la emisión del certificado final.",
+          criterios: [
+            "Mostrar un gráfico visual del \"Estado del Flujo Operativo\" con los hitos alcanzados (RQ, Propuesta, Visita confirmada, etc.).",
+            "Presentar un \"Historial de Trazabilidad\" detallado con fecha exacta, evento ocurrido, documento generado y estado.",
+            "Permitir descargar el documento asociado en cada hito desde la misma tabla.",
+            "Proveer filtros de búsqueda por rango de fechas, equipo y tipo de documento."
+          ],
+          imagenes: ["Trazabilidad de Servicio Extranet.png"] },
+
+        { id: "HU-13", titulo: "Gestión de Tickets de Soporte",
+          rol: "Cliente (Usuario Extranet)", accion: "visualizar la bandeja de tickets generados y su estado de resolución",
+          beneficio: "monitorear la atención a mis solicitudes escaladas o incidencias complejas.",
+          criterios: [
+            "Mostrar tarjetas resumen de tickets: Abiertos, Escalados, En espera de cliente y Resueltos.",
+            "Presentar una tabla con el ID del Ticket, Asunto, Equipo involucrado, Prioridad, Canal de origen (Helpdesk IA, Extranet) y Estado actual.",
+            "Mostrar el registro de la \"Última Respuesta\" indicando si provino del área técnica, soporte o del sistema.",
+            "Proveer un botón para registrar un \"Nuevo Ticket\" manualmente."
+          ],
+          imagenes: ["Tickets de Soporte Extranet.png"] },
+
+        // ─── MÓDULO 6: ADMINISTRACIÓN ────────────────────────────────────────────
+        { seccion: "MÓDULO 6: ADMINISTRACIÓN DE CUENTA", id: "HU-14", titulo: "Administración de Mi Cuenta",
+          rol: "Cliente (Administrador de Cuenta)", accion: "gestionar los datos de mi empresa, contactos autorizados y preferencias de notificación",
+          beneficio: "controlar qué usuarios de mi organización tienen acceso a la plataforma y cómo recibimos las alertas operativas.",
+          criterios: [
+            "Mostrar una sección de \"Datos de Empresa\" con Razón Social, RUC y Sede Activa.",
+            "Presentar la lista de \"Contactos Autorizados\" indicando su correo, rol (Administrador, Compras, Planta) y estado de acceso. Permitir agregar nuevos usuarios.",
+            "Proveer una sección de \"Canales de Notificación\" para seleccionar medios de recepción (Correo, WhatsApp, SMS).",
+            "Permitir seleccionar y guardar qué \"Eventos Configurables\" disparan notificaciones (Visita programada, Informe disponible, etc.)."
+          ],
+          imagenes: ["Mi Cuenta y Configuración Extranet.png"] }
+    ];
+
+    const listContainer = document.getElementById('hu-list');
+    const contentContainer = document.getElementById('main-content');
+    const sidebar = document.getElementById('sidebar');
+
+    function toggleMenu() { sidebar.classList.toggle('open'); }
+
+    function renderDocument() {
+        data.forEach((item, index) => {
+            if (item.seccion) {
+                const sectionHeader = document.createElement('div');
+                sectionHeader.className = 'menu-section';
+                sectionHeader.textContent = item.seccion;
+                if (index > 0) sectionHeader.style.marginTop = '10px';
+                listContainer.appendChild(sectionHeader);
+            }
+
+            const listItem = document.createElement('div');
+            listItem.className = `hu-item ${index === 0 ? 'active' : ''}`;
+            listItem.onclick = () => showCard(index, listItem);
+
+            if (item.isCover) {
+                listItem.innerHTML = `<div class="hu-title" style="color:var(--primary); font-weight:800;">${item.titulo}</div>`;
+            } else {
+                listItem.innerHTML = `<div class="hu-id">${item.id}</div><div class="hu-title">${item.titulo}</div>`;
+            }
+            listContainer.appendChild(listItem);
+
+            const card = document.createElement('div');
+            card.className = `card ${index === 0 ? 'active' : ''}`;
+            card.id = `card-${index}`;
+
+            if (item.isCover) {
+                card.innerHTML = `
+                    <div class="cover-page">
+                        <img src="totalweight-logo.png" alt="Total Weight" style="max-width: 300px; margin-bottom: 20px;">
+                        <h1>PROPUESTA TÉCNICA DE HISTORIAS DE USUARIO Y PROTOTIPADO</h1>
+                        <h2>Análisis y diseño de sistema<br>Portal Extranet – Total Weight Digital Suite</h2>
+                        <table class="cover-table">
+                            <tr><th>Propuesta elaborada para:</th><td>${item.cliente}</td></tr>
+                            <tr><th>Contacto:</th><td>${item.contacto}</td></tr>
+                            <tr><th>Versión:</th><td>${item.version}</td></tr>
+                            <tr><th>Fecha de creación:</th><td>${item.creacion}</td></tr>
+                            <tr><th>Fecha de modificación:</th><td>${item.modificacion}</td></tr>
+                        </table>
+                    </div>
+                `;
+            } else {
+                let imagesHtml = '';
+                if (item.imagenes && item.imagenes.length > 0) {
+                    imagesHtml = `<div class="image-gallery">`;
+                    item.imagenes.forEach(img => {
+                        imagesHtml += `
+                        <div class="img-container">
+                            <img src="${img}" alt="${img}" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'400\\' height=\\'250\\'><rect width=\\'100%\\' height=\\'100%\\' fill=\\'%23f1f3f4\\' /><text x=\\'50%\\' y=\\'50%\\' font-family=\\'Arial\\' font-weight=\\'bold\\' font-size=\\'14\\' fill=\\'%235f6368\\' text-anchor=\\'middle\\'>IMAGEN PENDIENTE</text><text x=\\'50%\\' y=\\'65%\\' font-family=\\'Arial\\' font-size=\\'11\\' fill=\\'%235f6368\\' text-anchor=\\'middle\\'>${img}</text></svg>'">
+                            <div class="img-name">${img}</div>
+                        </div>`;
+                    });
+                    imagesHtml += `</div>`;
+                }
+
+                card.innerHTML = `
+                    <div class="detail-header">
+                        <div><h2>${item.titulo}</h2></div>
+                        <div class="badge">${item.id}</div>
+                    </div>
+                    <div class="story-block">
+                        <p><strong>COMO</strong> ${item.rol}</p>
+                        <p><strong>QUIERO</strong> ${item.accion}</p>
+                        <p><strong>PARA</strong> ${item.beneficio}</p>
+                    </div>
+                    <h3>Criterios de Aceptación:</h3>
+                    <ul class="criteria">
+                        ${item.criterios.map(c => `<li>${c}</li>`).join('')}
+                    </ul>
+                    <h3>Desarrollo Visual (Pantallas):</h3>
+                    ${imagesHtml}
+                `;
+            }
+            contentContainer.appendChild(card);
+        });
+    }
+
+    function showCard(index, itemElement) {
+        document.querySelectorAll('.hu-item').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.card').forEach(el => el.classList.remove('active'));
+
+        itemElement.classList.add('active');
+        document.getElementById(`card-${index}`).classList.add('active');
+
+        sidebar.classList.remove('open');
+        document.getElementById('main-content').scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    renderDocument();
+</script>
+</body>
+</html>

@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propuesta Técnica - Intranet Total Weight Digital Suite</title>
+    <style>
+        :root {
+            --primary: #004aad;
+            --secondary: #e60000;
+            --bg-light: #f4f7f6;
+            --text-dark: #202124;
+            --text-muted: #5f6368;
+            --border: #dadce0;
+            --sidebar-bg: #ffffff;
+            --card-bg: #ffffff;
+        }
+        body, html {
+            margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            height: 100vh; background-color: var(--bg-light); color: var(--text-dark);
+            overflow: hidden;
+        }
+        .app-container { display: flex; height: 100vh; flex-direction: row; position: relative; }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px; background-color: var(--sidebar-bg); border-right: 1px solid var(--border);
+            display: flex; flex-direction: column; box-shadow: 2px 0 10px rgba(0,0,0,0.03);
+            z-index: 10; flex-shrink: 0;
+        }
+        .brand { padding: 25px 20px; border-bottom: 1px solid var(--border); text-align: center; }
+        .brand p { margin: 10px 0 0; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;}
+
+        .hu-list { flex-grow: 1; overflow-y: auto; padding: 10px 0; }
+        .menu-section { padding: 15px 20px 5px 20px; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+        .hu-item { padding: 12px 20px; cursor: pointer; border-left: 4px solid transparent; transition: all 0.2s; border-bottom: 1px solid #f8f9fa; display: flex; flex-direction: column; }
+        .hu-item:hover { background-color: #f1f3f4; }
+        .hu-item.active { background-color: #eff6ff; border-left-color: var(--primary); }
+        .hu-id { font-size: 0.75rem; font-weight: 900; color: var(--primary); }
+        .hu-item.active .hu-id { color: var(--secondary); }
+        .hu-title { font-size: 0.85rem; font-weight: 600; margin-top: 4px; color: var(--text-dark); }
+
+        /* Main Content */
+        .main-content { flex-grow: 1; overflow-y: auto; padding: 40px; box-sizing: border-box; }
+        .card { background: var(--card-bg); border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); padding: 40px; width: 100%; box-sizing: border-box; display: none; border-top: 5px solid var(--primary); }
+        .card.active { display: block; animation: fadeIn 0.3s ease-out; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Typography & Layout inside Cards */
+        .detail-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid var(--border); padding-bottom: 20px; margin-bottom: 25px; }
+        .detail-header h2 { margin: 0; font-size: 1.6rem; font-weight: 800; color: var(--text-dark); }
+        .badge { background: #fee2e2; color: var(--secondary); padding: 6px 15px; border-radius: 20px; font-size: 0.9rem; font-weight: 800; letter-spacing: 0.5px; }
+
+        .story-block { background-color: #f8f9fa; border-left: 4px solid var(--secondary); padding: 20px; margin-bottom: 30px; border-radius: 0 8px 8px 0; }
+        .story-block p { margin: 8px 0; font-size: 1rem; line-height: 1.5; color: #3c4043; }
+        .story-block strong { color: var(--primary); font-weight: 800; display: inline-block; width: 70px; }
+
+        h3 { color: var(--primary); font-size: 1.1rem; margin-top: 30px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        ul.criteria { padding-left: 25px; margin-top: 15px; }
+        ul.criteria li { margin-bottom: 12px; color: #3c4043; font-size: 0.95rem; line-height: 1.6; }
+
+        .image-gallery { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 30px; justify-content: center; }
+        .img-container { flex: 1 1 calc(50% - 20px); min-width: 320px; text-align: center; background: #f1f3f4; padding: 15px; border-radius: 12px; border: 1px dashed var(--border); }
+        .img-container img { max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 8px 16px rgba(0,0,0,0.1); border: 1px solid var(--border); }
+        .img-name { font-size: 0.75rem; color: var(--text-muted); margin-top: 10px; font-family: monospace; }
+
+        /* Portada / Cover Styles */
+        .cover-page { text-align: center; padding: 40px 20px; }
+        .cover-page h1 { font-size: 2.2rem; color: var(--primary); margin-bottom: 5px; margin-top: 20px; }
+        .cover-page h2 { font-size: 1.4rem; color: var(--text-muted); font-weight: 400; margin-top: 0; margin-bottom: 50px; }
+        .cover-table { width: 100%; max-width: 600px; margin: 0 auto; border-collapse: collapse; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .cover-table th, .cover-table td { padding: 15px 20px; border: 1px solid var(--border); font-size: 1rem; }
+        .cover-table th { background-color: #f8f9fa; color: var(--primary); width: 40%; font-weight: 700; }
+
+        /* Mobile Navbar */
+        .mobile-header { display: none; background-color: var(--primary); color: white; padding: 15px 20px; align-items: center; justify-content: space-between; box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 20; }
+        .mobile-header img { height: 30px; width: auto; filter: brightness(0) invert(1); }
+        .menu-btn { background: rgba(255,255,255,0.2); color: white; border: none; padding: 8px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .app-container { flex-direction: column; }
+            .mobile-header { display: flex; }
+            .sidebar { position: fixed; top: 60px; left: -100%; width: 100%; height: calc(100vh - 60px); transition: left 0.3s ease; box-shadow: none; border-right: none; }
+            .sidebar.open { left: 0; }
+            .brand { display: none; }
+            .main-content { padding: 20px 15px; }
+            .card { padding: 25px 20px; border-radius: 8px; }
+            .detail-header { flex-direction: column; gap: 10px; align-items: flex-start; }
+            .story-block { padding: 15px; margin-bottom: 20px; }
+            .img-container { flex: 1 1 100%; max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="mobile-header">
+    <img src="totalweight-logo.png" alt="Total Weight">
+    <button class="menu-btn" onclick="toggleMenu()">☰ Menú</button>
+</div>
+
+<div class="app-container">
+    <div class="sidebar" id="sidebar">
+        <div class="brand">
+            <img src="totalweight-logo.png" alt="Logo Total Weight" style="width: 100%; max-width: 220px; height: auto;">
+            <p>Documentación Ágil v1.0</p>
+        </div>
+        <div class="hu-list" id="hu-list"></div>
+    </div>
+    <div class="main-content" id="main-content"></div>
+</div>
+
+<script>
+    const data = [
+        {
+            id: "PORTADA", titulo: "Portada de Documento", isCover: true,
+            cliente: "TOTAL WEIGHT SAC", contacto: "Jorge García", version: "1.0", creacion: "25/04/26", modificacion: "05/05/26"
+        },
+
+        // ─── MÓDULO 1: ACCESO Y DASHBOARD ───────────────────────────────────────
+        { seccion: "MÓDULO 1: ACCESO Y DASHBOARD", id: "HU-01", titulo: "Acceso Seguro al Sistema",
+          rol: "Usuario del sistema", accion: "iniciar sesión con mi correo y contraseña",
+          beneficio: "acceder de forma segura a las funciones de mi cuenta.",
+          criterios: [
+            "Permitir el acceso únicamente con credenciales válidas y redirigir al Dashboard Principal.",
+            "Mostrar un mensaje de error si las credenciales ingresadas son incorrectas.",
+            "Incluir la funcionalidad de \"Recordarme\" para mantener la sesión activa en el dispositivo.",
+            "Disponer de un enlace funcional para la recuperación de contraseña (\"¿Olvidaste tu contraseña?\")."
+          ],
+          imagenes: ["Login - Total Weight Digital Suite.png"] },
+
+        { id: "HU-02", titulo: "Dashboard General Operativo",
+          rol: "Jefe de Operaciones", accion: "visualizar un resumen general de la operación",
+          beneficio: "monitorear la carga de trabajo, el estado de los servicios y atender alertas urgentes.",
+          criterios: [
+            "Mostrar tarjetas de indicadores (KPIs) con los servicios programados, en ejecución y pendientes.",
+            "Presentar una tabla de alertas operativas con acceso directo a la acción resolutiva.",
+            "Visualizar el nivel de cumplimiento SLA y la distribución de carga en tiempo real."
+          ],
+          imagenes: ["Dashboard General - Total Weight Digital Suite.png"] },
+
+        // ─── MÓDULO 2: GESTIÓN COMERCIAL - REQUERIMIENTOS (CRM) ─────────────────
+        { seccion: "MÓDULO 2: GESTIÓN COMERCIAL – REQUERIMIENTOS (CRM)", id: "HU-03", titulo: "Listado de Requerimientos (CRM)",
+          rol: "Jefe/Asistente Comercial", accion: "visualizar y filtrar el listado de requerimientos",
+          beneficio: "ubicar rápidamente solicitudes y revisar su estado actual.",
+          criterios: [
+            "Mostrar indicadores superiores con los totales de requerimientos según su estado principal.",
+            "Permitir filtrar los registros utilizando listas desplegables. El select solo debe mostrar los datos tal cual, sin alteraciones ni formatos adicionales.",
+            "Presentar los resultados en una tabla paginada con acciones rápidas por cada fila."
+          ],
+          imagenes: ["Requerimientos - Total Weight Digital Suite.png"] },
+
+        { id: "HU-04", titulo: "Vista Detalle del Requerimiento",
+          rol: "Jefe/Asistente Comercial", accion: "consultar el detalle completo de un requerimiento específico",
+          beneficio: "revisar la información del cliente, la prioridad y la etapa en la que se encuentra.",
+          criterios: [
+            "Mostrar una ventana modal con navegación por pestañas para estructurar la información.",
+            "Visualizar gráficamente el flujo de proceso actual del requerimiento.",
+            "Mostrar la información de contacto, el perfil del cliente y el registro de la línea de tiempo reciente."
+          ],
+          imagenes: ["Detalle Requerimiento - Total Weight Digital Suite.png", "Detalle Requerimiento Completo - Total Weight Digital Suite.png"] },
+
+        { id: "HU-05", titulo: "Anulación de Requerimiento",
+          rol: "Jefe Comercial", accion: "anular un requerimiento justificando la razón",
+          beneficio: "mantener la base de datos limpia de solicitudes canceladas manteniendo la trazabilidad.",
+          criterios: [
+            "Mostrar una advertencia clara sobre el impacto de la anulación.",
+            "Exigir la selección de un motivo. El select solo debe mostrar los datos tal cual.",
+            "Requerir el ingreso de una justificación detallada obligatoria.",
+            "Requerir la confirmación manual mediante un check de validación antes de habilitar el botón de anulación."
+          ],
+          imagenes: ["Anular Requerimiento - Total Weight Digital Suite.png"] },
+
+        { id: "HU-06", titulo: "Gestión de Requerimiento (Creación y Edición)",
+          rol: "Jefe/Asistente Comercial", accion: "crear nuevos requerimientos y editar los ya existentes",
+          beneficio: "registrar nuevas solicitudes de clientes y mantener su información actualizada.",
+          criterios: [
+            "Proveer un formulario para capturar o actualizar los datos principales (Origen, Área, Prioridad, Descripción). Los selects solo deben mostrar los datos tal cual.",
+            "Permitir la búsqueda y asignación o cambio del Cliente y Contacto desde la misma vista.",
+            "Habilitar la carga de documentos relacionados en ambos modos (creación y edición).",
+            "Mostrar un panel lateral con el resumen del estado y reglas automáticas. En el modo edición, este panel también debe mostrar el progreso del SLA, tiempo restante y el historial reciente de modificaciones.",
+            "En el modo edición, cargar toda la información existente y habilitar el botón de guardado únicamente si se detectan cambios en el formulario."
+          ],
+          imagenes: ["Nuevo Requerimiento - Total Weight Digital Suite.png", "Editar Requerimiento - Total Weight Digital Suite.png"] },
+
+        // ─── MÓDULO 3: PROPUESTAS COMERCIALES ───────────────────────────────────
+        { seccion: "MÓDULO 3: PROPUESTAS COMERCIALES", id: "HU-07", titulo: "Creación de Propuesta Comercial",
+          rol: "Jefe Comercial", accion: "generar una propuesta a partir de un requerimiento",
+          beneficio: "enviar una cotización formal estructurada al cliente.",
+          criterios: [
+            "Heredar automáticamente la información base desde el requerimiento de origen.",
+            "Permitir configurar parámetros financieros (Cálculo de IGV, vinculación a contrato marco).",
+            "Integrar un editor de texto enriquecido para redactar la introducción del documento.",
+            "Calcular y mostrar en un panel lateral el resumen de importes en tiempo real."
+          ],
+          imagenes: ["Crear Propuesta - Total Weight Digital Suite.png"] },
+
+        { id: "HU-08", titulo: "Bandeja de Propuestas Comerciales",
+          rol: "Jefe/Asistente Comercial", accion: "visualizar y gestionar el listado de propuestas comerciales",
+          beneficio: "dar seguimiento al ciclo de ventas y controlar los estados de cada propuesta.",
+          criterios: [
+            "Mostrar tarjetas resumen en la parte superior con contadores de estado (Pendientes, Por Visto Bueno, SLA vencidos, etc.).",
+            "Permitir filtrar el listado mediante un buscador general y filtros desplegables. El select solo debe mostrar los datos tal cual.",
+            "Presentar los resultados en una tabla paginada mostrando la versión actual, el requerimiento asociado y el monto de cada propuesta."
+          ],
+          imagenes: ["Bandeja de Propuestas Comerciales - Total Weight Digital Suite.png"] },
+
+        { id: "HU-09", titulo: "Detalle y Vista Previa de Propuesta",
+          rol: "Jefe/Asistente Comercial", accion: "consultar el detalle completo y generar una vista previa en PDF de una propuesta",
+          beneficio: "revisar la información técnica y económica antes de su envío al cliente.",
+          criterios: [
+            "Mostrar una ventana modal con el resumen económico calculado (Subtotal, Descuento, IGV, Total) y los datos generales.",
+            "Visualizar el workflow de aprobación indicando el estado actual de la propuesta.",
+            "Habilitar la visualización directa de los documentos adjuntos y vinculados (RQ, Expediente).",
+            "Permitir generar y visualizar un documento PDF estructurado con el formato oficial de la empresa a partir de los datos ingresados."
+          ],
+          imagenes: ["Detalle Propuesta - Total Weight Digital Suite.png", "Vista Previa PDF - Total Weight Digital Suite.png"] },
+
+        { id: "HU-10", titulo: "Edición y Gestión de Versiones de Propuesta",
+          rol: "Jefe/Asistente Comercial", accion: "editar la información de una propuesta y generar nuevas versiones",
+          beneficio: "realizar ajustes solicitados por el cliente o actualizar cotizaciones manteniendo un historial.",
+          criterios: [
+            "Proveer un editor con pestañas para modificar la configuración, detalles técnicos, forma de pago y condiciones.",
+            "Permitir organizar la estructura visual del documento PDF mediante una lista de verificación \"arrastrar y soltar\".",
+            "Al crear una nueva versión, requerir la selección de un motivo y una descripción breve de los cambios.",
+            "Permitir al usuario seleccionar qué bloques de información (ítems, condiciones, etc.) desea copiar de la versión anterior a la nueva."
+          ],
+          imagenes: ["Editar Propuesta - Total Weight Digital Suite.png", "Nueva Versión Propuesta - Total Weight Digital Suite.png"] },
+
+        { id: "HU-11", titulo: "Aplicación de Descuento Comercial",
+          rol: "Jefe Comercial", accion: "aplicar un descuento global a una propuesta en preparación",
+          beneficio: "ajustar el precio final según negociaciones comerciales o políticas de la empresa.",
+          criterios: [
+            "Mostrar una ventana para aplicar descuentos seleccionando entre \"Porcentaje\" o \"Monto fijo\".",
+            "Requerir la selección obligatoria de un \"Motivo del descuento\" desde una lista desplegable.",
+            "Calcular y mostrar en tiempo real la previsualización del descuento aplicado y los nuevos montos (Subtotal, IGV y Total)."
+          ],
+          imagenes: ["Aplicar Descuento - Total Weight Digital Suite.png"] },
+
+        { id: "HU-12", titulo: "Envío a Visto Bueno y Anulación de Propuesta",
+          rol: "Jefe/Asistente Comercial", accion: "enviar una propuesta para su aprobación interna o anularla si ya no es válida",
+          beneficio: "cumplir con el flujo de revisión de márgenes o cancelar procesos comerciales detenidos.",
+          criterios: [
+            "Para enviar a Visto Bueno, el sistema debe validar previamente que todos los requisitos estén completos (Cliente válido, ítems agregados, PDF generado, etc.).",
+            "Mostrar una alerta si el margen de utilidad requiere aprobación especial e indicar el SLA de respuesta.",
+            "Para la anulación, mostrar una advertencia de impacto y exigir la selección de un motivo y una justificación detallada obligatoria.",
+            "Requerir la confirmación manual mediante un check de \"Confirmación Crítica\" antes de habilitar el botón de anulación."
+          ],
+          imagenes: ["Enviar a Visto Bueno - Total Weight Digital Suite.png", "Anular Propuesta - Total Weight Digital Suite.png"] },
+
+        // ─── MÓDULO 4: VISTO BUENO Y APROBACIONES ───────────────────────────────
+        { seccion: "MÓDULO 4: VISTO BUENO Y APROBACIONES", id: "HU-13", titulo: "Bandeja de Visto Bueno",
+          rol: "Jefe Comercial", accion: "visualizar la bandeja de Visto Bueno de propuestas",
+          beneficio: "gestionar las solicitudes pendientes de aprobación y monitorear los tiempos de respuesta (SLA).",
+          criterios: [
+            "Mostrar tarjetas de KPIs superiores con los estados críticos de aprobación (Pendientes, Próximo a vencer, Vencidos).",
+            "Permitir filtrar el listado por Comercial, Estado y Moneda. El select solo debe mostrar los datos tal cual.",
+            "Presentar los resultados en una tabla con los datos clave (Monto, Comercial, Aprobador actual) y acciones directas.",
+            "Mostrar tarjetas informativas inferiores con políticas de aprobación, objetivos SLA y registro de cambios."
+          ],
+          imagenes: ["Bandeja de Visto Bueno - Total Weight Digital Suite.png"] },
+
+        { id: "HU-14", titulo: "Revisión Detallada y Comparación de Versiones",
+          rol: "Jefe Comercial", accion: "revisar el detalle de una propuesta y comparar sus versiones",
+          beneficio: "evaluar la rentabilidad, los riesgos operacionales y las diferencias con cotizaciones previas antes de decidir.",
+          criterios: [
+            "Mostrar un panel de \"Validaciones Previas\" en la vista de detalle alertando sobre límites de crédito, márgenes de utilidad cercanos al mínimo y disponibilidad de stock.",
+            "Proveer una herramienta de \"Comparar Versiones\" que permita seleccionar una versión base y una destino.",
+            "En la comparación, resaltar visualmente (mediante códigos de color) las diferencias financieras, cambios en ítems y modificaciones en las condiciones de venta.",
+            "Identificar el nivel de riesgo financiero de la versión analizada."
+          ],
+          imagenes: ["Detalle Propuesta para Aprobación - Total Weight Digital Suite.png", "Comparar Versiones - Total Weight Digital Suite.png"] },
+
+        { id: "HU-15", titulo: "Emisión de Decisiones (Aprobar, Rechazar, Corregir)",
+          rol: "Jefe Comercial", accion: "registrar mi decisión sobre una propuesta sometida a Visto Bueno",
+          beneficio: "avanzar el flujo hacia el cliente, detener cotizaciones inviables o exigir ajustes a mi equipo comercial.",
+          criterios: [
+            "Para Aprobar: Exigir la confirmación manual de \"Validaciones Requeridas\" (ej. disponibilidad confirmada) mediante casillas de verificación, permitiendo agregar un comentario opcional.",
+            "Para Rechazar: Exigir la selección de un motivo de rechazo (el select solo debe mostrar los datos tal cual) y una justificación detallada en texto. Mostrar advertencia de que la acción detiene la propuesta.",
+            "Para Solicitar Corrección: Permitir seleccionar las áreas específicas a corregir mediante casillas (Configuración, Ítems, Forma de pago, etc.), exigir observaciones detalladas y establecer una fecha/hora límite de corrección."
+          ],
+          imagenes: ["Decisiones de Aprobación - Total Weight Digital Suite.png", "Rechazar Propuesta - Total Weight Digital Suite.png", "Solicitar Corrección - Total Weight Digital Suite.png"] },
+
+        { id: "HU-16", titulo: "Reasignación de Aprobador",
+          rol: "Jefe Comercial", accion: "derivar la revisión de una propuesta a otro responsable",
+          beneficio: "asegurar el flujo cuando la propuesta excede mi jurisdicción o requiera el análisis de otra área.",
+          criterios: [
+            "Mostrar el aprobador actual y la fecha de asignación.",
+            "Permitir buscar y seleccionar a un nuevo aprobador con los permisos adecuados.",
+            "Requerir la selección de un motivo de reasignación. El select solo debe mostrar los datos tal cual.",
+            "Mostrar el SLA restante de aprobación e incluir una casilla de verificación opcional para \"Reiniciar SLA de aprobación\" al reasignar."
+          ],
+          imagenes: ["Reasignar Aprobador - Total Weight Digital Suite.png"] },
+
+        // ─── MÓDULO 5: SEGUIMIENTO COMERCIAL ────────────────────────────────────
+        { seccion: "MÓDULO 5: SEGUIMIENTO COMERCIAL", id: "HU-17", titulo: "Bandeja de Seguimiento Comercial",
+          rol: "Jefe/Asistente Comercial", accion: "visualizar la bandeja de seguimiento de propuestas enviadas",
+          beneficio: "gestionar las próximas acciones con los clientes y evitar que las oportunidades se enfríen.",
+          criterios: [
+            "Mostrar KPIs con el estado del pipeline (En seguimiento, Sin respuesta, Seguimientos vencidos, etc.).",
+            "Permitir filtrar el listado por responsable. El select solo debe mostrar los datos tal cual.",
+            "Presentar una tabla con información clave: días transcurridos, fecha de la próxima acción programada y estado visual del SLA."
+          ],
+          imagenes: ["Bandeja de Seguimiento Comercial - Total Weight Digital Suite.png"] },
+
+        { id: "HU-18", titulo: "Vista Detalle del Seguimiento",
+          rol: "Jefe/Asistente Comercial", accion: "consultar el detalle del seguimiento de una propuesta específica",
+          beneficio: "revisar el historial de interacciones previas y ejecutar la siguiente acción programada.",
+          criterios: [
+            "Mostrar un panel superior con el resumen del monto, días transcurridos y SLA restante.",
+            "Visualizar de forma prominente la \"Próxima Acción\" pendiente con un botón para ejecutarla directamente.",
+            "Presentar una línea de tiempo (Timeline) cronológica con todas las interacciones registradas previamente.",
+            "Proveer botones de acceso rápido para \"Registrar aceptación\", \"Registrar rechazo\" y \"Registrar Seguimiento\"."
+          ],
+          imagenes: ["Detalle de Seguimiento - Total Weight Digital Suite.png"] },
+
+        { id: "HU-19", titulo: "Registro de Acciones de Seguimiento (Llamadas y Correos)",
+          rol: "Jefe/Asistente Comercial", accion: "registrar los detalles de una interacción con el cliente",
+          beneficio: "mantener el historial actualizado y programar automáticamente el próximo contacto.",
+          criterios: [
+            "Para Registro General: Permitir seleccionar el tipo de seguimiento, resultado y registrar notas de la conversación.",
+            "Para Llamadas: Registrar fecha, hora, duración y resultado de la llamada de forma específica.",
+            "Para Correos: Proveer una interfaz de envío de email con soporte para plantillas predefinidas y editor de texto enriquecido.",
+            "En todos los casos, incluir un interruptor (toggle) para habilitar la programación obligatoria de una \"Próxima acción\" (Tipo de tarea, fecha, hora y prioridad)."
+          ],
+          imagenes: ["Registrar Seguimiento - Total Weight Digital Suite.png", "Registrar Llamada Comercial - Total Weight Digital Suite.png", "Registrar Correo de Seguimiento - Total Weight Digital Suite.png"] },
+
+        { id: "HU-20", titulo: "Reprogramación de Acciones",
+          rol: "Jefe/Asistente Comercial", accion: "reprogramar una acción de seguimiento pendiente",
+          beneficio: "ajustar mi agenda cuando un cliente solicita una nueva fecha o no hay respuesta.",
+          criterios: [
+            "Mostrar la información de la acción original programada.",
+            "Permitir seleccionar una nueva fecha, hora y nivel de prioridad.",
+            "Exigir la selección de un motivo de reprogramación mediante botones de opción (radio buttons).",
+            "Requerir un detalle adicional en texto para justificar el cambio."
+          ],
+          imagenes: ["Reprogramar Próxima Acción - Total Weight Digital Suite.png"] },
+
+        { id: "HU-21", titulo: "Cierre del Seguimiento (Aceptación, Rechazo o Sin Venta)",
+          rol: "Jefe/Asistente Comercial", accion: "registrar el cierre de la oportunidad comercial",
+          beneficio: "avanzar el flujo hacia operaciones o liberar el pipeline de oportunidades perdidas.",
+          criterios: [
+            "Para Aceptación: Registrar el contacto que confirma y la fecha/hora. Permitir adjuntar evidencia (correo, carta). Informar que la etapa cambiará a \"Órdenes de Compra\".",
+            "Para Rechazo: Exigir un motivo tipificado (el select solo debe mostrar los datos tal cual) y un comentario justificativo obligatorio.",
+            "Para Cierre sin Venta: Mostrar advertencia de impacto. Exigir motivo y detalle. Habilitar la opción de \"Permitir reactivación futura\" y exigir check de \"Confirmo el cierre\"."
+          ],
+          imagenes: ["Registrar Aceptación de Propuesta - Total Weight Digital Suite.png", "Registrar Rechazo Comercial - Total Weight Digital Suite.png", "Cerrar Seguimiento sin Venta - Total Weight Digital Suite.png"] },
+
+        // ─── MÓDULO 6: ÓRDENES DE COMPRA ────────────────────────────────────────
+        { seccion: "MÓDULO 6: ÓRDENES DE COMPRA", id: "HU-22", titulo: "Registro de Orden de Compra Recibida",
+          rol: "Jefe/Asistente Comercial", accion: "registrar la Orden de Compra enviada por el cliente",
+          beneficio: "vincular el documento contractual a la propuesta aceptada y notificar al área de Operaciones.",
+          criterios: [
+            "Mostrar un indicador de \"Cobertura\" que compare el monto de la propuesta aprobada vs. el monto de la OC registrada.",
+            "Exigir el ingreso de datos clave: N° OC, Fecha OC, Fecha Recepción, Moneda, Monto OC y Vigencia.",
+            "Requerir la carga obligatoria del archivo digital de la Orden de Compra (PDF).",
+            "Mostrar una nota informativa indicando que el registro notificará automáticamente a Contabilidad y Operaciones."
+          ],
+          imagenes: ["Registrar Orden de Compra - Total Weight Digital Suite.png"] },
+
+        { id: "HU-23", titulo: "Bandeja y Detalle de Órdenes de Compra",
+          rol: "Jefe/Asistente Comercial", accion: "visualizar el listado de Órdenes de Compra recibidas y consultar su detalle",
+          beneficio: "controlar la cobertura económica de los servicios vendidos y verificar las vinculaciones documentales.",
+          criterios: [
+            "Mostrar tarjetas superiores con el estado general de las OC (Vigentes, Cobertura parcial, Saldo insuficiente, Pendiente de validación).",
+            "Mostrar en la tabla principal columnas clave como \"Monto OC\", \"Monto Aplicado\", \"Saldo\", \"Cobertura\" (con código de colores) y \"Estado\".",
+            "En la vista de detalle, presentar el cálculo de \"Cobertura Económica\" comparando el monto de la propuesta aprobada vs. el monto de la OC recibida, mostrando la diferencia/saldo.",
+            "Mostrar un \"Checklist de Validación\" visual y las vinculaciones directas a los documentos previos (RQ, Propuesta, Expediente)."
+          ],
+          imagenes: ["Bandeja de Órdenes de Compra - Total Weight Digital Suite.png", "Detalle Orden de Compra - Total Weight Digital Suite.png"] },
+
+        { id: "HU-24", titulo: "Registro y Edición de Orden de Compra",
+          rol: "Jefe/Asistente Comercial", accion: "registrar una nueva Orden de Compra o editar los datos de una existente",
+          beneficio: "formalizar el sustento económico del servicio antes de enviarlo a operaciones.",
+          criterios: [
+            "Permitir vincular la OC a una propuesta previamente aprobada (heredando Cliente y RQ asociados).",
+            "Exigir el ingreso de datos estructurados: N° OC, Fechas (Emisión, Recepción, Vigencia), Moneda y Monto Total.",
+            "Requerir la carga del documento digital (PDF).",
+            "Mostrar un panel lateral dinámico (\"Validación de Cobertura\") que calcule el porcentaje de cobertura en tiempo real mientras se ingresa el monto.",
+            "En modo edición, mostrar una alerta indicando que modificar montos o moneda disparará un recálculo automático de saldos y requerirá \"Revalidación\"."
+          ],
+          imagenes: ["Registrar Nueva Orden de Compra - Total Weight Digital Suite.png", "Editar Orden de Compra - Total Weight Digital Suite.png"] },
+
+        { id: "HU-25", titulo: "Gestión de Documento y Auditoría de OC",
+          rol: "Jefe/Asistente Comercial", accion: "gestionar las versiones del archivo físico de la OC y revisar la auditoría del expediente",
+          beneficio: "asegurar la legibilidad de los documentos y mantener la trazabilidad para la normativa ISO 9001.",
+          criterios: [
+            "Permitir previsualizar, descargar o reemplazar el archivo PDF de la Orden de Compra.",
+            "Mantener un \"Historial de Versiones\" del documento, registrando fecha, usuario y el motivo de cada reemplazo.",
+            "Proveer una vista de \"Historial de Expediente Industrial\" que muestre un Timeline inmutable de eventos críticos (desde la creación del expediente hasta la validación de la OC).",
+            "Permitir imprimir o descargar el historial completo de auditoría en formato XLSX."
+          ],
+          imagenes: ["Gestionar Documento de Orden de Compra - Total Weight Digital Suite.png", "Historial y Auditoría de Orden de Compra - Total Weight Digital Suite.png"] },
+
+        { id: "HU-26", titulo: "Validación y Observación de Orden de Compra",
+          rol: "Jefe Comercial", accion: "validar definitivamente una OC o registrar observaciones técnicas/comerciales",
+          beneficio: "asegurar que el documento cumple con los requisitos fiscales y comerciales antes de habilitar el servicio.",
+          criterios: [
+            "Mostrar un \"Checklist de Validación\" interactivo comparando los datos extraídos de la OC física vs. los datos registrados en el sistema (Razón Social, RUC, Monto, Moneda).",
+            "Si todo es conforme, habilitar el botón \"Validar Orden de Compra\".",
+            "Si hay errores, permitir \"Observar OC\" exigiendo seleccionar motivos tipificados (el select solo debe mostrar los datos tal cual) y asignar un \"Responsable de Corrección\".",
+            "Al observar una OC, el sistema debe bloquear la liberación del expediente y notificar al responsable asignado."
+          ],
+          imagenes: ["Validar Orden de Compra - Total Weight Digital Suite.png", "Observar Orden de Compra - Total Weight Digital Suite.png"] },
+
+        { id: "HU-27", titulo: "Gestión Financiera: Distribución de Saldos y OC Complementaria",
+          rol: "Jefe Comercial", accion: "distribuir el monto de una OC entre varios servicios o registrar una OC complementaria",
+          beneficio: "gestionar clientes con presupuestos globales o corregir coberturas parciales (saldos insuficientes).",
+          criterios: [
+            "Distribución: Permitir asignar saldos disponibles de una OC \"padre\" a múltiples propuestas pendientes del mismo cliente, validando que el monto a aplicar no exceda el \"Saldo Disponible\".",
+            "OC Complementaria: Cuando la cobertura de una propuesta es menor al 100%, permitir registrar una nueva OC vinculada que cubra la \"Diferencia / Faltante\".",
+            "Mostrar el resultado calculado en tiempo real (OC Existente + Nueva OC = Cobertura Total)."
+          ],
+          imagenes: ["Distribuir Monto de Orden de Compra - Total Weight Digital Suite.png", "Registrar OC Complementaria - Total Weight Digital Suite.png"] },
+
+        { id: "HU-28", titulo: "Liberación y Anulación (Control de Transición Operativa)",
+          rol: "Jefe Comercial", accion: "liberar el expediente para el área de programación o anular el proceso completo",
+          beneficio: "autorizar formalmente el inicio de las operaciones logísticas o detener definitivamente procesos erróneos.",
+          criterios: [
+            "Liberación: Mostrar un resumen de \"Validaciones de Cumplimiento\" (Propuesta, OC, SCTR). Si hay requisitos obligatorios pendientes (ej. SSOMA), mostrar alerta pero permitir la liberación informando el impacto. Indicar claramente que la liberación traslada la responsabilidad a la siguiente etapa.",
+            "Anulación: Mostrar alerta de \"Impacto Crítico Detectado\". Si existe una Orden de Servicio en ejecución vinculada, bloquear la anulación exigiendo resolver primero el proceso operativo.",
+            "Si se permite la anulación, exigir motivo, justificación obligatoria y check de confirmación de impacto."
+          ],
+          imagenes: ["Liberar Expediente para Programación - Total Weight Digital Suite.png", "Anular Orden de Compra - Total Weight Digital Suite.png"] },
+
+        // ─── MÓDULO 7: EXPEDIENTES DIGITALES ────────────────────────────────────
+        { seccion: "MÓDULO 7: EXPEDIENTES DIGITALES", id: "HU-29", titulo: "Bandeja de Expedientes Digitales",
+          rol: "Usuario del Sistema (Comercial / Operaciones)", accion: "visualizar la bandeja de Expedientes Digitales",
+          beneficio: "monitorear el estado general de los servicios, ubicar bloqueos y acceder rápidamente a la trazabilidad de cada cliente.",
+          criterios: [
+            "Mostrar tarjetas superiores con el conteo de estados críticos (Expedientes Activos, Listos para Avanzar, Bloqueados, Con Excepción, SLA vencidos).",
+            "Permitir filtrar el listado por Estado, Etapa actual, Cliente y Área responsable. El select solo debe mostrar los datos tal cual.",
+            "Presentar una tabla que resuma la vinculación completa de cada expediente (N° Expediente, RQ, Propuesta, OC, OS/OM, Etapa Actual)."
+          ],
+          imagenes: ["Bandeja de Expedientes Digitales - Total Weight Digital Suite.png"] },
+
+        { id: "HU-30", titulo: "Vista Detallada y Workflow del Expediente",
+          rol: "Usuario del Sistema (Comercial / Operaciones)", accion: "consultar el detalle extendido y el workflow interactivo de un expediente",
+          beneficio: "revisar el progreso por etapas, los documentos críticos faltantes y la actividad reciente del servicio.",
+          criterios: [
+            "Mostrar un indicador visual de progreso por etapas (RQ > Propuesta > VB > OC > Prog. > SSOMA > Ejecución).",
+            "Mostrar un panel de \"Estado Actual\" indicando si el expediente está bloqueado y el motivo (ej. SCTR Vencido).",
+            "En la vista de Workflow, mostrar el detalle de gestión por etapa (Responsable, T. Espera, SLA y Resultado).",
+            "Habilitar la exportación del workflow y del expediente completo (descarga de estructura y documentos)."
+          ],
+          imagenes: ["Detalle Requerimiento Extendido - Total Weight Digital Suite.png", "Workflow del Expediente - Total Weight Digital Suite.png", "Exportar Expediente - Total Weight Digital Suite.png"] },
+
+        { id: "HU-31", titulo: "Repositorio Integrado de Documentos",
+          rol: "Usuario del Sistema (Comercial / Operaciones)", accion: "acceder al listado completo de documentos vinculados al expediente y adjuntar nuevos archivos",
+          beneficio: "centralizar la información, revisar evidencias y cargar informes internos sin salir del contexto del servicio.",
+          criterios: [
+            "Mostrar una ventana modal con navegación por pestañas según el origen del documento (Comerciales, Operativos, SSOMA, Técnicos, etc.).",
+            "Listar cada documento mostrando su origen, etapa, versión, estado y usuario que lo cargó.",
+            "Permitir \"Adjuntar documento interno\" requiriendo: Tipo de documento, Etapa asociada, Nombre, Descripción y el archivo físico.",
+            "Permitir configurar la visibilidad del documento adjunto (Interno o por Área)."
+          ],
+          imagenes: ["Documentos del Expediente - Total Weight Digital Suite.png", "Adjuntar Documento Interno - Total Weight Digital Suite.png"] },
+
+        { id: "HU-32", titulo: "Gestión de Bloqueos y Excepciones",
+          rol: "Jefe de Operaciones / Jefe Comercial", accion: "resolver bloqueos documentales o cerrar excepciones activas",
+          beneficio: "destrabar el flujo del expediente y permitir que avance a la siguiente etapa de ejecución.",
+          criterios: [
+            "Para Bloqueos: Mostrar el contexto del requerimiento y el impacto del bloqueo (ej. \"No se puede habilitar servicio\"). Exigir la selección de un tipo de resolución (el select solo debe mostrar los datos tal cual) y adjuntar la evidencia (ej. nuevo SCTR).",
+            "Para Excepciones: Mostrar el tipo documental y la descripción. Requerir el \"Resultado de cierre\" desde un desplegable, un sustento obligatorio en texto y la carga de evidencia física.",
+            "Una vez resuelto el bloqueo/excepción, el estado del expediente debe actualizarse automáticamente y notificar al área responsable."
+          ],
+          imagenes: ["Resolver Bloqueo - Total Weight Digital Suite.png", "Cerrar Excepción - Total Weight Digital Suite.png"] },
+
+        { id: "HU-33", titulo: "Auditoría y Reasignación de Expediente",
+          rol: "Jefe de Operaciones / Jefe Comercial", accion: "revisar el historial inmutable de eventos y reasignar al responsable actual",
+          beneficio: "cumplir con auditorías de calidad (ISO 9001) y balancear la carga operativa del equipo.",
+          criterios: [
+            "Para Auditoría: Mostrar un \"Historial del Expediente\" cronológico, filtrable por tipo de evento, usuario, etapa y rango de fechas. Permitir la exportación del historial.",
+            "Para Reasignación: Mostrar el responsable actual y el SLA restante. Permitir buscar un \"Nuevo Responsable\". Exigir un \"Motivo de reasignación\" (el select solo debe mostrar los datos tal cual) y permitir decidir la gestión del SLA (Mantener actual o Reiniciar).",
+            "Mostrar una nota de impacto indicando que la reasignación se registrará en auditoría y notificará al nuevo usuario."
+          ],
+          imagenes: ["Historial del Expediente - Total Weight Digital Suite.png", "Reasignar Responsable - Total Weight Digital Suite.png"] },
+
+        { id: "HU-34", titulo: "Transición y Avance de Etapa",
+          rol: "Jefe de Operaciones / Asistente de Operaciones", accion: "avanzar el expediente a la siguiente etapa del flujo",
+          beneficio: "confirmar que se han cumplido los requisitos actuales y trasladar la responsabilidad al siguiente proceso.",
+          criterios: [
+            "Al intentar avanzar, mostrar un panel de \"Validaciones de Etapa\" verificando checklist automáticos (OC válida, OS generada, SCTR vigente, etc.).",
+            "Si hay bloqueos (Expediente Bloqueado): Mostrar alerta roja de \"No es posible avanzar\" e inhabilitar el avance hasta que se resuelvan los requisitos críticos. Proveer botón directo para \"Resolver bloqueo\".",
+            "Si está conforme (Expediente Listo): Mostrar mensaje verde de \"Expediente listo para avanzar\". Indicar claramente la Etapa Actual, la Siguiente Etapa y el área que será responsable. Habilitar el botón \"Avanzar a siguiente etapa\"."
+          ],
+          imagenes: ["Avanzar Expediente (Bloqueado) - Total Weight Digital Suite.png", "Avanzar Expediente (Listo) - Total Weight Digital Suite.png"] },
+
+        // ─── MÓDULO 8: PROGRAMACIÓN OPERATIVA ───────────────────────────────────
+        { seccion: "MÓDULO 8: PROGRAMACIÓN OPERATIVA", id: "HU-35", titulo: "Bandeja de Programación y Calendario Operativo",
+          rol: "Jefe/Asistente de Operaciones", accion: "visualizar la bandeja de programación con vista de calendario y recursos",
+          beneficio: "planificar las atenciones de servicios, gestionar la disponibilidad del equipo y ubicar solicitudes pendientes.",
+          criterios: [
+            "Mostrar tarjetas resumen de KPIs: Servicios hoy, Pendientes de programar, Con conflicto, Técnicos disponibles y Cupos liberables.",
+            "Proveer vistas intercambiables: Calendario (matriz semanal por recurso), Lista, Carga de Recursos y Backlog.",
+            "En la vista de Calendario, mostrar los bloques asignados a cada técnico diferenciados por color según su estado operativo (Confirmado, Pendiente, Bloqueado, etc.).",
+            "Permitir filtrar el calendario por Área, Tipo de Servicio, Responsable, Técnico, Cliente y Estado. El select solo debe mostrar los datos tal cual."
+          ],
+          imagenes: ["Programación Operativa - Total Weight Digital Suite.png"] },
+
+        { id: "HU-36", titulo: "Generación de Orden de Servicio y Asignación de Recursos",
+          rol: "Jefe/Asistente de Operaciones", accion: "generar una Orden de Servicio (OS) a partir de un expediente liberado y asignarle recursos",
+          beneficio: "definir el cronograma operativo, designar al técnico responsable y reservar los equipos necesarios para la ejecución.",
+          criterios: [
+            "Al generar la OS, heredar automáticamente los datos base del Expediente, RQ y Propuesta.",
+            "Exigir la captura del Cronograma Operativo: Fecha de Ejecución, Hora de Inicio y Hora Fin Estimada.",
+            "Para la \"Asignación de Recursos\", mostrar un buscador de técnicos que filtre la disponibilidad. Al seleccionar, mostrar un panel lateral con el \"Detalle del Recurso\" (Carga del día, Habilitación SSOMA y Scorecard).",
+            "Mostrar un checklist dinámico de \"Validaciones de Workflow\" que bloquee la confirmación si existen pendientes críticos (Ej. SSOMA Pendiente). En ese caso, solo permitir \"Guardar tentativa\"."
+          ],
+          imagenes: ["Generar Orden de Servicio - Total Weight Digital Suite.png", "Asignar Recurso - Total Weight Digital Suite.png", "Programar Servicio - Total Weight Digital Suite.png"] },
+
+        { id: "HU-37", titulo: "Detalle de Servicio, Confirmación y Bloqueos de Ejecución",
+          rol: "Jefe/Asistente de Operaciones", accion: "revisar el detalle de un servicio programado y confirmar la visita con el cliente",
+          beneficio: "asegurar que todas las condiciones operativas y de seguridad estén listas antes de enviar al equipo técnico.",
+          criterios: [
+            "En la vista de \"Detalle de Servicio Programado\", mostrar un \"Check-list de Validación\" claro con el estado de OC, Confirmación de Cliente, SSOMA y Asignación de Técnico.",
+            "Permitir \"Confirmar Visita con Cliente\" registrando el Canal (Correo, WhatsApp, Llamada) y previsualizando el cuerpo del mensaje antes del envío.",
+            "Si el servicio no cumple con los requisitos mínimos de seguridad (SCTR vencido, Inducción pendiente, etc.), mostrar una alerta crítica de \"Servicio no habilitado\" y bloquear el botón de confirmación de ejecución, permitiendo solo \"Guardar como tentativa\" o derivar a SSOMA para su resolución."
+          ],
+          imagenes: ["Detalle de Servicio Programado - Total Weight Digital Suite.png", "Confirmar Visita con Cliente - Total Weight Digital Suite.png", "Bloquear Servicio por Falta de Habilitación - Total Weight Digital Suite.png"] },
+
+        { id: "HU-38", titulo: "Reprogramación, Liberación de Cupos y Sugerencia de Backlog",
+          rol: "Jefe/Asistente de Operaciones", accion: "reprogramar un servicio o liberar un cupo en la agenda",
+          beneficio: "reaccionar ante cancelaciones de clientes o imprevistos técnicos, optimizando los espacios libres.",
+          criterios: [
+            "Para reprogramar, mostrar la fecha/hora actual y exigir el ingreso de las nuevas condiciones, así como un motivo tipificado obligatorio (el select solo debe mostrar los datos tal cual).",
+            "Al liberar un cupo (por cancelación o reprogramación de un cliente), el sistema debe mostrar un \"Backlog sugerido compatible\" buscando automáticamente solicitudes pendientes que coincidan en Zona y Duración con el espacio liberado.",
+            "Permitir asignar directamente un servicio sugerido del Backlog al cupo recién liberado con un solo clic."
+          ],
+          imagenes: ["Reprogramar Servicio - Total Weight Digital Suite.png", "Liberar Cupo y Sugerir Backlog - Total Weight Digital Suite.png"] },
+
+        { id: "HU-39", titulo: "Gestión de Carga de Recursos y Resolución de Conflictos",
+          rol: "Jefe de Operaciones", accion: "analizar la matriz de utilización semanal y resolver conflictos de horario",
+          beneficio: "evitar la sobrecarga del equipo técnico y solucionar solapamientos en las asignaciones.",
+          criterios: [
+            "Mostrar una \"Matriz de Utilización Semanal\" con el total de horas asignadas por técnico y un \"Ranking de Utilización\" visual (Óptimo, Alta, Sobrecarga).",
+            "Si el sistema detecta que un técnico tiene dos servicios asignados en el mismo rango horario, generar una alerta de \"Conflicto de Programación\".",
+            "Al abrir un conflicto, mostrar visualmente el solapamiento y ofrecer opciones de resolución directas: \"Cambiar técnico\" (sugiriendo recursos disponibles), \"Cambiar horario\" o \"Reprogramar servicio en conflicto\"."
+          ],
+          imagenes: ["Carga de Recursos - Total Weight Digital Suite.png", "Ver Conflicto de Programación - Total Weight Digital Suite.png"] },
+
+        // ─── MÓDULO 9: ÓRDENES DE SERVICIO ──────────────────────────────────────
+        { seccion: "MÓDULO 9: ÓRDENES DE SERVICIO", id: "HU-40", titulo: "Creación, Edición y Anulación de Orden de Servicio",
+          rol: "Jefe/Asistente de Operaciones", accion: "crear, editar o anular una Orden de Servicio (OS)",
+          beneficio: "estructurar el trabajo técnico, corregir parámetros logísticos o cancelar servicios inviables.",
+          criterios: [
+            "Creación/Edición: Permitir vincular un expediente origen y cargar automáticamente Cliente, RQ, OC y Propuesta. Mostrar validaciones en tiempo real (Cliente Activo, Línea de Crédito, Garantía, SSOMA). En edición, advertir que cambiar la fecha o el responsable requerirá una \"Revalidación Necesaria\" de disponibilidad y conflictos.",
+            "Mostrar un \"Resumen de OS\" lateral con el cálculo automático del Total Estimado (Servicio Base + Traslado + Insumos).",
+            "Anulación: Mostrar alerta de \"Impacto de la Anulación\" sobre la programación y viáticos. Exigir selección de motivo (el select solo debe mostrar los datos tal cual) y justificación detallada obligatoria."
+          ],
+          imagenes: ["Nueva Orden de Servicio - Total Weight Digital Suite.png", "Editar Orden de Servicio - Total Weight Digital Suite.png", "Anular Orden de Servicio - Total Weight Digital Suite.png"] },
+
+        { id: "HU-41", titulo: "Bandeja, Detalle y Vista Previa de Orden de Servicio",
+          rol: "Jefe/Asistente de Operaciones", accion: "visualizar la bandeja general, el detalle específico y la vista previa del expediente de una OS",
+          beneficio: "monitorear el estado del despacho técnico y verificar las validaciones documentales previas.",
+          criterios: [
+            "Mostrar la bandeja principal con tarjetas de estado (OS Activas, Programadas, En Ejecución, Bloqueadas).",
+            "En la vista de Detalle, incluir navegación por pestañas para organizar la información (Resumen, Personal, Viáticos, etc.).",
+            "Mostrar en el resumen un Checklist visual de \"Validaciones Previas\" (OC Adjunta, Expediente Revisado, SSOMA, Repuestos en Stock).",
+            "Proveer una \"Vista Previa del Expediente\" en una ventana emergente para consultas rápidas sin salir de la OS."
+          ],
+          imagenes: ["Bandeja de Órdenes de Servicio - Total Weight Digital Suite.png", "Detalle Orden de Servicio - Total Weight Digital Suite.png", "Vista Previa Expediente - Total Weight Digital Suite.png"] },
+
+        { id: "HU-42", titulo: "Cronograma y Trazabilidad de Hitos de OS",
+          rol: "Jefe/Asistente de Operaciones", accion: "visualizar el cronograma detallado de la Orden de Servicio",
+          beneficio: "monitorear el cumplimiento de los tiempos (SLA) en cada hito del proceso operativo.",
+          criterios: [
+            "Mostrar un \"Historial de Eventos\" cronológico indicando fecha, hora, hito alcanzado y responsable.",
+            "Presentar una tabla de \"Planificación Detallada\" con las etapas operativas (Preparación, SSOMA, Ejecución, Validación).",
+            "Indicar visualmente el estado del SLA para cada hito específico de la tabla (ej. \"En plazo\", \"3h restantes\").",
+            "Calcular y mostrar en tarjetas inferiores la duración total estimada, el porcentaje general de programación y las alertas activas. Permitir la exportación del cronograma en un formato descargable."
+          ],
+          imagenes: ["Ver Cronograma OS - Total Weight Digital Suite.png"] },
+
+        { id: "HU-43", titulo: "Gestión de Personal y Equipos de la OS",
+          rol: "Jefe/Asistente de Operaciones", accion: "asignar, retirar personal técnico y gestionar los equipos a intervenir en una OS",
+          beneficio: "asegurar que el recurso humano adecuado y las herramientas precisas estén vinculados al servicio.",
+          criterios: [
+            "Personal: Mostrar el \"Personal Actual\" asignado con su rol, sede, estado SSOMA y carga laboral diaria. Permitir retirar personal o buscar/agregar nuevos miembros filtrando por especialidad y disponibilidad.",
+            "Equipos: Mostrar un catálogo buscador para asociar los equipos del cliente (Balanzas, Básculas) a la OS.",
+            "Validar y mostrar visualmente si el equipo seleccionado cuenta con \"GARANTÍA ACTIVA\"."
+          ],
+          imagenes: ["Gestionar Personal OS - Total Weight Digital Suite.png", "Gestionar Equipos OS - Total Weight Digital Suite.png"] },
+
+        { id: "HU-44", titulo: "Gestión de Viáticos y Gastos Operativos",
+          rol: "Asistente de Operaciones", accion: "asignar viáticos previos y revisar la rendición de gastos de los técnicos",
+          beneficio: "proveer los fondos necesarios para la movilización y controlar económicamente el servicio.",
+          criterios: [
+            "Viáticos (Asignación): Permitir registrar montos asignados al personal por concepto de movilidad o alimentación. Calcular en tiempo real el Total Asignado, lo Depositado y el \"Pendiente de pago\".",
+            "Gastos (Rendición): Mostrar una tabla con los gastos solicitados/rendidos por el técnico en campo. Mostrar tarjetas resumen de montos: Solicitados, Aprobados, Observados y Pendientes.",
+            "Permitir acciones directas de revisión sobre cada gasto (Aprobar, Observar o Rechazar) visualizando el comprobante físico."
+          ],
+          imagenes: ["Gestionar Viáticos - Total Weight Digital Suite.png", "Gestionar Gastos - Total Weight Digital Suite.png"] },
+
+        { id: "HU-45", titulo: "Enviar a Ejecución (Despacho a Campo)",
+          rol: "Jefe de Operaciones", accion: "confirmar el envío a ejecución de la Orden de Servicio",
+          beneficio: "habilitar oficialmente la salida del equipo técnico hacia las instalaciones del cliente.",
+          criterios: [
+            "Al presionar \"Enviar a ejecución\", el sistema debe validar estrictamente el Checklist de Habilitación.",
+            "Si existen bloqueos críticos (ej. SSOMA pendiente o Repuesto por confirmar), mostrar una alerta roja detallando las restricciones e inhabilitando el botón de despacho.",
+            "Si todos los checks están conformes, permitir la confirmación final para cambiar el estado de la OS a \"En Ejecución\"."
+          ],
+          imagenes: ["Enviar a Ejecución - Total Weight Digital Suite.png"] },
+
+        // ─── MÓDULO 10: SSOMA ────────────────────────────────────────────────────
+        { seccion: "MÓDULO 10: SSOMA", id: "HU-46", titulo: "Bandeja de Gestión y Matriz de Requisitos SSOMA",
+          rol: "Coordinador SSOMA", accion: "visualizar la bandeja de validación documental y configurar la matriz de requisitos",
+          beneficio: "controlar las habilitaciones del personal y definir qué documentos son obligatorios según el cliente y el tipo de servicio.",
+          criterios: [
+            "Mostrar tarjetas resumen de KPIs: Servicios por validar, Pendientes documentales, Bloqueados y Vencimientos.",
+            "Presentar una tabla con los servicios pendientes indicando: Documentos Pendientes, Vencimientos y el nivel de \"Riesgo\" detectado por la IA.",
+            "Proveer una \"Matriz de Requisitos SSOMA\" que permita configurar qué documento es \"Obligatorio\" o \"Bloquea\" el servicio dependiendo del Cliente, Sede, Tipo de Servicio y Rol (Ej. Técnico vs. Metrólogo)."
+          ],
+          imagenes: ["Gestión SSOMA - Total Weight Digital Suite.png", "Matriz de Requisitos SSOMA - Total Weight Digital Suite.png"] },
+
+        { id: "HU-47", titulo: "Validación Inteligente y Carga de Documentos",
+          rol: "Coordinador SSOMA", accion: "cargar documentos de seguridad y validar los requisitos de un servicio",
+          beneficio: "asegurar que el personal cumpla con la normativa y habilitar el servicio.",
+          criterios: [
+            "Al abrir el \"Detalle SSOMA\", mostrar el listado de requisitos calculados por la matriz, indicando el estado de cada uno (Aprobado, Pendiente, Vencido).",
+            "Permitir \"Cargar nuevo documento\" integrando un motor OCR (Validación Inteligente IA) que verifique automáticamente la legibilidad del texto, fechas de emisión y caducidad.",
+            "Si el documento es un SCTR, extraer y sugerir la \"Nueva fecha de vencimiento\" basada en la lectura del archivo.",
+            "Mantener un \"Historial de Versiones\" para cada documento actualizado."
+          ],
+          imagenes: ["Detalle SSOMA - Total Weight Digital Suite.png", "Actualizar Documento SSOMA - Total Weight Digital Suite.png", "Validar Requisitos SSOMA - Total Weight Digital Suite.png"] },
+
+        { id: "HU-48", titulo: "Gestión de Bloqueos: Observaciones y Cambio de Técnico",
+          rol: "Coordinador SSOMA", accion: "observar documentos erróneos o solicitar el cambio de un técnico bloqueado",
+          beneficio: "corregir inconsistencias documentales o evitar retrasos operativos por falta de habilitación.",
+          criterios: [
+            "Permitir \"Observar Documento SSOMA\" exigiendo un motivo (el select solo debe mostrar los datos tal cual) y un detalle específico de corrección. Asignar la corrección al área correspondiente (ej. Operaciones).",
+            "Mostrar una alerta indicando que la observación generará un \"Bloqueo de Servicio Activo\".",
+            "Si un técnico está bloqueado irremediablemente (ej. SCTR vencido sin renovación posible a corto plazo), proveer un flujo para \"Cambiar Técnico\", sugiriendo personal disponible, de la misma especialidad y con estado SSOMA \"Conforme\"."
+          ],
+          imagenes: ["Observar Documento SSOMA - Total Weight Digital Suite.png", "Cambiar Técnico por Bloqueo SSOMA - Total Weight Digital Suite.png"] },
+
+        { id: "HU-49", titulo: "Control de Vencimientos y Auditoría",
+          rol: "Coordinador SSOMA", accion: "monitorear los documentos próximos a vencer y auditar el historial de revisiones",
+          beneficio: "gestionar renovaciones preventivas y mantener la trazabilidad de las decisiones de seguridad.",
+          criterios: [
+            "Proveer una vista de \"Vencimientos SSOMA\" que clasifique los documentos por estado crítico (Vencidos, Vencen hoy, Vencen esta semana).",
+            "Mostrar en la tabla de vencimientos el \"Impacto\" directo (número de servicios que se verán afectados por la caducidad del documento).",
+            "Proveer un \"Historial SSOMA\" tipo Timeline que registre inmutablemente: Inicio de validación, Ejecución de IA, Observaciones y Solicitudes de ATS."
+          ],
+          imagenes: ["Vencimientos SSOMA - Total Weight Digital Suite.png", "Historial y Auditoría SSOMA - Total Weight Digital Suite.png"] },
+
+        { id: "HU-50", titulo: "Liberación de Servicio y Autorización de Excepciones",
+          rol: "Jefe SSOMA", accion: "liberar un servicio para su ejecución o autorizar una excepción de ingreso",
+          beneficio: "habilitar operativamente a los equipos conformes o asumir el riesgo controlado ante bloqueos.",
+          criterios: [
+            "Liberación: Al intentar liberar, el sistema debe verificar que la \"Lista de Verificación\" esté 100% conforme. Si es exitoso, marcar como \"Servicio Habilitado\" y registrar la auditoría de liberación.",
+            "Excepción: Si un servicio está bloqueado, permitir a la Jefatura \"Autorizar Excepción SSOMA\" mostrando una \"Advertencia de Responsabilidad\" legal.",
+            "Exigir para la excepción: Tipo, Vigencia (solo este servicio o temporal) y un Sustento Técnico obligatorio."
+          ],
+          imagenes: ["Liberar Servicio para Ejecución - Total Weight Digital Suite.png", "Autorizar Excepción SSOMA - Total Weight Digital Suite.png"] },
+
+        // ─── MÓDULO 11: CONTROL DE CAMPO ────────────────────────────────────────
+        { seccion: "MÓDULO 11: CONTROL DE CAMPO", id: "HU-51", titulo: "Panel de Seguimiento en Tiempo Real y Mapa Operativo",
+          rol: "Controlador de Operaciones", accion: "visualizar el panel de seguimiento con el mapa operativo y la lista de servicios activos",
+          beneficio: "monitorear la ubicación de los técnicos, detectar alertas críticas y conocer el estado general del trabajo en campo.",
+          criterios: [
+            "Mostrar tarjetas de KPIs superiores: Servicios en ruta, En ejecución, Con demora, Incidencias y Finalizados.",
+            "Proveer un \"Mapa operativo\" interactivo que geolocalice a los técnicos y muestre pines de colores según el estado del servicio (En Ruta, En Ejecución, Demora, Incidencia).",
+            "Mostrar un panel lateral de \"Servicios Activos\" y \"Alertas Críticas\" para acceso rápido.",
+            "Presentar una tabla de \"Detalle de Gestión de Campo\" indicando OS, Cliente, Técnico, Estado, Ubicación, Avance (%) y Alerta activa."
+          ],
+          imagenes: ["Seguimiento Operativo - Total Weight Digital Suite.png"] },
+
+        { id: "HU-52", titulo: "Detalle Operativo del Servicio y Cambio de Estado",
+          rol: "Controlador de Operaciones", accion: "revisar el detalle de un servicio en tránsito y actualizar su estado manualmente",
+          beneficio: "controlar el avance del Checklist de servicio y corregir estados si la App móvil del técnico falla.",
+          criterios: [
+            "Mostrar tarjetas superiores con el Estado Actual, ETA estimado, Programado y % de Cumplimiento SLA.",
+            "Incluir un panel con \"Actividad Reciente\" y un \"Checklist de Servicio\" que se actualice según los hitos completados (En Ruta, Llegada a Planta, Ejecución).",
+            "Permitir \"Cambiar Estado Operativo\" manualmente, exigiendo seleccionar el Nuevo Estado, un Motivo de cambio y un Comentario justificativo.",
+            "Indicar que el cambio manual se registrará en el Historial de Estados del Expediente."
+          ],
+          imagenes: ["Detalle Operativo Rediseñado - Total Weight Digital Suite.png", "Cambiar Estado Operativo - Total Weight Digital Suite.png"] },
+
+        { id: "HU-53", titulo: "Monitoreo de Ubicación, Ruta y Demoras",
+          rol: "Controlador de Operaciones", accion: "rastrear la ruta específica del técnico y registrar demoras detectadas",
+          beneficio: "informar al cliente sobre la hora estimada de llegada (ETA) y justificar retrasos en el SLA.",
+          criterios: [
+            "Mostrar un modal interactivo de \"Ubicación y Ruta\" con el trazado GPS desde la base hasta el cliente.",
+            "Mostrar la velocidad actual del técnico, el ETA calculado y alertas de tráfico en tiempo real.",
+            "Permitir \"Registrar Parada / Demora\" seleccionando el Tipo de demora, Hora de inicio y Duración estimada.",
+            "Exigir definir el \"Impacto Operativo\" (Retrasa inicio, Retrasa cierre, Riesgo SLA) y calcular en tiempo real el nuevo ETA estimado tras registrar la demora."
+          ],
+          imagenes: ["Ubicación y Ruta - Total Weight Digital Suite.png", "Resgitar Parada - Demora Operativa - Total Weight Digital Suite.png"] },
+
+        { id: "HU-54", titulo: "Gestión de Incidencias y Reasignación en Ruta",
+          rol: "Controlador de Operaciones", accion: "registrar incidencias operativas, escalar alertas y reasignar técnicos en ruta",
+          beneficio: "resolver problemas de fuerza mayor (accidentes, falta de repuestos) evitando cancelar el servicio.",
+          criterios: [
+            "Permitir \"Registrar Incidencia\" capturando: Tipo (ej. Repuesto no disponible), Severidad, Descripción, Impacto (Detiene servicio) y Evidencia fotográfica.",
+            "Proveer la opción de \"Escalar Alerta Operativa\", seleccionando el Motivo, Responsable destino y un Mensaje, indicando que se notificará vía push/correo.",
+            "Permitir \"Reasignar Técnico en Ruta\", mostrando un mapa con técnicos cercanos y una tabla de \"Técnicos Disponibles\" filtrando por ubicación, ETA de llegada al punto, estado SSOMA y carga operativa."
+          ],
+          imagenes: ["Registrar Incidencia Operativa - Total Weight Digital Suite.png", "Registrar Incidencia Operativa - Total Weight Digital Suite (1).png", "Escalar Alerta Operativa - Total Weight Digital Suite.png", "Reasignar Técnico en Ruta - Total Weight Digital Suite.png"] },
+
+        { id: "HU-55", titulo: "Revisión de Evidencias, Cierre y Auditoría",
+          rol: "Controlador de Operaciones", accion: "revisar las evidencias multimedia enviadas desde campo y cerrar el seguimiento operativo",
+          beneficio: "asegurar que el trabajo técnico cuenta con respaldo documental antes de pasar a la revisión final.",
+          criterios: [
+            "Mostrar una galería de \"Evidencias Recibidas\" (Fotos, Documentos, Firmas) subidas por el técnico desde la App Móvil, con marca de tiempo y GPS verificado.",
+            "Para el \"Cierre del Seguimiento\", mostrar un Checklist de cierre (Servicio finalizado, Evidencias, Firma cliente). Alertar si faltan requisitos (ej. \"Firma cliente pendiente\"). Permitir el cierre seleccionando el Resultado del servicio y un comentario.",
+            "Proveer una vista de \"Historial Operativo\" que grafique todos los eventos en ruta (Asignado, En movimiento, Demoras, ETA recalculado) para fines de auditoría."
+          ],
+          imagenes: ["Ver Evidencias Recibidas - Total Weight Digital Suite.png", "Cerrar Seguimiento Operativo - Total Weight Digital Suite.png", "Historial Operativo - Total Weight Digital Suite.png"] },
+
+        // ─── MÓDULO 12: REVISIÓN TÉCNICA ─────────────────────────────────────────
+        { seccion: "MÓDULO 12: REVISIÓN TÉCNICA", id: "HU-56", titulo: "Bandeja y Detalle del Informe Técnico",
+          rol: "Revisor Técnico", accion: "visualizar la bandeja de informes pendientes y revisar el detalle general del diagnóstico",
+          beneficio: "priorizar mi carga de trabajo, controlar los tiempos de revisión (SLA) y conocer el contexto del servicio ejecutado.",
+          criterios: [
+            "Mostrar tarjetas de KPIs superiores: Informes Pendientes, En Revisión, Observados, Sin Evidencias y Vencidos SLA.",
+            "Mostrar la \"Eficiencia de Revisión\" y la \"Tasa de Observación\" en la bandeja principal.",
+            "En la vista de Detalle, mostrar los Datos del Reporte, un Resumen del Diagnóstico (hallazgo principal) y el checklist de Validaciones del Informe.",
+            "Permitir filtrar el listado por Estado, Cliente, Tipo de Servicio y Técnico. El select solo debe mostrar los datos tal cual."
+          ],
+          imagenes: ["Bandeja de Revisión Técnica - Total Weight Digital Suite.png", "Detalle de Informe Técnico - Total Weight Digital Suite.png"] },
+
+        { id: "HU-57", titulo: "Workspace de Revisión y Control de Evidencias",
+          rol: "Revisor Técnico", accion: "utilizar un entorno de trabajo integrado para contrastar el informe PDF con sus evidencias fotográficas",
+          beneficio: "realizar un control de calidad cruzado, asegurando que el diagnóstico escrito coincida con las pruebas en campo.",
+          criterios: [
+            "Proveer un \"Workspace de Revisión\" que muestre el documento PDF interactivo lado a lado con un \"Checklist de control técnico\".",
+            "Mostrar alertas de \"Validación Automática\" en el workspace (Ej. Firma ausente, Repuesto sin código).",
+            "Proveer una vista dedicada de \"Evidencias del Servicio\" categorizada (Fotos, Documentos, Firmas, Faltantes).",
+            "Permitir visualizar el detalle de cada evidencia (Metadatos, GPS, fecha/hora) y descargar el paquete completo o solicitar evidencias faltantes."
+          ],
+          imagenes: ["Workspace de Revisión Técnica - Total Weight Digital Suite.png", "Ver Evidencias del Servicio - Total Weight Digital Suite.png"] },
+
+        { id: "HU-58", titulo: "Ciclo de Corrección (Observar, Solicitar y Comparar Versiones)",
+          rol: "Revisor Técnico", accion: "observar informes con errores, solicitar su corrección al técnico y comparar las nuevas versiones",
+          beneficio: "asegurar la exactitud de la información técnica antes de entregarla al cliente final.",
+          criterios: [
+            "Observar/Solicitar: Permitir \"Observar Informe Técnico\" exigiendo seleccionar el Motivo y las Secciones Afectadas. Luego, permitir \"Solicitar Corrección\" definiendo qué debe corregirse, un mensaje detallado y un Plazo de entrega. El sistema debe cambiar el estado a \"En Corrección\" y notificar automáticamente al técnico responsable.",
+            "Comparar: Al recibir una nueva versión, proveer una herramienta para \"Comparar Versiones del Informe\" mostrando lado a lado la versión Anterior vs. la Corregida.",
+            "Resaltar visualmente las áreas modificadas y las nuevas evidencias adjuntas en la versión corregida."
+          ],
+          imagenes: ["Observar Informe Técnico - Total Weight Digital Suite.png", "Solicitar Corrección de Informe - Total Weight Digital Suite.png", "Comparar Versiones del Informe - Total Weight Digital Suite.png"] },
+
+        { id: "HU-59", titulo: "Aprobación, Liberación y Auditoría del Informe",
+          rol: "Revisor Técnico", accion: "aprobar el informe definitivo, revisar su historial de auditoría y liberarlo a la siguiente etapa",
+          beneficio: "certificar la calidad del servicio y avanzar el flujo hacia la conformidad del cliente.",
+          criterios: [
+            "Aprobación: Permitir \"Aprobar Informe\" si la lista de validaciones técnicas está completa (Datos, Diagnóstico, Evidencias, Firmas).",
+            "Liberación: Al intentar \"Liberar a Conformidad\", validar el cumplimiento estricto. Si faltan evidencias críticas, mostrar una alerta de bloqueo (\"No es posible liberar el informe\"). Si cumple, mostrar la Siguiente Etapa y avanzar el Progreso del Expediente.",
+            "Auditoría: Proveer un \"Historial del Informe Técnico\" que registre inmutablemente: Revisiones iniciadas, Observaciones registradas, Correcciones solicitadas y Nuevas versiones recibidas."
+          ],
+          imagenes: ["Aprobar Informe Técnico - Total Weight Digital Suite.png", "Liberar Informe a Conformidad - Total Weight Digital Suite.png", "Liberar Informe (Bloqueado) - Total Weight Digital Suite.png", "Historial y Auditoría del Informe - Total Weight Digital Suite.png"] },
+
+        { id: "HU-60", titulo: "Derivación a Precotización",
+          rol: "Revisor Técnico", accion: "derivar hallazgos técnicos críticos hacia el área comercial",
+          beneficio: "que el equipo de ventas genere proactivamente una cotización por repuestos o servicios adicionales detectados.",
+          criterios: [
+            "Mostrar el Resumen del Diagnóstico crítico que origina la derivación (Ej. Falla en tarjeta principal).",
+            "Ejecutar una \"Transferencia Automática de Datos\" adjuntando el Expediente, OS, Informe y Evidencias hacia el nuevo requerimiento comercial.",
+            "Permitir listar los \"Ítems sugeridos para cotización\" (Descripción, Cantidad y Disponibilidad en inventario).",
+            "Requerir la asignación de Prioridad y un Comentario para el equipo de precotización."
+          ],
+          imagenes: ["Derivar a Precotización - Total Weight Digital Suite.png"] },
+
+        // ─── MÓDULO 13: METROLOGÍA ───────────────────────────────────────────────
+        { seccion: "MÓDULO 13: METROLOGÍA", id: "HU-61", titulo: "Maestro de Equipos por Cliente",
+          rol: "Jefe de Metrología / Administrador", accion: "gestionar el catálogo de equipos registrados por cliente",
+          beneficio: "llevar la trazabilidad técnica, controlar las garantías y conocer el historial de intervenciones de cada activo.",
+          criterios: [
+            "Mostrar tarjetas de KPIs superiores: Total de equipos, Con garantía vigente, Garantías por vencer, Equipos observados y Actividad mensual.",
+            "Proveer filtros combinables por: Cliente, Sede, Tipo de equipo, Marca, Modelo y Estado. El select solo debe mostrar los datos tal cual.",
+            "Presentar una tabla con el inventario detallando el Código TW, Serie, Ubicación y un indicador visual semaforizado para el estado de la Garantía.",
+            "Permitir exportar la data del inventario."
+          ],
+          imagenes: ["Equipos por cliente.png"] },
+
+        { id: "HU-62", titulo: "Bandeja y Detalle de Órdenes de Metrología (OM)",
+          rol: "Jefe de Metrología", accion: "visualizar la bandeja de Órdenes de Metrología y el detalle de cada una",
+          beneficio: "monitorear el progreso de las calibraciones, la asignación de metrólogos y controlar los tiempos de atención (SLA).",
+          criterios: [
+            "Mostrar la bandeja con KPIs de estado (Activas, En calibración, Pendiente certificado, Patrón vencido, SLA vencidos).",
+            "En la bandeja, incluir herramientas de monitoreo como \"Ubicación Geográfica OM\" en un mapa y gráficos de \"Distribución de Carga\" por equipo.",
+            "En la vista de Detalle de OM, mostrar la información del equipo, el metrólogo asignado y los \"Patrones Utilizados\".",
+            "Mostrar un panel de \"Resultados Preliminares\" (Error Máximo, Incertidumbre y Estado Funcional) y el progreso de Generación del Certificado."
+          ],
+          imagenes: ["Bandeja orden de metrologia refactorizado.png", "Detalle orden de metrologia.png"] },
+
+        { id: "HU-63", titulo: "Creación y Edición de Órdenes de Metrología",
+          rol: "Jefe de Metrología", accion: "crear una nueva OM o editar sus parámetros técnicos",
+          beneficio: "planificar el trabajo de calibración definiendo el método, los patrones a usar y la normativa aplicable.",
+          criterios: [
+            "Creación: Permitir seleccionar el \"Origen de la Orden\" (Expediente, Orden de Serv., Evaluación o Solicitud). Exigir la configuración de Especificaciones Técnicas: Tipo de calibración, Método de medición, Patrón requerido y Norma aplicada. Permitir agregar y listar los \"Equipos Vinculados\" que serán intervenidos.",
+            "Edición: Permitir modificar la fecha, metrólogo, patrón y método.",
+            "Mostrar los datos de lectura (Solo lectura) de la Información del Cliente y el Registro del Sistema para contexto."
+          ],
+          imagenes: ["Nueva orden de metrologia.png", "Editar orden de metrologia.png"] },
+
+        { id: "HU-64", titulo: "Validación de Patrones y Registro de Mediciones",
+          rol: "Metrólogo en campo/laboratorio", accion: "validar el patrón a utilizar y registrar las mediciones de la prueba de exactitud",
+          beneficio: "calcular automáticamente el error, la incertidumbre y determinar si el equipo está dentro de tolerancia.",
+          criterios: [
+            "Validación de Patrón: Antes de iniciar, mostrar una \"Lista de Verificación Técnica\" (Patrón vigente, Certificado disponible, Rango compatible, Incertidumbre válida). Exigir validación explícita.",
+            "Registro de Mediciones: Solicitar los datos base del equipo: Capacidad máxima, División (e), Clase y Tolerancia (mpe). Permitir ingresar filas para la \"Prueba de Exactitud\", capturando: Carga Aplicada y Lectura.",
+            "El sistema debe calcular automáticamente: Error, Incertidumbre, Tolerancia específica del punto y Resultado (CUMPLE/NO CUMPLE) por fila.",
+            "Calcular globalmente el Error Máximo, Incertidumbre Combinada y el Estatus General del equipo (Ej. \"FUERA DE TOLERANCIA\")."
+          ],
+          imagenes: ["Validar patron de metrologia.png", "Registrar mediciones de metrologia.png"] },
+
+        { id: "HU-65", titulo: "Observación y Finalización de Orden de Metrología",
+          rol: "Metrólogo / Jefe de Metrología", accion: "observar órdenes con inconsistencias o finalizar el registro operativo de la calibración",
+          beneficio: "asegurar que el trabajo técnico se cierre correctamente o se detenga si existen hallazgos que impidan su aprobación.",
+          criterios: [
+            "Observación: Permitir \"Observar OM\" requiriendo un motivo crítico (el select solo debe mostrar los datos tal cual), un detalle técnico obligatorio y permitir adjuntar evidencia de referencia. Advertir que esto impedirá la certificación.",
+            "Finalización: Mostrar un Checklist de verificación (Mediciones registradas, Patrón validado). Exigir la selección manual del \"Resultado de calibración\" mediante opciones predefinidas (Conforme, No conforme, Requiere ajuste, Requiere nueva calibración).",
+            "Requerir el ingreso de notas finales antes de finalizar la orden."
+          ],
+          imagenes: ["Observar orden de metrologia.png", "Finalizar orden de metrologia.png", "Anular orden de metrologia.png"] },
+
+        { id: "HU-66", titulo: "Generación y Emisión de Certificado Metrológico",
+          rol: "Jefe de Metrología", accion: "generar el certificado oficial de la calibración",
+          beneficio: "entregar al cliente el documento formal, inalterable y con su respectivo correlativo que avale el trabajo realizado bajo norma.",
+          criterios: [
+            "Mostrar un panel de solo lectura con los \"Datos Heredados de Operación\" (OM, Cliente, Equipo, Mediciones, Patrón, Resultado).",
+            "Permitir seleccionar la plantilla específica del certificado (Certificado calibración balanza, Certificado patrón, Certificado verificación).",
+            "Calcular y sugerir automáticamente el siguiente correlativo disponible para la emisión. Permitir fijar la Fecha de Emisión.",
+            "Mostrar una advertencia indicando que al generar el certificado se creará un documento PDF inalterable firmado digitalmente."
+          ],
+          imagenes: ["Generar certificado de metrologia.png"] },
+
+        { id: "HU-67", titulo: "Historial, Trazabilidad y Auditoría de la OM",
+          rol: "Jefe de Metrología", accion: "visualizar el historial inmutable y la auditoría completa de la Orden de Metrología",
+          beneficio: "asegurar la trazabilidad de todas las intervenciones técnicas y cumplir con las exigencias normativas de calidad.",
+          criterios: [
+            "Proveer una vista estructurada mediante navegación por pestañas: Timeline, Mediciones, Patrones, Certificados, Observaciones y Auditoría.",
+            "En la pestaña \"Timeline\", mostrar un registro cronológico detallado de todos los hitos clave (Ej. Orden Creada, Registro de Mediciones, Validación de Patrones).",
+            "Por cada evento en el timeline, mostrar inmutablemente: Fecha, hora exacta, nombre del usuario responsable, rol y una descripción de la acción realizada.",
+            "Mostrar etiquetas visuales del estado de cada evento (ej. si la validación del patrón fue automática o si un certificado está vigente)."
+          ],
+          imagenes: ["Historial de auditoria de orden de metrologia.png"] },
+
+        // ─── MÓDULO 14: MÓDULO EJECUTIVO COMERCIAL ───────────────────────────────
+        { seccion: "MÓDULO 14: MÓDULO EJECUTIVO COMERCIAL", id: "HU-68", titulo: "Bandeja Principal y Detalle de Propuestas",
+          rol: "Ejecutivo Comercial", accion: "visualizar la bandeja de propuestas activas y el desglose de una propuesta específica",
+          beneficio: "monitorear el pipeline comercial, revisar los montos cotizados y controlar los estados (Borrador, Pendiente VB, Enviado).",
+          criterios: [
+            "Mostrar un \"General Proposal Ledger\" (Bandeja) con el ID, Cliente, Proyecto, Estado, Monto y Fecha de Expiración.",
+            "Proveer un panel inferior de detalle con pestañas (Requerimiento, Propuestas, Evaluaciones, Documentación).",
+            "En el detalle de la propuesta, mostrar un \"Resumen de Validez\" (Vigencia, Moneda, Tiempo de Entrega), \"Condiciones Comerciales\" y un \"Desglose de Partidas\" con cantidades y precios unitarios.",
+            "Alertar visualmente si existe una versión previa de la propuesta y permitir \"Comparar Versiones\"."
+          ],
+          imagenes: ["Mantenimiento de propuestas bandeja.png", "Mantenimiento de propuesta.png"] },
+
+        { id: "HU-69", titulo: "Selección y Gestión de Equipos en Propuesta",
+          rol: "Ejecutivo Comercial", accion: "agregar, retirar o importar equipos vinculados a una propuesta",
+          beneficio: "definir el alcance técnico del servicio o los bienes a suministrar al cliente.",
+          criterios: [
+            "Selección: Mostrar un \"Catálogo de Equipos Disponibles\" permitiendo añadir ítems (Ej. Balanzas, Celdas de carga). Mostrar el Subtotal de Equipos y Total Estimado en tiempo real.",
+            "Listado / Mantenimiento: Mostrar la lista de \"Equipos del Cliente\" y permitir importarlos masivamente vía archivo XLS.",
+            "Permitir \"Retirar equipo del listado\" mostrando una confirmación de que la acción no se puede deshacer de forma automática y recalcular los totales.",
+            "Permitir exportar el listado final de equipos a Excel."
+          ],
+          imagenes: ["Mantenimiento de listado de equipos de propuesta.png", "Retirar listado de qeuipos.png"] },
+
+        { id: "HU-70", titulo: "Configuración Económica y Forma de Pago",
+          rol: "Ejecutivo Comercial", accion: "configurar la moneda, los impuestos y la forma de pago de la propuesta",
+          beneficio: "establecer las condiciones financieras correctas antes de enviarla a aprobación.",
+          criterios: [
+            "Permitir configurar el Tipo de Moneda (ej. USD, PEN, COP) y la Condición de Pago. Al cambiar la moneda, advertir que se recalcularán automáticamente todos los importes basados en la Tasa de Cambio (TRM) actual.",
+            "Permitir aplicar o excluir el impuesto (ej. I.G.V. 18%) mediante un checkbox, mostrando una alerta sobre el impacto en el cálculo total y facturación.",
+            "Mostrar un \"Resumen Económico\" en tiempo real con el Subtotal, Impuestos y el Total a Pagar en la moneda seleccionada."
+          ],
+          imagenes: ["Cotizaciones configuracion pago.png", "Cambio de moneda de configuracion de propuesta.png", "Propuesta pago.png"] },
+
+        { id: "HU-71", titulo: "Mantenimiento de Condiciones y Clausulado",
+          rol: "Ejecutivo Comercial", accion: "gestionar las condiciones legales, técnicas y comerciales de la propuesta",
+          beneficio: "proteger los intereses de la empresa y dejar claras las reglas del servicio al cliente.",
+          criterios: [
+            "Proveer un \"Catálogo de Condiciones\" base predefinidas (Ej. Vigencia de Precios, Garantía de Equipos, Límite de Responsabilidad Civil).",
+            "Permitir añadir, editar o \"Retirar condición\" del listado activo de la propuesta (requiriendo confirmación para retirar).",
+            "Permitir añadir \"Condiciones Personalizadas\" especificando si se muestran como Título, Párrafo, Viñeta o Nota Legal.",
+            "Incluir un campo de texto libre para \"Notas Generales\" u observaciones adicionales."
+          ],
+          imagenes: ["Mantenimineto de propuesta retirar condicion.png", "Editar propuesta.png"] },
+
+        { id: "HU-72", titulo: "Módulo de Visto Bueno (Aprobación Comercial)",
+          rol: "Gerente Comercial", accion: "revisar, aprobar o rechazar las propuestas enviadas por los ejecutivos",
+          beneficio: "controlar los márgenes de rentabilidad, descuentos y asegurar la calidad de la oferta antes de enviarla al cliente.",
+          criterios: [
+            "Mostrar una Bandeja de \"Visto Bueno\" filtrable por Tipo de documento, Nro., Rango de Fechas y Estado (Pendiente VB, Aprobado).",
+            "Al seleccionar un registro, mostrar el \"Detalle del Documento\" incluyendo monto, comercial responsable, observaciones y los documentos adjuntos listos para descarga.",
+            "Proveer un modal para \"Aprobar Visto Bueno\" (o Rechazar), permitiendo añadir un comentario opcional.",
+            "Requerir la marcación de un checkbox de confirmación (\"Confirmo que he revisado... Esta acción registrará su firma digital\")."
+          ],
+          imagenes: ["Modulo Bandeja de visto bueno.png", "Aprobar visto bueno.png"] },
+
+        { id: "HU-73", titulo: "Bandeja de Propuestas por Enviar",
+          rol: "Administrador de Operaciones / Comercial", accion: "visualizar las propuestas con Visto Bueno aprobado listas para envío",
+          beneficio: "despachar formalmente la propuesta técnica y comercial al cliente final.",
+          criterios: [
+            "Mostrar un listado de propuestas en estado \"POR ENVIAR\", indicando Versión, RQ asociado, Cliente, Moneda y Monto.",
+            "Al seleccionar una propuesta, mostrar el \"Detalle de Propuesta\" (Tipo de servicio, Plazo de Entrega, Garantía) y el \"Resumen Comercial\".",
+            "Mostrar los \"Documentos Adjuntos\" (Ej. PDF de la Propuesta Técnica, Cuadro de Costos en Excel) permitiendo su previsualización.",
+            "Habilitar la acción \"Enviar Propuesta al Cliente\" (icono de correo) para desencadenar el envío externo."
+          ],
+          imagenes: ["Propuestas por enviar.png"] }
+    ];
+
+    const listContainer = document.getElementById('hu-list');
+    const contentContainer = document.getElementById('main-content');
+    const sidebar = document.getElementById('sidebar');
+
+    function toggleMenu() { sidebar.classList.toggle('open'); }
+
+    function renderDocument() {
+        data.forEach((item, index) => {
+            if (item.seccion) {
+                const sectionHeader = document.createElement('div');
+                sectionHeader.className = 'menu-section';
+                sectionHeader.textContent = item.seccion;
+                if (index > 0) sectionHeader.style.marginTop = '10px';
+                listContainer.appendChild(sectionHeader);
+            }
+
+            const listItem = document.createElement('div');
+            listItem.className = `hu-item ${index === 0 ? 'active' : ''}`;
+            listItem.onclick = () => showCard(index, listItem);
+
+            if (item.isCover) {
+                listItem.innerHTML = `<div class="hu-title" style="color:var(--primary); font-weight:800;">${item.titulo}</div>`;
+            } else {
+                listItem.innerHTML = `<div class="hu-id">${item.id}</div><div class="hu-title">${item.titulo}</div>`;
+            }
+            listContainer.appendChild(listItem);
+
+            const card = document.createElement('div');
+            card.className = `card ${index === 0 ? 'active' : ''}`;
+            card.id = `card-${index}`;
+
+            if (item.isCover) {
+                card.innerHTML = `
+                    <div class="cover-page">
+                        <img src="totalweight-logo.png" alt="Total Weight" style="max-width: 300px; margin-bottom: 20px;">
+                        <h1>PROPUESTA TÉCNICA DE HISTORIAS DE USUARIO Y PROTOTIPADO</h1>
+                        <h2>Análisis y diseño de sistema<br>Intranet – Total Weight Digital Suite</h2>
+                        <table class="cover-table">
+                            <tr><th>Propuesta elaborada para:</th><td>${item.cliente}</td></tr>
+                            <tr><th>Contacto:</th><td>${item.contacto}</td></tr>
+                            <tr><th>Versión:</th><td>${item.version}</td></tr>
+                            <tr><th>Fecha de creación:</th><td>${item.creacion}</td></tr>
+                            <tr><th>Fecha de modificación:</th><td>${item.modificacion}</td></tr>
+                        </table>
+                    </div>
+                `;
+            } else {
+                let imagesHtml = '';
+                if (item.imagenes && item.imagenes.length > 0) {
+                    imagesHtml = `<div class="image-gallery">`;
+                    item.imagenes.forEach(img => {
+                        const escapedImg = img.replace(/'/g, "\\'");
+                        imagesHtml += `
+                        <div class="img-container">
+                            <img src="${img}" alt="${img}" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'400\\' height=\\'250\\'><rect width=\\'100%\\' height=\\'100%\\' fill=\\'%23f1f3f4\\' /><text x=\\'50%\\' y=\\'50%\\' font-family=\\'Arial\\' font-weight=\\'bold\\' font-size=\\'14\\' fill=\\'%235f6368\\' text-anchor=\\'middle\\'>IMAGEN PENDIENTE</text><text x=\\'50%\\' y=\\'65%\\' font-family=\\'Arial\\' font-size=\\'11\\' fill=\\'%235f6368\\' text-anchor=\\'middle\\'>${img}</text></svg>'">
+                            <div class="img-name">${img}</div>
+                        </div>`;
+                    });
+                    imagesHtml += `</div>`;
+                }
+
+                card.innerHTML = `
+                    <div class="detail-header">
+                        <div><h2>${item.titulo}</h2></div>
+                        <div class="badge">${item.id}</div>
+                    </div>
+                    <div class="story-block">
+                        <p><strong>COMO</strong> ${item.rol}</p>
+                        <p><strong>QUIERO</strong> ${item.accion}</p>
+                        <p><strong>PARA</strong> ${item.beneficio}</p>
+                    </div>
+                    <h3>Criterios de Aceptación:</h3>
+                    <ul class="criteria">
+                        ${item.criterios.map(c => `<li>${c}</li>`).join('')}
+                    </ul>
+                    <h3>Desarrollo Visual (Pantallas):</h3>
+                    ${imagesHtml}
+                `;
+            }
+            contentContainer.appendChild(card);
+        });
+    }
+
+    function showCard(index, itemElement) {
+        document.querySelectorAll('.hu-item').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.card').forEach(el => el.classList.remove('active'));
+
+        itemElement.classList.add('active');
+        document.getElementById(`card-${index}`).classList.add('active');
+
+        sidebar.classList.remove('open');
+        document.getElementById('main-content').scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    renderDocument();
+</script>
+</body>
+</html>

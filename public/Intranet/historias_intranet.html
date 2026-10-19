@@ -28,8 +28,12 @@
             display: flex; flex-direction: column; box-shadow: 2px 0 10px rgba(0,0,0,0.03);
             z-index: 10; flex-shrink: 0;
         }
-        .brand { padding: 25px 20px; border-bottom: 1px solid var(--border); text-align: center; }
+        .brand { padding: 10px 20px; border-bottom: 1px solid var(--border); text-align: center; }
         .brand p { margin: 10px 0 0; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;}
+
+        .hu-count { padding: 15px 20px 0 20px; font-size: 0.70rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; text-align: center; }
+        .hu-count strong { color: var(--primary); font-weight: 800; }
+        .menu-section.first-visible { padding-top: 4px; }
 
         .hu-list { flex-grow: 1; overflow-y: auto; padding: 10px 0; }
         .menu-section { padding: 15px 20px 5px 20px; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
@@ -152,7 +156,6 @@
     <div class="sidebar" id="sidebar">
         <div class="brand">
             <img src="totalweight-logo.png" alt="Logo Total Weight" style="width: 100%; max-width: 220px; height: auto;">
-            <p>Documentación Ágil v1.0</p>
         </div>
         <div class="filter-area">
             <div class="search-and-filter">
@@ -169,6 +172,7 @@
                 </button>
             </div>
         </div>
+        <div class="hu-count" id="hu-count">— HU</div>
         <div class="hu-list" id="hu-list"></div>
     </div>
     <div class="main-content" id="main-content"></div>
@@ -185,6 +189,9 @@
         <div class="filter-pills" id="sprint-pills">
             <button class="pill-btn active" data-value="" onclick="setPill('sprint', this)">Todos</button>
             <button class="pill-btn" data-value="1" onclick="setPill('sprint', this)">Sprint 1</button>
+            <button class="pill-btn" data-value="2" onclick="setPill('sprint', this)">Sprint 2</button>
+            <button class="pill-btn" data-value="3" onclick="setPill('sprint', this)">Sprint 3</button>
+            <button class="pill-btn" data-value="4" onclick="setPill('sprint', this)">Sprint 4</button>
             <button class="pill-btn" data-value="sin" onclick="setPill('sprint', this)">Sin sprint</button>
         </div>
     </div>
@@ -285,87 +292,66 @@
           ],
           imagenes: ["Nuevo Requerimiento - Total Weight Digital Suite.png", "Editar Requerimiento - Total Weight Digital Suite.png", "Requerimiento Seleccionar Cliente - Total Weight Digital Suite.png"] },
 
-        { seccion: "MÓDULO 15: MANTENIMIENTO DE MAESTROS", id: "HU-79", sprint: 1, titulo: "Mantenimiento de Clientes",
-          rol: "Jefe Comercial / Administrador", accion: "gestionar el catálogo de clientes registrados en el sistema",
-          beneficio: "mantener actualizada la base de datos de empresas y personas con las que opera Total Weight, asegurando la integridad de toda la cadena comercial y operativa.",
-          criterios: [
-            "Mostrar un listado paginado de clientes con filtros por Razón Social, RUC, Tipo de Persona, Canal, Categoría y Estado. El select solo debe mostrar los datos tal cual.",
-            "Permitir crear un nuevo cliente mediante un formulario que capture: Razón Social, RUC, Tipo de Documento, Tipo de Persona, Canal de Captación, Categoría y Condición de Pago.",
-            "Permitir editar los datos de un cliente existente, mostrando una advertencia si el cambio afecta requerimientos o expedientes activos vinculados.",
-            "En la vista de detalle del cliente, mostrar las sedes registradas y los contactos asociados, con acceso rápido para gestionarlos.",
-            "Permitir activar o desactivar un cliente, registrando el motivo del cambio de estado."
-          ],
-          imagenes: ["Mantenimiento de clientes - Total Weight Digital Suite.png"] },
-
-        { id: "HU-80", sprint: 1, titulo: "Mantenimiento de Sedes de Cliente",
-          rol: "Jefe Comercial / Administrador", accion: "gestionar las sedes o puntos de atención vinculados a un cliente",
-          beneficio: "tener la información de las instalaciones del cliente correctamente registradas para planificar servicios, asignar zonas y gestionar la logística de campo.",
-          criterios: [
-            "Mostrar el listado de sedes registradas para un cliente, indicando nombre, dirección, ubigeo (Departamento, Provincia, Distrito) y estado.",
-            "Permitir registrar una nueva sede capturando: Nombre de sede, Referencia de domicilio, Ubigeo, y opcionalmente las coordenadas geográficas.",
-            "Permitir editar los datos de una sede existente. Si hay servicios programados activos en esa sede, mostrar una advertencia informativa.",
-            "Permitir desactivar una sede, bloqueando su selección en nuevos requerimientos pero preservando el historial existente.",
-            "Mostrar los contactos vinculados a cada sede con acceso directo para gestionarlos."
-          ],
-          imagenes: ["Modal Mantenimiento de sedes - Total Weight Digital Suite.png"] },
-
-        { id: "HU-81", sprint: 1, titulo: "Mantenimiento de Contactos",
-          rol: "Jefe Comercial / Administrador", accion: "gestionar los contactos vinculados a un cliente y sus sedes",
-          beneficio: "contar con la información de las personas de contacto actualizada para registrar requerimientos, realizar seguimiento comercial y gestionar comunicaciones.",
-          criterios: [
-            "Mostrar el listado de contactos de un cliente con filtros por Sede, Cargo y Estado. El select solo debe mostrar los datos tal cual.",
-            "Permitir registrar un nuevo contacto capturando: Nombres, Apellidos, Cargo, Área y vincularlo al Cliente y opcionalmente a una Sede específica.",
-            "Permitir registrar datos de comunicación del contacto: correo electrónico, teléfono y número de WhatsApp.",
-            "Permitir editar los datos de un contacto existente y desactivarlo si ya no es referente activo, preservando el historial en requerimientos previos.",
-            "En la selección de contacto desde el formulario de requerimiento, el buscador debe filtrar los contactos activos del cliente seleccionado."
-          ],
-          imagenes: ["Modal Mantenimiento de Contactos - Total Weight Digital Suite.png"] },
-
         // ─── MÓDULO 3: PROPUESTAS COMERCIALES ───────────────────────────────────
-        { seccion: "MÓDULO 3: PROPUESTAS COMERCIALES", id: "HU-07", titulo: "Creación de Propuesta Comercial",
-          rol: "Jefe Comercial", accion: "generar una propuesta a partir de un requerimiento",
-          beneficio: "enviar una cotización formal estructurada al cliente.",
+        { seccion: "MÓDULO 3: PROPUESTAS COMERCIALES", id: "HU-07", sprint: 3, titulo: "Creación de Propuesta Comercial",
+          rol: "Jefe/Asistente Comercial", accion: "generar una propuesta comercial estructurada por secciones a partir de un requerimiento",
+          beneficio: "enviar una cotización formal completa al cliente con todos los apartados técnicos, comerciales y contractuales requeridos.",
           criterios: [
-            "Heredar automáticamente la información base desde el requerimiento de origen.",
-            "Permitir configurar parámetros financieros (Cálculo de IGV, vinculación a contrato marco).",
-            "Integrar un editor de texto enriquecido para redactar la introducción del documento.",
-            "Calcular y mostrar en un panel lateral el resumen de importes en tiempo real."
+            "Heredar automáticamente la información base desde el requerimiento de origen (cliente, sede, contacto, área, prioridad y descripción).",
+            "Presentar la creación de la propuesta como un flujo por secciones navegable: Propuesta, Opciones, Detalle, Recomendaciones, Forma de Pago, Suministros del Cliente, Condiciones del Servicio y Listado de Equipos.",
+            "En la sección \"Propuesta\": permitir capturar los datos generales, un editor enriquecido para la introducción del documento y el campo Valor de Venta con cálculo automático del panel lateral.",
+            "En la sección \"Opciones\": permitir configurar alternativas u opciones adicionales de la propuesta (reutiliza el layout de la sección Propuesta).",
+            "En la sección \"Detalle\": permitir agregar los ítems principales de la cotización con cantidad, precio unitario, descuento y subtotal.",
+            "En la sección \"Recomendaciones\": permitir listar recomendaciones técnicas y comerciales adicionales para el cliente (reutiliza el layout de Detalle).",
+            "En la sección \"Forma de Pago\": permitir seleccionar la condición de pago desde el catálogo y ofrecer un botón \"Nuevo\" que abre un modal para registrar una nueva forma de pago en línea.",
+            "En la sección \"Suministros del Cliente\": permitir listar los suministros que el cliente debe proveer (reutiliza el layout de Detalle).",
+            "En la sección \"Condiciones del Servicio\": permitir capturar cláusulas del servicio, plazos, garantías y condiciones especiales usando textos base reutilizables (HU-85).",
+            "En la sección \"Listado de Equipos\": permitir agregar equipos manualmente, seleccionarlos del maestro de Equipos del Cliente (HU-88) o importarlos masivamente desde Excel con IA (HU-89). Los campos Número de Serie, Marca y Modelo no pueden editarse una vez que el equipo está registrado.",
+            "Contemplar el ingreso de datos de Tercerización cuando el certificado se emitirá a nombre de un tercero distinto al cliente principal.",
+            "Calcular y mostrar en un panel lateral el resumen de importes (subtotal, IGV, descuentos y total) en tiempo real conforme se navega entre secciones.",
+            "Guardar el estado de la propuesta como \"Borrador\" hasta que sea enviada a Visto Bueno (HU-12). Una vez enviada al cliente, la propuesta queda inmutable y solo puede editarse mediante la generación de una nueva versión (HU-10)."
           ],
-          imagenes: ["Crear Propuesta - Total Weight Digital Suite.png"] },
+          imagenes: ["Crear Propuesta - Total Weight Digital Suite.png", "Crear Propuesta -Seccion Propuesta.png", "Crear Propuesta - Opcionales de la Propuesta.png", "Crear Propuesta - Detalle.png", "Crear Propuesta - Recomendaciones de la Propuesta.png", "Crear Propuesta - Forma de Pago.png", "Crear Propuesta - Suministros del Cliente.png", "Crear Propuesta - Condiciones del Servicio.png", "Crear Propuesta - Listado de Equipos.png"] },
 
-        { id: "HU-08", titulo: "Bandeja de Propuestas Comerciales",
+        { id: "HU-08", sprint: 3, titulo: "Bandeja de Propuestas Comerciales",
           rol: "Jefe/Asistente Comercial", accion: "visualizar y gestionar el listado de propuestas comerciales",
           beneficio: "dar seguimiento al ciclo de ventas y controlar los estados de cada propuesta.",
           criterios: [
             "Mostrar tarjetas resumen en la parte superior con contadores de estado (Pendientes, Por Visto Bueno, SLA vencidos, etc.).",
             "Permitir filtrar el listado mediante un buscador general y filtros desplegables. El select solo debe mostrar los datos tal cual.",
-            "Presentar los resultados en una tabla paginada mostrando la versión actual, el requerimiento asociado y el monto de cada propuesta."
+            "Presentar los resultados en una tabla paginada mostrando la versión actual, el requerimiento asociado y el monto de cada propuesta.",
+            "Mostrar en cada fila la acción disponible según el estado de la propuesta: \"Editar\" cuando está en Borrador, \"Generar Nueva Versión\" cuando ya fue enviada al cliente, y \"Ver Detalle\" cuando está Anulada o Cerrada."
           ],
           imagenes: ["Bandeja de Propuestas Comerciales - Total Weight Digital Suite.png"] },
 
-        { id: "HU-09", titulo: "Detalle y Vista Previa de Propuesta",
+        { id: "HU-09", sprint: 3, titulo: "Detalle y Vista Previa de Propuesta",
           rol: "Jefe/Asistente Comercial", accion: "consultar el detalle completo y generar una vista previa en PDF de una propuesta",
           beneficio: "revisar la información técnica y económica antes de su envío al cliente.",
           criterios: [
             "Mostrar una ventana modal con el resumen económico calculado (Subtotal, Descuento, IGV, Total) y los datos generales.",
             "Visualizar el workflow de aprobación indicando el estado actual de la propuesta.",
             "Habilitar la visualización directa de los documentos adjuntos y vinculados (RQ, Expediente).",
-            "Permitir generar y visualizar un documento PDF estructurado con el formato oficial de la empresa a partir de los datos ingresados."
+            "Permitir generar y visualizar un documento PDF estructurado con el formato oficial de la empresa a partir de los datos ingresados.",
+            "Cuando la propuesta se encuentre en estado enviada al cliente, el botón \"Editar\" se reemplaza automáticamente por \"Generar Nueva Versión\" (HU-10), preservando la inmutabilidad de la versión enviada."
           ],
           imagenes: ["Detalle Propuesta - Total Weight Digital Suite.png", "Vista Previa PDF - Total Weight Digital Suite.png"] },
 
-        { id: "HU-10", titulo: "Edición y Gestión de Versiones de Propuesta",
-          rol: "Jefe/Asistente Comercial", accion: "editar la información de una propuesta y generar nuevas versiones",
-          beneficio: "realizar ajustes solicitados por el cliente o actualizar cotizaciones manteniendo un historial.",
+        { id: "HU-10", sprint: 3, titulo: "Edición y Gestión de Versiones de Propuesta",
+          rol: "Jefe/Asistente Comercial", accion: "editar la información de una propuesta y generar nuevas versiones cuando la vigente ya fue enviada al cliente",
+          beneficio: "realizar ajustes solicitados por el cliente o actualizar cotizaciones manteniendo un historial completo e inmutable de lo enviado.",
           criterios: [
-            "Proveer un editor con pestañas para modificar la configuración, detalles técnicos, forma de pago y condiciones.",
+            "Permitir editar una propuesta únicamente si se encuentra en estado \"Borrador\" (aún no enviada al cliente).",
+            "Una vez enviada al cliente, la propuesta queda inmutable y solo puede modificarse mediante la generación de una nueva versión.",
+            "Al crear una nueva versión, heredar los datos de la versión anterior y requerir la selección de un motivo y una descripción breve de los cambios.",
+            "La nueva versión inicia en estado \"Borrador\" y puede editarse N veces hasta ser enviada al cliente, momento en que se congela y ya no admite modificaciones.",
+            "Proveer un editor con pestañas alineado a las secciones de Crear Propuesta (HU-07) para modificar la configuración, detalles técnicos, forma de pago y condiciones durante el estado Borrador.",
             "Permitir organizar la estructura visual del documento PDF mediante una lista de verificación \"arrastrar y soltar\".",
-            "Al crear una nueva versión, requerir la selección de un motivo y una descripción breve de los cambios.",
-            "Permitir al usuario seleccionar qué bloques de información (ítems, condiciones, etc.) desea copiar de la versión anterior a la nueva."
+            "Permitir al usuario seleccionar qué bloques de información (ítems, condiciones, etc.) desea copiar de la versión anterior a la nueva.",
+            "Mostrar el historial completo de versiones con su número, estado (Borrador / Enviada / Anulada), fecha y usuario responsable, permitiendo consultar cualquier versión previa en solo lectura."
           ],
           imagenes: ["Editar Propuesta - Total Weight Digital Suite.png", "Nueva Versión Propuesta - Total Weight Digital Suite.png"] },
 
-        { id: "HU-11", titulo: "Aplicación de Descuento Comercial",
+        { id: "HU-11", sprint: 3, titulo: "Aplicación de Descuento Comercial",
           rol: "Jefe Comercial", accion: "aplicar un descuento global a una propuesta en preparación",
           beneficio: "ajustar el precio final según negociaciones comerciales o políticas de la empresa.",
           criterios: [
@@ -375,22 +361,37 @@
           ],
           imagenes: ["Aplicar Descuento - Total Weight Digital Suite.png"] },
 
-        { id: "HU-12", titulo: "Envío a Visto Bueno y Anulación de Propuesta",
+        { id: "HU-12", sprint: 3, titulo: "Envío a Visto Bueno y Anulación de Propuesta",
           rol: "Jefe/Asistente Comercial", accion: "enviar una propuesta para su aprobación interna o anularla si ya no es válida",
           beneficio: "cumplir con el flujo de revisión de márgenes o cancelar procesos comerciales detenidos.",
           criterios: [
             "Para enviar a Visto Bueno, el sistema debe validar previamente que todos los requisitos estén completos (Cliente válido, ítems agregados, PDF generado, etc.).",
+            "El envío a Visto Bueno se dirige automáticamente al Jefe Directo del comercial autor, según la jerarquía configurada en la ficha de usuario. Si el jefe directo tiene un suplente activo (HU-84) dentro del período de vigencia, la solicitud se enruta al suplente.",
             "Mostrar una alerta si el margen de utilidad requiere aprobación especial e indicar el SLA de respuesta.",
             "Para la anulación, mostrar una advertencia de impacto y exigir la selección de un motivo y una justificación detallada obligatoria.",
             "Requerir la confirmación manual mediante un check de \"Confirmación Crítica\" antes de habilitar el botón de anulación."
           ],
           imagenes: ["Enviar a Visto Bueno - Total Weight Digital Suite.png", "Anular Propuesta - Total Weight Digital Suite.png"] },
 
-        // ─── MÓDULO 4: VISTO BUENO Y APROBACIONES ───────────────────────────────
-        { seccion: "MÓDULO 4: VISTO BUENO Y APROBACIONES", id: "HU-13", titulo: "Bandeja de Visto Bueno",
-          rol: "Jefe Comercial", accion: "visualizar la bandeja de Visto Bueno de propuestas",
-          beneficio: "gestionar las solicitudes pendientes de aprobación y monitorear los tiempos de respuesta (SLA).",
+        { id: "HU-89", sprint: 3, titulo: "Importación de Equipos desde Excel con IA",
+          rol: "Asistente/Jefe Comercial", accion: "importar de forma masiva el listado de equipos de una propuesta desde un archivo Excel, apoyándome en la IA para reconocer y matchear los equipos contra el catálogo de la base de datos",
+          beneficio: "acelerar la elaboración de propuestas con muchos ítems, reducir errores de tipeo y detectar automáticamente equipos ya conocidos del cliente o del catálogo maestro, evitando duplicados.",
           criterios: [
+            "Disponibilizar un botón de \"Importar desde Excel\" dentro de la sección \"Listado de Equipos\" del flujo de Crear Propuesta, que abre un modal dedicado.",
+            "Permitir cargar un archivo .xls o .xlsx mediante drag & drop o selector, mostrando el progreso de subida y el análisis realizado por la IA sobre las columnas detectadas.",
+            "Presentar una vista previa completa con los equipos detectados, indicando por cada fila el estado del matching (Coincidencia exacta, Coincidencia sugerida, Sin coincidencia / Nuevo) contra el catálogo maestro y contra los equipos del cliente.",
+            "Mostrar una vista específica de \"Discrepancias\" cuando la IA detecte inconsistencias (marca/modelo diferente al catálogo, número de serie duplicado, campos vacíos u otras alertas) y permitir al usuario decidir por cada caso: aceptar sugerencia, editar, o registrar como equipo nuevo.",
+            "Al confirmar la importación, incorporar los equipos validados al listado de la propuesta y ofrecer alta automática en el maestro de Equipos del Cliente para los ítems marcados como nuevos.",
+            "Registrar en la auditoría el archivo importado, la cantidad de filas procesadas, las decisiones tomadas por el usuario y el identificador de la propuesta destino."
+          ],
+          imagenes: ["Crear Propuesta - Modal Importación XLS con IA.png", "Crear Propuesta - Modal Importación XLS con IA (Discrepancias).png", "Crear Propuesta - Modal Importación XLS con IA (Vista Previa Completa).png"] },
+
+        // ─── MÓDULO 4: VISTO BUENO Y APROBACIONES ───────────────────────────────
+        { seccion: "MÓDULO 4: VISTO BUENO Y APROBACIONES", id: "HU-13", sprint: 3, titulo: "Bandeja de Visto Bueno",
+          rol: "Jefe Directo / Encargado Comercial", accion: "visualizar la bandeja de Visto Bueno de las propuestas de los comerciales que tengo a mi cargo",
+          beneficio: "gestionar las solicitudes pendientes de aprobación de mi equipo directo y monitorear los tiempos de respuesta (SLA).",
+          criterios: [
+            "Mostrar únicamente las propuestas cuyos comerciales autores tienen al usuario logueado registrado como Jefe Directo en su ficha de usuario, o aquellas en las que el usuario logueado actúa como suplente activo del jefe titular (HU-84).",
             "Mostrar tarjetas de KPIs superiores con los estados críticos de aprobación (Pendientes, Próximo a vencer, Vencidos).",
             "Permitir filtrar el listado por Comercial, Estado y Moneda. El select solo debe mostrar los datos tal cual.",
             "Presentar los resultados en una tabla con los datos clave (Monto, Comercial, Aprobador actual) y acciones directas.",
@@ -398,7 +399,7 @@
           ],
           imagenes: ["Bandeja de Visto Bueno - Total Weight Digital Suite.png"] },
 
-        { id: "HU-14", titulo: "Revisión Detallada y Comparación de Versiones",
+        { id: "HU-14", sprint: 3, titulo: "Revisión Detallada y Comparación de Versiones",
           rol: "Jefe Comercial", accion: "revisar el detalle de una propuesta y comparar sus versiones",
           beneficio: "evaluar la rentabilidad, los riesgos operacionales y las diferencias con cotizaciones previas antes de decidir.",
           criterios: [
@@ -409,29 +410,30 @@
           ],
           imagenes: ["Detalle Propuesta para Aprobación - Total Weight Digital Suite.png", "Comparar Versiones - Total Weight Digital Suite.png"] },
 
-        { id: "HU-15", titulo: "Emisión de Decisiones (Aprobar, Rechazar, Corregir)",
-          rol: "Jefe Comercial", accion: "registrar mi decisión sobre una propuesta sometida a Visto Bueno",
+        { id: "HU-15", sprint: 3, titulo: "Emisión de Decisiones (Aprobar, Rechazar, Corregir)",
+          rol: "Jefe Directo / Encargado Comercial", accion: "registrar mi decisión sobre una propuesta sometida a Visto Bueno por un comercial a mi cargo",
           beneficio: "avanzar el flujo hacia el cliente, detener cotizaciones inviables o exigir ajustes a mi equipo comercial.",
           criterios: [
             "Para Aprobar: Exigir la confirmación manual de \"Validaciones Requeridas\" (ej. disponibilidad confirmada) mediante casillas de verificación, permitiendo agregar un comentario opcional.",
+            "Al aprobar, la propuesta pasa a estado \"Aprobada\" y queda lista para envío al cliente. Una vez enviada al cliente, la propuesta se vuelve inmutable y solo podrá modificarse generando una nueva versión (HU-10).",
             "Para Rechazar: Exigir la selección de un motivo de rechazo (el select solo debe mostrar los datos tal cual) y una justificación detallada en texto. Mostrar advertencia de que la acción detiene la propuesta.",
             "Para Solicitar Corrección: Permitir seleccionar las áreas específicas a corregir mediante casillas (Configuración, Ítems, Forma de pago, etc.), exigir observaciones detalladas y establecer una fecha/hora límite de corrección."
           ],
           imagenes: ["Decisiones de Aprobación - Total Weight Digital Suite.png", "Rechazar Propuesta - Total Weight Digital Suite.png", "Solicitar Corrección - Total Weight Digital Suite.png"] },
 
-        { id: "HU-16", titulo: "Reasignación de Aprobador",
-          rol: "Jefe Comercial", accion: "derivar la revisión de una propuesta a otro responsable",
-          beneficio: "asegurar el flujo cuando la propuesta excede mi jurisdicción o requiera el análisis de otra área.",
+        { id: "HU-16", sprint: 3, titulo: "Reasignación de Aprobador",
+          rol: "Jefe Directo / Encargado Comercial", accion: "derivar la revisión de una propuesta a otro responsable",
+          beneficio: "asegurar el flujo cuando la propuesta excede mi jurisdicción o requiere el análisis de otra área.",
           criterios: [
             "Mostrar el aprobador actual y la fecha de asignación.",
-            "Permitir buscar y seleccionar a un nuevo aprobador con los permisos adecuados.",
+            "Permitir buscar y seleccionar a un nuevo aprobador con los permisos adecuados; el nuevo aprobador debe ser otro Jefe Directo válido dentro de la jerarquía comercial y no puede ser un rol inferior al del comercial autor.",
             "Requerir la selección de un motivo de reasignación. El select solo debe mostrar los datos tal cual.",
             "Mostrar el SLA restante de aprobación e incluir una casilla de verificación opcional para \"Reiniciar SLA de aprobación\" al reasignar."
           ],
           imagenes: ["Reasignar Aprobador - Total Weight Digital Suite.png"] },
 
         // ─── MÓDULO 5: SEGUIMIENTO COMERCIAL ────────────────────────────────────
-        { seccion: "MÓDULO 5: SEGUIMIENTO COMERCIAL", id: "HU-17", titulo: "Bandeja de Seguimiento Comercial",
+        { seccion: "MÓDULO 5: SEGUIMIENTO COMERCIAL", id: "HU-17", sprint: 3, titulo: "Bandeja de Seguimiento Comercial",
           rol: "Jefe/Asistente Comercial", accion: "visualizar la bandeja de seguimiento de propuestas enviadas",
           beneficio: "gestionar las próximas acciones con los clientes y evitar que las oportunidades se enfríen.",
           criterios: [
@@ -441,7 +443,7 @@
           ],
           imagenes: ["Bandeja de Seguimiento Comercial - Total Weight Digital Suite.png"] },
 
-        { id: "HU-18", titulo: "Vista Detalle del Seguimiento",
+        { id: "HU-18", sprint: 3, titulo: "Vista Detalle del Seguimiento",
           rol: "Jefe/Asistente Comercial", accion: "consultar el detalle del seguimiento de una propuesta específica",
           beneficio: "revisar el historial de interacciones previas y ejecutar la siguiente acción programada.",
           criterios: [
@@ -452,7 +454,7 @@
           ],
           imagenes: ["Detalle de Seguimiento - Total Weight Digital Suite.png"] },
 
-        { id: "HU-19", titulo: "Registro de Acciones de Seguimiento (Llamadas y Correos)",
+        { id: "HU-19", sprint: 3, titulo: "Registro de Acciones de Seguimiento (Llamadas y Correos)",
           rol: "Jefe/Asistente Comercial", accion: "registrar los detalles de una interacción con el cliente",
           beneficio: "mantener el historial actualizado y programar automáticamente el próximo contacto.",
           criterios: [
@@ -463,7 +465,7 @@
           ],
           imagenes: ["Registrar Seguimiento - Total Weight Digital Suite.png", "Registrar Llamada Comercial - Total Weight Digital Suite.png", "Registrar Correo de Seguimiento - Total Weight Digital Suite.png"] },
 
-        { id: "HU-20", titulo: "Reprogramación de Acciones",
+        { id: "HU-20", sprint: 3, titulo: "Reprogramación de Acciones",
           rol: "Jefe/Asistente Comercial", accion: "reprogramar una acción de seguimiento pendiente",
           beneficio: "ajustar mi agenda cuando un cliente solicita una nueva fecha o no hay respuesta.",
           criterios: [
@@ -474,7 +476,7 @@
           ],
           imagenes: ["Reprogramar Próxima Acción - Total Weight Digital Suite.png"] },
 
-        { id: "HU-21", titulo: "Cierre del Seguimiento (Aceptación, Rechazo o Sin Venta)",
+        { id: "HU-21", sprint: 3, titulo: "Cierre del Seguimiento (Aceptación, Rechazo o Sin Venta)",
           rol: "Jefe/Asistente Comercial", accion: "registrar el cierre de la oportunidad comercial",
           beneficio: "avanzar el flujo hacia operaciones o liberar el pipeline de oportunidades perdidas.",
           criterios: [
@@ -485,147 +487,243 @@
           imagenes: ["Registrar Aceptación de Propuesta - Total Weight Digital Suite.png", "Registrar Rechazo Comercial - Total Weight Digital Suite.png", "Cerrar Seguimiento sin Venta - Total Weight Digital Suite.png"] },
 
         // ─── MÓDULO 6: ÓRDENES DE COMPRA ────────────────────────────────────────
-        { seccion: "MÓDULO 6: ÓRDENES DE COMPRA", id: "HU-22", titulo: "Registro de Orden de Compra Recibida",
-          rol: "Jefe/Asistente Comercial", accion: "registrar la Orden de Compra enviada por el cliente",
-          beneficio: "vincular el documento contractual a la propuesta aceptada y notificar al área de Operaciones.",
+        { seccion: "MÓDULO 6: ÓRDENES DE COMPRA", id: "HU-22", sprint: 4, titulo: "Bandeja de Órdenes de Compra",
+          rol: "Jefe/Asistente Comercial", accion: "visualizar el listado consolidado de Órdenes de Compra recibidas con sus estados, saldos y vinculaciones",
+          beneficio: "monitorear la cobertura económica del portafolio y detectar OCs pendientes de validación, en observación o con saldo sin asignar.",
           criterios: [
-            "Mostrar un indicador de \"Cobertura\" que compare el monto de la propuesta aprobada vs. el monto de la OC registrada.",
-            "Exigir el ingreso de datos clave: N° OC, Fecha OC, Fecha Recepción, Moneda, Monto OC y Vigencia.",
-            "Requerir la carga obligatoria del archivo digital de la Orden de Compra (PDF).",
-            "Mostrar una nota informativa indicando que el registro notificará automáticamente a Contabilidad y Operaciones."
+            "Mostrar KPIs superiores: Total OCs del mes, Monto total validado, OCs en observación, OCs autogeneradas pendientes de reemplazo.",
+            "Mostrar en la tabla principal las columnas: N° OC, Cliente (RS + RUC), Propuesta(s) vinculada(s) (si son varias mostrar \"P-001 +2 más\" clickeable), Monto OC, Monto asignado, Saldo OC (lo que sobra sin asignar a propuestas), Fecha emisión, Estado (badge por color), Responsable y Acciones.",
+            "Permitir filtrar por Estado, Cliente, Rango de fechas, Responsable y Propuesta. El select solo debe mostrar los datos tal cual.",
+            "Diferenciar visualmente las OCs autogeneradas con un chip \"Autogenerada\" junto al código OC-AUTO-NNNN-YYYY.",
+            "No mostrar en la bandeja la columna \"Saldo propuesta\": esa información vive en el detalle de cada propuesta.",
+            "Permitir abrir el modal detalle con click en la fila o con el botón de acciones (ver detalle, anular)."
           ],
-          imagenes: ["Registrar Orden de Compra - Total Weight Digital Suite.png"] },
+          imagenes: ["Bandeja de Órdenes de Compra - Total Weight Digital Suite.png"] },
 
-        { id: "HU-23", titulo: "Bandeja y Detalle de Órdenes de Compra",
-          rol: "Jefe/Asistente Comercial", accion: "visualizar el listado de Órdenes de Compra recibidas y consultar su detalle",
-          beneficio: "controlar la cobertura económica de los servicios vendidos y verificar las vinculaciones documentales.",
+        { id: "HU-23", sprint: 4, titulo: "Registro de OC con Validación por IA integrada",
+          rol: "Jefe/Asistente Comercial", accion: "registrar una Orden de Compra enviada por el cliente adjuntando el PDF y permitiendo que la IA extraiga y valide los datos contra la propuesta aceptada",
+          beneficio: "eliminar el tipeo manual, detectar diferencias automáticamente y decidir el curso de acción (validar, solicitar corrección al cliente o generar nueva versión de propuesta) sin esperar validaciones manuales de un jefe.",
           criterios: [
-            "Mostrar tarjetas superiores con el estado general de las OC (Vigentes, Cobertura parcial, Saldo insuficiente, Pendiente de validación).",
-            "Mostrar en la tabla principal columnas clave como \"Monto OC\", \"Monto Aplicado\", \"Saldo\", \"Cobertura\" (con código de colores) y \"Estado\".",
-            "En la vista de detalle, presentar el cálculo de \"Cobertura Económica\" comparando el monto de la propuesta aprobada vs. el monto de la OC recibida, mostrando la diferencia/saldo.",
-            "Mostrar un \"Checklist de Validación\" visual y las vinculaciones directas a los documentos previos (RQ, Propuesta, Expediente)."
+            "Al pasar una propuesta a estado ACEPTADA, el sistema debe mostrar un modal preguntando \"¿El cliente ya envió la OC?\" con dos opciones: [Sí, registrar OC] (abre la ficha de registro) y [No, autogenerar OC provisional] (crea una OC-AUTO sin PDF, cubierta en HU-27).",
+            "La ficha de registro debe incluir: propuesta vinculada (preseleccionada), checkbox \"¿La factura tendrá lo mismo que la OC?\" (marcado por defecto), zona de carga de PDF (drag & drop), campos extraíbles por IA (N° OC, Fecha emisión, Monto, Moneda, Forma de pago, Conceptos) y observaciones libres.",
+            "Al subir el PDF, la IA (Gemini) debe extraer los datos y rellenar automáticamente los campos del formulario. Los campos extraídos del PDF (N° OC, Fecha emisión, Monto, Moneda, Forma de pago, Conceptos/Equipos, IGV, Descuento, Vigencia) quedan bloqueados por defecto y muestran un ícono \"🧠 IA\" indicando su origen. Si el comercial detecta un error de extracción, puede presionar \"corregir manualmente\" en el campo específico: el ícono cambia a \"✋ corregido manualmente\" y la modificación queda registrada en el timeline con usuario, fecha, valor original IA y valor nuevo.",
+            "Los campos que NO vienen del PDF son siempre editables: Fecha de recepción (fecha en que la OC llegó a TW), Propuesta vinculada, checkbox \"¿La factura tendrá lo mismo que la OC?\", Observaciones libres, y reparto de monto entre propuestas vinculadas (si aplica).",
+            "La IA debe validar los datos del PDF contra la propuesta vinculada y mostrar un panel con todas las diferencias detectadas clasificadas por severidad (crítico, advertencia, OK).",
+            "Reglas de acción por defecto: cualquier diferencia (RUC, RS, N° prop, fecha emisión, monto, forma de pago, descuento, IGV, moneda, plazo) implica \"Solicitar corrección al cliente\".",
+            "Excepción única: si hay conceptos/equipos distintos Y el checkbox \"¿La factura tendrá lo mismo que la OC?\" está MARCADO, la acción propuesta es \"Generar nueva versión de propuesta\". Si el checkbox está DESMARCADO, también se solicita corrección al cliente.",
+            "El monto siempre se alerta pero nunca bloquea: la OC puede cubrir solo parte de la propuesta o superarla (multi-OC por propuesta, cubierto en HU-25).",
+            "Debe existir un botón \"Ver validación completa\" en el panel lateral derecho que abra el Modal Detalle de Validación IA (HU-24) con la comparación side-by-side campo por campo, el historial de validaciones corridas y los insights generados por la IA.",
+            "Botones contextuales según diferencias: [Guardar y Validar] (si todo coincide → OC estado VALIDADA), [Guardar con observaciones] (OC estado OBSERVADA con flag informativo), [Solicitar corrección al cliente] (OC estado OBSERVADA pendiente corrección cliente), [Generar nueva versión de propuesta] (abre modal confirmación, auto-crea P-X vN+1 como copia de la vN sin modificar conceptos; comercial edita manualmente).",
+            "La IA NO decide: solo informa diferencias; la acción final siempre es decisión del comercial.",
+            "Al guardar, registrar en el timeline todos los eventos: creación, extracción IA, validación IA, acción elegida."
           ],
-          imagenes: ["Bandeja de Órdenes de Compra - Total Weight Digital Suite.png", "Detalle Orden de Compra - Total Weight Digital Suite.png"] },
+          imagenes: [
+            "Modal Post-Aceptación Propuesta - Total Weight Digital Suite.png",
+            "Registrar Orden de Compra - Multi-Propuesta - Total Weight Digital Suite.png",
+            "Registrar Orden de Compra - Validación con Advertencias - Total Weight Digital Suite.png",
+            "Registrar Orden de Compra - Validación Crítica - Total Weight Digital Suite.png"
+          ] },
 
-        { id: "HU-24", titulo: "Registro y Edición de Orden de Compra",
-          rol: "Jefe/Asistente Comercial", accion: "registrar una nueva Orden de Compra o editar los datos de una existente",
-          beneficio: "formalizar el sustento económico del servicio antes de enviarlo a operaciones.",
+        { id: "HU-24", sprint: 4, titulo: "Modal Detalle de Validación por IA",
+          rol: "Jefe/Asistente Comercial", accion: "consultar en detalle el resultado completo de la validación IA de una Orden de Compra contra una propuesta aceptada, incluyendo la comparación campo por campo, el historial de validaciones corridas y las explicaciones/insights generados por la IA",
+          beneficio: "entender a profundidad el porqué de cada diferencia detectada, trazar la evolución de la OC a través de iteraciones de corrección, y recibir sugerencias contextuales de la IA sobre cómo proceder frente a cada diferencia.",
           criterios: [
-            "Permitir vincular la OC a una propuesta previamente aprobada (heredando Cliente y RQ asociados).",
-            "Exigir el ingreso de datos estructurados: N° OC, Fechas (Emisión, Recepción, Vigencia), Moneda y Monto Total.",
-            "Requerir la carga del documento digital (PDF).",
-            "Mostrar un panel lateral dinámico (\"Validación de Cobertura\") que calcule el porcentaje de cobertura en tiempo real mientras se ingresa el monto.",
-            "En modo edición, mostrar una alerta indicando que modificar montos o moneda disparará un recálculo automático de saldos y requerirá \"Revalidación\"."
+            "El modal se abre desde dos lugares: (a) desde el panel lateral derecho de la Ficha de Registro OC (botón \"Ver validación completa\"), y (b) desde el tab \"Validación IA\" del Modal Detalle de OC (HU-25).",
+            "Modal centrado ancho (~1000px) con header (cuadrado+ícono auto_awesome, título \"Detalle de Validación IA\", subtítulo \"OC-XXX vs PROP-YYY\" y chip global de severidad: verde \"Sin diferencias\" / ámbar \"N advertencias\" / rojo \"N críticas\").",
+            "Fila superior con 4 mini KPIs: COINCIDENCIAS (verde), ADVERTENCIAS (ámbar), CRÍTICAS (rojo tenue), VALIDACIONES CORRIDAS (azul).",
+            "Tres tabs internos: [📊 Comparación] (activa por defecto) · [📜 Historial] · [💡 Insights IA].",
+            "Tab Comparación: 2 cards superiores (OC azul tenue + Propuesta Aceptada verde tenue con metadata). Debajo tabla con 4 columnas (CAMPO | VALOR EN OC | VALOR EN PROPUESTA | ESTADO/DICTAMEN) y una fila por cada campo validado: Cliente, N° Propuesta referenciada, Monto total, Forma de pago, Moneda, IGV, Conceptos/Equipos, Fecha emisión. Cada fila con chip de severidad (verde OK / ámbar Diferencia / rojo Crítico). Acordeón expandible al final \"Detalle de conceptos\" con sub-tabla.",
+            "Tab Historial: timeline vertical con todas las corridas de validación IA (fecha, hora, usuario, resultado), eventos de reemplazo de PDF, correcciones manuales y re-validaciones. Útil para auditoría del ciclo de corrección cliente.",
+            "Tab Insights IA: encabezado con ícono lightbulb y nota explicativa. Cards verticales (una por cada diferencia detectada) con explicación generada por Gemini sobre las posibles causas de la diferencia y un chip \"RECOMENDADO:\" con la acción sugerida. Requiere endpoint específico que llame a Gemini con prompt de interpretación.",
+            "Footer: izquierda botón \"Re-validar ahora\" (link con ícono refresh que dispara una nueva corrida de validación IA). Derecha botones [Cerrar] y [Guardar OC con observaciones] (si aplica según el estado).",
+            "La validación mostrada corresponde siempre a UNA sub-aplicación OC↔Propuesta específica. Si la OC tiene múltiples propuestas vinculadas, el usuario debe seleccionar cuál validar desde el contexto que abre el modal (pills de propuestas en Ficha de Registro o Modal Detalle OC).",
+            "Es un modal INFORMATIVO (lectura) salvo por el botón \"Re-validar ahora\" y la acción de guardar observaciones."
           ],
-          imagenes: ["Registrar Nueva Orden de Compra - Total Weight Digital Suite.png", "Editar Orden de Compra - Total Weight Digital Suite.png"] },
+          imagenes: ["Detalle de Validación IA - Total Weight Digital Suite.png"] },
 
-        { id: "HU-25", titulo: "Gestión de Documento y Auditoría de OC",
-          rol: "Jefe/Asistente Comercial", accion: "gestionar las versiones del archivo físico de la OC y revisar la auditoría del expediente",
-          beneficio: "asegurar la legibilidad de los documentos y mantener la trazabilidad para la normativa ISO 9001.",
+        { id: "HU-25", sprint: 4, titulo: "Modal Detalle de OC con Sub-aplicaciones y Vinculaciones múltiples",
+          rol: "Jefe/Asistente Comercial", accion: "consultar la información completa de una Orden de Compra, incluyendo todas las propuestas vinculadas, el estado de cada sub-aplicación y la validación IA correspondiente",
+          beneficio: "tener una vista única e informativa del expediente financiero de la OC, con navegación clara hacia la ficha de registro cuando se requiera operar.",
           criterios: [
-            "Permitir previsualizar, descargar o reemplazar el archivo PDF de la Orden de Compra.",
-            "Mantener un \"Historial de Versiones\" del documento, registrando fecha, usuario y el motivo de cada reemplazo.",
-            "Proveer una vista de \"Historial de Expediente Industrial\" que muestre un Timeline inmutable de eventos críticos (desde la creación del expediente hasta la validación de la OC).",
-            "Permitir imprimir o descargar el historial completo de auditoría en formato XLSX."
+            "El modal es SOLO INFORMATIVO (lectura). Todas las operaciones de edición redirigen a la ficha de registro, salvo anular (modal confirmación propio) y ver validación IA (sección interna o modal detallado HU-24).",
+            "Layout: panel izquierdo con preview del PDF inline, panel derecho con datos extraídos, checkbox \"¿Factura = OC?\" (consultable no editable), lista de propuestas vinculadas (cada una con N° prop clickeable, monto asignado, estado de sub-aplicación), saldo OC destacado, sección \"Validación IA\" dinámica según la propuesta seleccionada arriba, y timeline cronológico al pie.",
+            "La sección Validación IA debe cambiar su contenido según la propuesta vinculada seleccionada en la lista superior (por defecto la primera). Debe mostrar las diferencias detectadas en la última validación de esa vinculación y un botón [Ver validación completa] que abre el Modal Detalle de Validación IA (HU-24).",
+            "Soportar multi-propuesta por OC: una misma OC puede estar vinculada a varias propuestas del mismo cliente. Las vinculaciones se gestionan desde la ficha de registro (botón [Agregar propuesta vinculada]), no desde el modal.",
+            "Cada vinculación (sub-aplicación) tiene su propio estado de validación: una OC puede estar VALIDADA_PARCIAL cuando una vinculación está OK y otra en observación.",
+            "Estado consolidado de la OC: VALIDADA (todas OK), VALIDADA_PARCIAL (al menos una OK + al menos una pendiente), OBSERVADA (todas pendientes), ANULADA.",
+            "Botones contextuales según estado y propuesta seleccionada: [Editar OC], [Reemplazar PDF], [Subir OC corregida] (si pendiente corrección cliente), [Agregar propuesta vinculada] (si hay saldo OC), [Validar contra propuesta] (en sub-aplicación cuyo vN+1 esté ACEPTADA), [Anular OC] y [Cerrar]. Todos redirigen a la ficha de registro excepto Anular (modal confirmación) y Cerrar.",
+            "Las vinculaciones a propuesta mostradas en la lista deben ser clickeables para navegar al detalle de la propuesta correspondiente."
           ],
-          imagenes: ["Gestionar Documento de Orden de Compra - Total Weight Digital Suite.png", "Historial y Auditoría de Orden de Compra - Total Weight Digital Suite.png"] },
+          imagenes: [
+            "Detalle Orden de Compra - Resumen - Total Weight Digital Suite.png",
+            "Detalle Orden de Compra - Propuestas Vinculadas - Total Weight Digital Suite.png",
+            "Detalle Orden de Compra - Validación IA - Total Weight Digital Suite.png"
+          ] },
 
-        { id: "HU-26", titulo: "Validación y Observación de Orden de Compra",
-          rol: "Jefe Comercial", accion: "validar definitivamente una OC o registrar observaciones técnicas/comerciales",
-          beneficio: "asegurar que el documento cumple con los requisitos fiscales y comerciales antes de habilitar el servicio.",
+        { id: "HU-26", sprint: 4, titulo: "Gestión documental, Ciclo de corrección y Timeline de auditoría",
+          rol: "Jefe/Asistente Comercial", accion: "reemplazar el PDF de una OC, cargar una OC corregida enviada por el cliente y revisar el timeline inmutable de eventos del expediente",
+          beneficio: "mantener el documento vigente en el sistema, cerrar ciclos de corrección iterativos sin límite y asegurar trazabilidad completa para ISO 9001.",
           criterios: [
-            "Mostrar un \"Checklist de Validación\" interactivo comparando los datos extraídos de la OC física vs. los datos registrados en el sistema (Razón Social, RUC, Monto, Moneda).",
-            "Si todo es conforme, habilitar el botón \"Validar Orden de Compra\".",
-            "Si hay errores, permitir \"Observar OC\" exigiendo seleccionar motivos tipificados (el select solo debe mostrar los datos tal cual) y asignar un \"Responsable de Corrección\".",
-            "Al observar una OC, el sistema debe bloquear la liberación del expediente y notificar al responsable asignado."
+            "Reemplazar PDF: desde la ficha de registro, al reemplazar el PDF se dispara automáticamente una re-validación por la IA contra todas las propuestas vinculadas. Resultado y acciones derivadas quedan registrados en el timeline.",
+            "Subir OC corregida: cuando una OC está en estado OBSERVADA con flag \"Pendiente corrección del cliente\", el detalle y la ficha habilitan el botón [Subir OC corregida]. Al cargar el PDF corregido, se reemplaza el documento, se dispara re-validación IA automática y, si coincide, pasa a VALIDADA; si sigue habiendo diferencias, continúa el ciclo. No hay límite de iteraciones.",
+            "No se mantienen versiones navegables del PDF: solo existe la versión vigente, y el historial de reemplazos queda registrado en el timeline (fecha, usuario, motivo).",
+            "Validar contra propuesta (re-validación manual): cuando se generó una nueva versión de propuesta (vN+1) y esta pasa a ACEPTADA, la sub-aplicación OC↔P-X queda en espera. El comercial debe entrar manualmente a la OC desde la bandeja, seleccionar la vinculación afectada y presionar [Validar contra propuesta] para disparar la IA contra la nueva versión. La re-validación no es automática aquí.",
+            "Timeline inmutable: debe registrar como mínimo los eventos de creación de OC, carga/reemplazo de PDF, extracción IA, validaciones IA (con el resultado), decisiones del comercial (guardar, solicitar corrección, generar nueva versión), vinculaciones agregadas o quitadas, cambios de estado y anulación.",
+            "El timeline debe ser consultable desde el modal detalle y debe permitir descargar un reporte XLSX con todos los eventos del expediente."
           ],
-          imagenes: ["Validar Orden de Compra - Total Weight Digital Suite.png", "Observar Orden de Compra - Total Weight Digital Suite.png"] },
+          imagenes: [
+            "Detalle Orden de Compra - Timeline - Total Weight Digital Suite.png",
+            "Detalle Orden de Compra - Documento PDF - Total Weight Digital Suite.png"
+          ] },
 
-        { id: "HU-27", titulo: "Gestión Financiera: Distribución de Saldos y OC Complementaria",
-          rol: "Jefe Comercial", accion: "distribuir el monto de una OC entre varios servicios o registrar una OC complementaria",
-          beneficio: "gestionar clientes con presupuestos globales o corregir coberturas parciales (saldos insuficientes).",
+        { id: "HU-27", sprint: 4, titulo: "OC Autogenerada y Reemplazo por OC real del cliente",
+          rol: "Jefe/Asistente Comercial", accion: "crear automáticamente una OC provisional cuando el cliente aún no ha enviado la orden de compra, y reemplazarla posteriormente cuando la OC real llegue",
+          beneficio: "no bloquear la operación comercial ni el inicio de la ejecución del servicio por la demora del cliente en emitir el documento físico.",
           criterios: [
-            "Distribución: Permitir asignar saldos disponibles de una OC \"padre\" a múltiples propuestas pendientes del mismo cliente, validando que el monto a aplicar no exceda el \"Saldo Disponible\".",
-            "OC Complementaria: Cuando la cobertura de una propuesta es menor al 100%, permitir registrar una nueva OC vinculada que cubra la \"Diferencia / Faltante\".",
-            "Mostrar el resultado calculado en tiempo real (OC Existente + Nueva OC = Cobertura Total)."
+            "Cuando el comercial elige \"No, autogenerar OC provisional\" en el modal post-aceptación de propuesta, el sistema crea una OC con código OC-AUTO-NNNN-YYYY, sin PDF adjunto, estado RECIBIDA.",
+            "La OC autogenerada debe mostrar un chip visible \"Autogenerada\" en bandeja y modal detalle para distinguirla de las OCs reales.",
+            "La OC autogenerada cuenta como cobertura al 100% de la propuesta vinculada, permitiendo que operaciones programe y ejecute el servicio sin bloqueos.",
+            "En el modal detalle, una OC autogenerada debe mostrar el botón [Reemplazar por OC del cliente] que redirige a la ficha de registro en modo creación, preservando la vinculación a la propuesta.",
+            "Al guardar la OC real: la autogenerada se marca como reemplazada (quedando únicamente en el timeline), la OC real toma el relevo y pasa por el flujo normal de validación IA.",
+            "Las OCs autogeneradas deben contarse en un KPI específico de la bandeja (\"OCs autogeneradas pendientes de reemplazo\") para seguimiento."
           ],
-          imagenes: ["Distribuir Monto de Orden de Compra - Total Weight Digital Suite.png", "Registrar OC Complementaria - Total Weight Digital Suite.png"] },
+          imagenes: [
+            "Modal Post-Aceptación Propuesta - Total Weight Digital Suite.png",
+            "Detalle Orden de Compra - Autogenerada - Total Weight Digital Suite.png"
+          ] },
 
-        { id: "HU-28", titulo: "Liberación y Anulación (Control de Transición Operativa)",
-          rol: "Jefe Comercial", accion: "liberar el expediente para el área de programación o anular el proceso completo",
-          beneficio: "autorizar formalmente el inicio de las operaciones logísticas o detener definitivamente procesos erróneos.",
+        { id: "HU-28", sprint: 4, titulo: "Anulación de Orden de Compra",
+          rol: "Jefe Comercial", accion: "anular una Orden de Compra registrada por error, duplicada o que el cliente dejó sin efecto",
+          beneficio: "mantener la trazabilidad del documento sin afectar la cobertura económica de propuestas y conservar la auditoría del motivo.",
           criterios: [
-            "Liberación: Mostrar un resumen de \"Validaciones de Cumplimiento\" (Propuesta, OC, SCTR). Si hay requisitos obligatorios pendientes (ej. SSOMA), mostrar alerta pero permitir la liberación informando el impacto. Indicar claramente que la liberación traslada la responsabilidad a la siguiente etapa.",
-            "Anulación: Mostrar alerta de \"Impacto Crítico Detectado\". Si existe una Orden de Servicio en ejecución vinculada, bloquear la anulación exigiendo resolver primero el proceso operativo.",
-            "Si se permite la anulación, exigir motivo, justificación obligatoria y check de confirmación de impacto."
+            "El botón [Anular OC] está disponible en el modal detalle y en la ficha de registro, visible solo si el estado de la OC no es ya ANULADA.",
+            "Al presionar el botón se abre un modal de confirmación que solicita: motivo tipificado (select con opciones predefinidas: duplicada, error de registro, cancelada por cliente, otro) y justificación obligatoria de texto libre.",
+            "Si existen Órdenes de Servicio en ejecución vinculadas a la propuesta cubierta por esta OC, mostrar alerta de \"Impacto crítico\" indicando el detalle del impacto, pero permitir la anulación con confirmación adicional (check \"Confirmo el impacto\").",
+            "Al confirmar la anulación: la OC pasa a estado ANULADA (solo lectura), se descuenta su aporte de la cobertura de todas las propuestas vinculadas, los saldos propuesta se recalculan automáticamente, y el evento queda registrado en el timeline con usuario, motivo y justificación.",
+            "Una OC ANULADA no puede ser editada, reactivada ni vincular propuestas nuevas. Solo es consultable para auditoría.",
+            "Si la propuesta vinculada estaba en estado CERRADA solo gracias a esta OC, al anular pasa automáticamente a ACEPTADA con el saldo propuesta recalculado."
           ],
-          imagenes: ["Liberar Expediente para Programación - Total Weight Digital Suite.png", "Anular Orden de Compra - Total Weight Digital Suite.png"] },
+          imagenes: ["Anular Orden de Compra - Total Weight Digital Suite.png"] },
 
         // ─── MÓDULO 7: EXPEDIENTES DIGITALES ────────────────────────────────────
-        { seccion: "MÓDULO 7: EXPEDIENTES DIGITALES", id: "HU-29", titulo: "Bandeja de Expedientes Digitales",
-          rol: "Usuario del Sistema (Comercial / Operaciones)", accion: "visualizar la bandeja de Expedientes Digitales",
-          beneficio: "monitorear el estado general de los servicios, ubicar bloqueos y acceder rápidamente a la trazabilidad de cada cliente.",
+        { seccion: "MÓDULO 7: EXPEDIENTES DIGITALES", id: "HU-29", sprint: 4, titulo: "Bandeja de Expedientes Digitales",
+          rol: "Usuario del Sistema (Comercial / Operaciones)",
+          accion: "visualizar la bandeja consolidada de Expedientes Digitales con cards de KPIs por estado, buscador, filtros avanzados y tabla plana de 8 columnas con la trazabilidad completa de RQ → Propuesta → OC → OS/OM",
+          beneficio: "monitorear el estado general de los servicios en una sola vista, identificar bloqueos y SLA vencidos a primera vista, y acceder rápidamente al detalle de cualquier expediente del flujo end-to-end.",
           criterios: [
-            "Mostrar tarjetas superiores con el conteo de estados críticos (Expedientes Activos, Listos para Avanzar, Bloqueados, Con Excepción, SLA vencidos).",
-            "Permitir filtrar el listado por Estado, Etapa actual, Cliente y Área responsable. El select solo debe mostrar los datos tal cual.",
-            "Presentar una tabla que resuma la vinculación completa de cada expediente (N° Expediente, RQ, Propuesta, OC, OS/OM, Etapa Actual)."
+            "Encabezado de la vista con título 'Expedientes Digitales' y subtítulo descriptivo: 'Pipeline consolidado de RQs y Propuestas en curso, con trazabilidad del flujo end-to-end'.",
+            "Fila superior con 5 CARDS DE KPIs clickeables (cada card actúa como filtro rápido): [📁 Expedientes Activos (N)] [✓ Listos para Avanzar (N)] [🚫 Bloqueados (N)] [⚠️ Con Excepción (N)] [⏰ SLA Vencidos (N)]. Cada card muestra ícono + etiqueta + conteo grande.",
+            "Barra superior con buscador global (buscar por N° RQ, N° Propuesta, Cliente o RUC) + botón [⚙️ Filtros] con contador de filtros activos (ej. 'Filtros 3').",
+            "Panel de filtros expandible: Estado global, Etapa actual, Cliente, Área responsable, Tipo de propuesta, Rango de fechas, SLA. Los selects deben mostrar los datos tal cual, sin transformar.",
+            "Botones de utilidad en la barra: [⬇ Exportar XLSX] + [⚙️ Configurar columnas].",
+            "Mensaje informativo bajo la barra: 'Deslízate horizontalmente para ver las 8 columnas completas'. Las primeras columnas son fijas (sticky) para no perder referencia al hacer scroll.",
+            "TABLA DE 8 COLUMNAS: [1] RQ (código clickeable que lleva al detalle del expediente), [2] PROPUESTA (código + versión activa; si hay varias propuestas en el RQ, mostrar la activa + sub-texto '+N más'), [3] CLIENTE / RUC (razón social + RUC pequeño debajo), [4] OC (CANTIDAD) (chip con conteo de OCs vinculadas, ej. '2 OCs', '0' si no hay), [5] OS/OM (código de la Orden de Servicio u Orden de Metrología generada, ej. '05-2026-0012'; vacío si aún no se generó), [6] TIPO DE PROPUESTA (chip de color por tipo: Calibración, Suministros, Metrología, Mantenimiento, Soporte Técnico), [7] ETAPA ACTUAL (chip con la etapa vigente del workflow), [8] ESTADO / ACCIONES (chip de estado global + botón [👁 Ver Expediente]).",
+            "Click en cualquier fila (o en el código del RQ, o en el botón [👁 Ver Expediente]) abre la Ficha de Detalle del Expediente (HU-30) en pantalla completa.",
+            "Paginación en el footer de la tabla: 'Mostrando 1-10 de 42 registros' + navegación por páginas.",
+            "La bandeja es la vista principal del módulo. NO permite crear expedientes manualmente: los expedientes se generan automáticamente cuando se crea un RQ en el módulo Requerimientos (HU-18)."
           ],
-          imagenes: ["Bandeja de Expedientes Digitales - Total Weight Digital Suite.png"] },
+          imagenes: ["Bandeja de Expedientes Digitales - Estructura Plana (8 Columnas).png"] },
 
-        { id: "HU-30", titulo: "Vista Detallada y Workflow del Expediente",
-          rol: "Usuario del Sistema (Comercial / Operaciones)", accion: "consultar el detalle extendido y el workflow interactivo de un expediente",
-          beneficio: "revisar el progreso por etapas, los documentos críticos faltantes y la actividad reciente del servicio.",
+        { id: "HU-30", sprint: 4, titulo: "Ficha de Detalle del Expediente Digital",
+          rol: "Usuario del Sistema (Comercial / Operaciones / SSOMA / Metrología)", accion: "consultar en una ficha completa de pantalla con 11 tabs principales toda la información consolidada de un expediente, con drill-down detallado por cada etapa del flujo end-to-end",
+          beneficio: "tener una vista única 360° del servicio donde todas las áreas ven la información completa de cada etapa sin salir del expediente, con acceso rápido a reasignaciones y repositorio documental.",
           criterios: [
-            "Mostrar un indicador visual de progreso por etapas (RQ > Propuesta > VB > OC > Prog. > SSOMA > Ejecución).",
-            "Mostrar un panel de \"Estado Actual\" indicando si el expediente está bloqueado y el motivo (ej. SCTR Vencido).",
-            "En la vista de Workflow, mostrar el detalle de gestión por etapa (Responsable, T. Espera, SLA y Resultado).",
-            "Habilitar la exportación del workflow y del expediente completo (descarga de estructura y documentos)."
+            "La vista es una FICHA de pantalla completa (no modal) sin panel lateral. Todo el contenido es SOLO LECTURA; para editar, cada entidad muestra un botón [Ir al módulo origen] que redirige al módulo correspondiente.",
+            "SECCIÓN PRIMARIA (cabecera fija): N° de Expediente (ej. EXP-2026-MIN-01), Cliente, Chip de Estado global (Activo / Bloqueado / Con Excepción / Cerrado), Etapa actual, responsable principal, y FILA DE ACCIONES RÁPIDAS alineada a la derecha con 4 botones: [📎 Documentos] (abre Modal HU-31), [📜 Historial de Auditoría] (abre Modal HU-32), [⬇ Exportar Expediente Completo] (siempre visible), [🔄 Reasignar Responsable] (visible SOLO cuando el expediente está en etapa comercial — RQ, Propuesta, VB, Seguimiento, OC o OS; abre Modal HU-33).",
+            "Fila de 5 KPIs siempre visibles bajo la cabecera: Días transcurridos, SLA actual restante, Documentos totales, Bloqueos activos y Progreso general (%).",
+            "11 BOTONES EN EL MENÚ NAVEGABLE TIPO WORKFLOW (Resumen + las 10 etapas del flujo): [📊 Resumen] [📄 RQ] [📝 Propuestas (N)] [✓ Visto Bueno] [📞 Seguimiento] [🧾 OC (N)] [⚙️ OS] [📅 Programación] [🛡️ SSOMA] [🚀 Ejecución] [✓ Cierre]. Los tabs con contador (N) indican cuántos items hay en esa categoría. Documentos y Auditoría NO son tabs del workflow: se acceden desde los botones de la sección primaria (ver criterio anterior).",
+            "Carga perezosa (lazy load): solo el tab 'Resumen' carga al abrir la ficha. Los demás tabs cargan su data al ser seleccionados por primera vez. Esto evita latencia al cargar inicialmente.",
+            "Tab 📊 Resumen (por defecto): contiene (a) Workflow visual stepper horizontal interactivo con las 10 etapas (RQ > Propuesta > VB > Seguimiento > OC > OS > Programación > SSOMA > Ejecución > Cierre), coloreado por estado (verde completada, azul actual, gris pendiente, rojo bloqueada); (b) Árbol de entidades jerárquico con responsables por item (puramente consultivo, sin botones ⋯ por fila: la reasignación de una entidad concreta se hace desde el botón [🔄 Reasignar Responsable] de la sección primaria, que abre el Modal HU-33 Opción A — Entidad Específica); (c) resumen de bloqueos globales.",
+            "Click en una etapa del stepper del tab Resumen cambia automáticamente al tab correspondiente a esa etapa (ej. click en 'OC' lleva al tab 🧾 OC).",
+            "Tab 📄 RQ: datos completos del requerimiento (código, origen, grado de necesidad, descripción, área, contacto cliente, fechas, archivos adjuntos) + mini timeline específico del RQ.",
+            "Tab 📝 Propuestas (N): pills horizontales por versión [v1] [v2] [v3] [v4] [v5]; al seleccionar una pill, se muestra el detalle completo de esa versión (monto, moneda, equipos, condiciones comerciales, forma de pago, PDF descargable, aprobadores VB, fechas, estado y responsable). Botón 'Comparar versiones' si hay más de 1.",
+            "Tab ✓ Visto Bueno: lista de solicitudes VB por versión de propuesta. Para cada VB: aprobador asignado, decisión (aprobado/rechazado/devuelto), comentarios, fecha, historial de reasignación de aprobador si aplica.",
+            "Tab 🧾 OC (N): pills horizontales por OC [OC-ANT-0847] [OC-ANT-0848]; al seleccionar una pill, se muestra el detalle completo (datos extraídos IA, validación por sub-aplicación, PDF preview, checkbox factura=OC, observaciones, timeline específico, propuestas vinculadas).",
+            "Tab ⚙️ OS: datos de la OS vinculada (cronograma de ejecución, personal técnico asignado, equipos a intervenir, viáticos, gastos). Botón 'Ir al módulo OS' para editar.",
+            "Tab 📅 Programación: calendario de ejecución, recursos reservados, conflictos resueltos para este expediente.",
+            "Tab 🛡️ SSOMA: checklist de habilitación por técnico/equipo, documentos SSOMA cargados, estado de validación.",
+            "Tab 🚀 Ejecución: eventos de campo (GPS, fotos, firmas digitales), timeline de ejecución, incidencias registradas.",
+            "Tab ✓ Cierre: datos del cierre del servicio (conformidad del cliente, informe final, fecha de cierre, observaciones).",
+            "Los tabs con contador (N) actualizan dinámicamente cuando se agregan nuevos items (ej. nueva versión de propuesta = Propuestas (6)).",
+            "La ficha es puramente consultiva: NO se avanzan etapas manualmente (el avance es automático según el flujo). NO se resuelven bloqueos aquí (se redirige al módulo origen). NO se editan datos de las entidades aquí."
           ],
-          imagenes: ["Detalle Requerimiento Extendido - Total Weight Digital Suite.png", "Workflow del Expediente - Total Weight Digital Suite.png", "Exportar Expediente - Total Weight Digital Suite.png"] },
+          imagenes: [
+            "Ficha de Detalle del Expediente Digital - Flujo con Línea Continua.png",
+            "Ficha de Detalle del Expediente Digital - Etapa RQ Activa.png",
+            "Ficha de Detalle del Expediente Digital - Etapa Propuesta Activa.png",
+            "Ficha de Detalle del Expediente Digital - Etapa VB (11 Hitos).png",
+            "Ficha de Detalle del Expediente Digital - Etapa Seguimiento Activa.png",
+            "Ficha de Detalle del Expediente Digital - Etapa OC Activa.png"
+          ] },
 
-        { id: "HU-31", titulo: "Repositorio Integrado de Documentos",
-          rol: "Usuario del Sistema (Comercial / Operaciones)", accion: "acceder al listado completo de documentos vinculados al expediente y adjuntar nuevos archivos",
-          beneficio: "centralizar la información, revisar evidencias y cargar informes internos sin salir del contexto del servicio.",
+        { id: "HU-31", sprint: 4, titulo: "Modal Repositorio Consolidado de Documentos",
+          rol: "Usuario del Sistema (Comercial / Operaciones / SSOMA / Metrología)", accion: "consultar en un modal unificado TODOS los documentos del expediente agrupados por categoría, con buscador, filtros, preview inline y descarga individual",
+          beneficio: "centralizar la información documental del servicio en un solo lugar sin salir del expediente, para revisar evidencias, consultar versiones y auditar trazabilidad documental.",
           criterios: [
-            "Mostrar una ventana modal con navegación por pestañas según el origen del documento (Comerciales, Operativos, SSOMA, Técnicos, etc.).",
-            "Listar cada documento mostrando su origen, etapa, versión, estado y usuario que lo cargó.",
-            "Permitir \"Adjuntar documento interno\" requiriendo: Tipo de documento, Etapa asociada, Nombre, Descripción y el archivo físico.",
-            "Permitir configurar la visibilidad del documento adjunto (Interno o por Área)."
+            "El modal se abre desde el botón [📎 Documentos] de la información primaria del expediente (y también desde los botones de acciones rápidas de otras vistas drill-down cuando aplique).",
+            "Modal centrado grande (~1100px ancho) con header (ícono attach_file + título 'Repositorio de Documentos del Expediente' + subtítulo con código del expediente y cliente).",
+            "Barra superior con buscador global (buscar por nombre, tipo o módulo origen) + filtros laterales (Rango de fechas, Estado, Formato) + contador total de documentos.",
+            "5 TABS por categoría de documentos: [📎 Todos (N)] [📄 Comerciales (N)] [🧾 Operativos (N)] [🛡 SSOMA (N)] [🔧 Técnicos (N)]. El contador (N) refleja cantidad de documentos por tab.",
+            "Comerciales: adjuntos del RQ, PDFs de propuestas por versión, correos de seguimiento, evidencias de aceptación/rechazo.",
+            "Operativos: PDFs de OCs recibidas del cliente, PDFs de OS generadas.",
+            "SSOMA: SCTR, inducciones, certificaciones, documentos de habilitación del personal/equipos.",
+            "Técnicos: reportes técnicos, actas de calibración, fotos de ejecución (futuras versiones).",
+            "Tabla de documentos con columnas: NOMBRE (con ícono por tipo PDF/XLSX/EML/JPG), ORIGEN (módulo + etapa consolidados en una sola columna, ej. 'Propuesta — VB'), VERSIÓN (si aplica), FECHA DE CARGA, USUARIO (visible al expandir fila o en tooltip), ACCIONES (botón 👁 Preview inline + botón ⬇ Descargar).",
+            "Preview inline: al presionar [👁 Preview], se abre un panel/modal secundario con la vista previa del PDF embebido, con controles de zoom y navegación de páginas. También opción de abrir el documento en pantalla completa.",
+            "El modal es SOLO LECTURA. NO permite adjuntar nuevos documentos ni editar los existentes (todo el módulo Expediente Digital es informativo/consultivo; la carga de documentos se hace en los módulos origen).",
+            "Footer: contador 'Mostrando N de N documentos' alineado izquierda, botón [⬇ Exportar lista XLSX] (exporta la metadata de los documentos: nombre, origen, versión, fecha, usuario — NO los PDFs en sí) y botón [Cerrar] alineados derecha.",
+            "El tab Todos lista los documentos ordenados cronológicamente por fecha de carga (más recientes primero por defecto, pero se puede invertir con sort en la columna fecha)."
           ],
-          imagenes: ["Documentos del Expediente - Total Weight Digital Suite.png", "Adjuntar Documento Interno - Total Weight Digital Suite.png"] },
+          imagenes: [
+            "Modal Repositorio Consolidado de Documentos - Total Weight Digital Suite.png"
+          ] },
 
-        { id: "HU-32", titulo: "Gestión de Bloqueos y Excepciones",
-          rol: "Jefe de Operaciones / Jefe Comercial", accion: "resolver bloqueos documentales o cerrar excepciones activas",
-          beneficio: "destrabar el flujo del expediente y permitir que avance a la siguiente etapa de ejecución.",
+        { id: "HU-32", sprint: 4, titulo: "Modal Historial de Auditoría del Expediente",
+          rol: "Jefe Comercial / Administrador / Auditor",
+          accion: "consultar en un modal unificado todo el historial de eventos del expediente agrupados por tipo (timeline general, reasignaciones, bloqueos/excepciones y alertas de SLA), con filtros, buscador y exportación",
+          beneficio: "disponer de una vista forense completa de la vida del expediente que permita auditar decisiones, trazar responsables y entender incidencias sin tener que entrar a cada etapa por separado.",
           criterios: [
-            "Para Bloqueos: Mostrar el contexto del requerimiento y el impacto del bloqueo (ej. \"No se puede habilitar servicio\"). Exigir la selección de un tipo de resolución (el select solo debe mostrar los datos tal cual) y adjuntar la evidencia (ej. nuevo SCTR).",
-            "Para Excepciones: Mostrar el tipo documental y la descripción. Requerir el \"Resultado de cierre\" desde un desplegable, un sustento obligatorio en texto y la carga de evidencia física.",
-            "Una vez resuelto el bloqueo/excepción, el estado del expediente debe actualizarse automáticamente y notificar al área responsable."
+            "El modal se abre desde el botón [📜 Historial de Auditoría] ubicado en la zona de acciones de la Ficha del Expediente (al lado del botón [📎 Documentos]).",
+            "Modal centrado grande (~1100px ancho) con header (ícono history + título 'Historial de Auditoría del Expediente' + subtítulo con código del expediente, cliente y responsable actual).",
+            "Barra superior con buscador global (buscar por texto en comentarios, usuario o entidad) + filtros laterales (Rango de fechas, Usuario, Etapa, Tipo de evento) + contador total de eventos.",
+            "4 TABS por tipo de registro: [📊 Timeline (N)] [🔄 Reasignaciones (N)] [🚫 Bloqueos (N)] [⏰ Alertas SLA (N)]. El contador (N) refleja la cantidad por tab.",
+            "TAB Timeline: línea de tiempo cronológica consolidada con TODOS los eventos del expediente (creación RQ, cada versión de propuesta, envíos, aceptaciones/rechazos, OC recibidas, OS generada, programación, bloqueos SSOMA, ejecuciones, cierres, reasignaciones). Cada evento muestra: ícono por tipo + timestamp + usuario + descripción + entidad afectada + chip de etapa.",
+            "TAB Reasignaciones: tabla con el histórico completo de cambios de responsable. Columnas: FECHA, ENTIDAD/ALCANCE (ej. 'Propuesta PRO-0045-2026 v2' o 'Cascada desde RQ' o 'Cartera completa'), DE (responsable anterior), A (responsable nuevo), MOTIVO (tipificado), COMENTARIO (visible al expandir fila), DECISIÓN SLA (Mantenido/Reiniciado), EJECUTADO POR.",
+            "TAB Bloqueos: tabla con todas las excepciones/bloqueos registrados sobre el expediente (SSOMA no apto, OC observada, VB rechazado, cliente no responde, equipo no disponible, etc.). Columnas: FECHA, TIPO DE BLOQUEO, ETAPA, ENTIDAD AFECTADA, MOTIVO, FECHA DE RESOLUCIÓN (si aplica), DURACIÓN (horas/días), USUARIO QUE REGISTRÓ.",
+            "TAB Alertas SLA: tabla con todas las alertas de SLA disparadas en la vida del expediente. Columnas: FECHA, ETAPA, NIVEL (🟡 Advertencia / 🟠 Riesgo / 🔴 Vencido), SLA ESTABLECIDO, SLA REAL, DESVÍO, RESPONSABLE AL MOMENTO DE LA ALERTA, ACCIÓN TOMADA.",
+            "Todos los tabs permiten ordenar por columna y expandir filas para ver detalle completo (comentarios largos, metadatos adicionales).",
+            "El modal es SOLO LECTURA. NO permite editar ni eliminar registros de auditoría (los eventos son inmutables por diseño).",
+            "Footer: contador 'Mostrando N de N eventos' alineado izquierda, botones [⬇ Exportar XLSX] + [⬇ Exportar PDF] (exportan el tab activo con los filtros aplicados) y botón [Cerrar] alineados derecha.",
+            "El Timeline consolidado se nutre automáticamente de los timelines individuales de cada módulo origen (RQ, Propuesta, VB, Seguimiento, OC, OS, Programación, SSOMA, Ejecución, Cierre). Los eventos NO se duplican: cada evento aparece una vez con su origen identificado."
           ],
-          imagenes: ["Resolver Bloqueo - Total Weight Digital Suite.png", "Cerrar Excepción - Total Weight Digital Suite.png"] },
+          imagenes: [
+            "Modal Historial de Auditoría del Expediente - Total Weight Digital Suite.png"
+          ] },
 
-        { id: "HU-33", titulo: "Auditoría y Reasignación de Expediente",
-          rol: "Jefe de Operaciones / Jefe Comercial", accion: "revisar el historial inmutable de eventos y reasignar al responsable actual",
-          beneficio: "cumplir con auditorías de calidad (ISO 9001) y balancear la carga operativa del equipo.",
+        { id: "HU-33", sprint: 4, titulo: "Modal de Reasignación de Responsable (Individual / Cascada / Global)",
+          rol: "Jefe Comercial / Administrador", accion: "reasignar al responsable actual de una o más entidades (RQ, Propuesta, OC, OS) a otro comercial, con 3 modos de alcance: individual, cascada por árbol o global del comercial",
+          beneficio: "redistribuir la carga de trabajo con el nivel de granularidad adecuado al caso (ajuste puntual, cambio de responsable del flujo o renuncia completa del comercial).",
           criterios: [
-            "Para Auditoría: Mostrar un \"Historial del Expediente\" cronológico, filtrable por tipo de evento, usuario, etapa y rango de fechas. Permitir la exportación del historial.",
-            "Para Reasignación: Mostrar el responsable actual y el SLA restante. Permitir buscar un \"Nuevo Responsable\". Exigir un \"Motivo de reasignación\" (el select solo debe mostrar los datos tal cual) y permitir decidir la gestión del SLA (Mantener actual o Reiniciar).",
-            "Mostrar una nota de impacto indicando que la reasignación se registrará en auditoría y notificará al nuevo usuario."
+            "El botón [Reasignar Responsable] se visibiliza en la Ficha del Expediente SOLO cuando el expediente está en una etapa comercial (RQ, Propuesta, VB, Seguimiento, OC, OS). En etapas operativas (Programación, SSOMA, Ejecución, Cierre) el botón NO aparece.",
+            "Al presionar el botón, se abre el modal con 3 opciones iniciales que el usuario debe elegir: (a) ENTIDAD ESPECÍFICA — reasigna solo una entidad puntual; (b) CASCADA — reasigna una entidad raíz + todo lo descendiente del árbol, con opción de personalizar selección (desmarcar entidades); (c) TODO LO PENDIENTE DEL COMERCIAL — reasigna todas las entidades activas del comercial en todos los expedientes del sistema (uso: renuncia, vacaciones largas), con opción de desmarcar expedientes puntuales.",
+            "OPCIÓN A — Entidad Específica: dropdown con las entidades activas del expediente actual (RQ, Propuestas, OCs, OS). Seguimiento NO aparece en la lista porque siempre hereda el responsable de la propuesta vinculada. Entidades finalizadas (RECHAZADA, ANULADA, CERRADA) tampoco aparecen. Al elegir una entidad, se muestra preview: 'Se reasignará solo: [código]'.",
+            "OPCIÓN B — Cascada: dropdown para elegir la entidad raíz del árbol a reasignar. Al elegirla, el modal muestra automáticamente el preview de la cascada: lista de la raíz + todas las entidades descendientes del árbol (ej. si eliges una Propuesta, muestra sus OCs y su OS). Botón [⚙️ Personalizar selección] habilita checkboxes por cada entidad descendiente para desmarcar las que NO se deben reasignar (la raíz siempre queda marcada). Preview actualiza en tiempo real.",
+            "OPCIÓN C — Todo lo pendiente del comercial: muestra automáticamente el resumen de impacto global (cantidad de expedientes, propuestas, OCs y OS activos del comercial). Botón [📋 Ver detalle de expedientes afectados ▼] despliega una tabla con una fila por cada expediente afectado (columnas: Código, Cliente, Etapa actual, SLA restante, # Entidades activas). La tabla es solo informativa (sin checkboxes de exclusión): la Opción C es masiva y reasigna TODOS los expedientes activos del comercial. Cada fila puede expandirse para ver las entidades específicas que contiene. Si el usuario necesita excluir expedientes puntuales, debe usar la Opción B (Cascada con personalización) por cada caso.",
+            "Campos comunes a las 3 opciones: Responsable actual (lectura, con nombre + avatar + cargo), Nuevo Responsable (buscador filtrado por rol Comercial), Motivo tipificado (Vacaciones / Cambio de puesto / Renuncia / Carga de trabajo alta / Redistribución operativa / Otro), Comentario obligatorio (mínimo 20 caracteres), Decisión del SLA (Mantener restante / Reiniciar desde ahora).",
+            "Seguimiento se arrastra automáticamente: su responsable siempre refleja al de la propuesta vinculada. No es necesario reasignarlo por separado y no aparece como entidad reasignable en ninguna opción.",
+            "Solo se reasignan entidades ACTIVAS. Las entidades finalizadas (RQ cerrado, Propuesta RECHAZADA/ANULADA, OC ANULADA, OS COMPLETADA/CANCELADA) permanecen con su responsable histórico para auditoría y no se reasignan en ninguna de las 3 opciones.",
+            "Al confirmar: cada entidad reasignada registra el cambio en su propio timeline. El timeline/auditoría del expediente registra el evento consolidado con el detalle de qué se reasignó (y en el caso de Opción C, cuántos expedientes y entidades fueron afectados), con fecha, usuario que ejecutó, motivo y comentario.",
+            "Notificación automática: el nuevo responsable recibe correo + notificación interna con la lista de entidades/expedientes que ahora son suyos. El responsable anterior recibe notificación informativa del cambio.",
+            "El botón [Confirmar Reasignación] queda deshabilitado hasta completar todos los campos obligatorios y haber seleccionado al menos una entidad/expediente (según la opción elegida)."
           ],
-          imagenes: ["Historial del Expediente - Total Weight Digital Suite.png", "Reasignar Responsable - Total Weight Digital Suite.png"] },
-
-        { id: "HU-34", titulo: "Transición y Avance de Etapa",
-          rol: "Jefe de Operaciones / Asistente de Operaciones", accion: "avanzar el expediente a la siguiente etapa del flujo",
-          beneficio: "confirmar que se han cumplido los requisitos actuales y trasladar la responsabilidad al siguiente proceso.",
-          criterios: [
-            "Al intentar avanzar, mostrar un panel de \"Validaciones de Etapa\" verificando checklist automáticos (OC válida, OS generada, SCTR vigente, etc.).",
-            "Si hay bloqueos (Expediente Bloqueado): Mostrar alerta roja de \"No es posible avanzar\" e inhabilitar el avance hasta que se resuelvan los requisitos críticos. Proveer botón directo para \"Resolver bloqueo\".",
-            "Si está conforme (Expediente Listo): Mostrar mensaje verde de \"Expediente listo para avanzar\". Indicar claramente la Etapa Actual, la Siguiente Etapa y el área que será responsable. Habilitar el botón \"Avanzar a siguiente etapa\"."
-          ],
-          imagenes: ["Avanzar Expediente (Bloqueado) - Total Weight Digital Suite.png", "Avanzar Expediente (Listo) - Total Weight Digital Suite.png"] },
+          imagenes: [
+            "Modal Reasignar Responsable - Entidad Específica.png",
+            "Modal Reasignar Responsable - Cascada Personalizada.png",
+            "Modal Reasignar Responsable - Cartera Completa.png"
+          ] },
 
         // ─── MÓDULO 8: PROGRAMACIÓN OPERATIVA ───────────────────────────────────
-        { seccion: "MÓDULO 8: PROGRAMACIÓN OPERATIVA", id: "HU-35", titulo: "Bandeja de Programación y Calendario Operativo",
+        { seccion: "MÓDULO 8: PROGRAMACIÓN OPERATIVA", id: "HU-35", sprint: 5, titulo: "Bandeja de Programación y Calendario Operativo",
           rol: "Jefe/Asistente de Operaciones", accion: "visualizar la bandeja de programación con vista de calendario y recursos",
           beneficio: "planificar las atenciones de servicios, gestionar la disponibilidad del equipo y ubicar solicitudes pendientes.",
           criterios: [
@@ -636,7 +734,7 @@
           ],
           imagenes: ["Programación Operativa - Total Weight Digital Suite.png"] },
 
-        { id: "HU-36", titulo: "Generación de Orden de Servicio y Asignación de Recursos",
+        { id: "HU-36", sprint: 5, titulo: "Generación de Orden de Servicio y Asignación de Recursos",
           rol: "Jefe/Asistente de Operaciones", accion: "generar una Orden de Servicio (OS) a partir de un expediente liberado y asignarle recursos",
           beneficio: "definir el cronograma operativo, designar al técnico responsable y reservar los equipos necesarios para la ejecución.",
           criterios: [
@@ -647,7 +745,7 @@
           ],
           imagenes: ["Generar Orden de Servicio - Total Weight Digital Suite.png", "Asignar Recurso - Total Weight Digital Suite.png", "Programar Servicio - Total Weight Digital Suite.png"] },
 
-        { id: "HU-37", titulo: "Detalle de Servicio, Confirmación y Bloqueos de Ejecución",
+        { id: "HU-37", sprint: 5, titulo: "Detalle de Servicio, Confirmación y Bloqueos de Ejecución",
           rol: "Jefe/Asistente de Operaciones", accion: "revisar el detalle de un servicio programado y confirmar la visita con el cliente",
           beneficio: "asegurar que todas las condiciones operativas y de seguridad estén listas antes de enviar al equipo técnico.",
           criterios: [
@@ -657,7 +755,7 @@
           ],
           imagenes: ["Detalle de Servicio Programado - Total Weight Digital Suite.png", "Confirmar Visita con Cliente - Total Weight Digital Suite.png", "Bloquear Servicio por Falta de Habilitación - Total Weight Digital Suite.png"] },
 
-        { id: "HU-38", titulo: "Reprogramación, Liberación de Cupos y Sugerencia de Backlog",
+        { id: "HU-38", sprint: 5, titulo: "Reprogramación, Liberación de Cupos y Sugerencia de Backlog",
           rol: "Jefe/Asistente de Operaciones", accion: "reprogramar un servicio o liberar un cupo en la agenda",
           beneficio: "reaccionar ante cancelaciones de clientes o imprevistos técnicos, optimizando los espacios libres.",
           criterios: [
@@ -667,7 +765,7 @@
           ],
           imagenes: ["Reprogramar Servicio - Total Weight Digital Suite.png", "Liberar Cupo y Sugerir Backlog - Total Weight Digital Suite.png"] },
 
-        { id: "HU-39", titulo: "Gestión de Carga de Recursos y Resolución de Conflictos",
+        { id: "HU-39", sprint: 5, titulo: "Gestión de Carga de Recursos y Resolución de Conflictos",
           rol: "Jefe de Operaciones", accion: "analizar la matriz de utilización semanal y resolver conflictos de horario",
           beneficio: "evitar la sobrecarga del equipo técnico y solucionar solapamientos en las asignaciones.",
           criterios: [
@@ -677,68 +775,131 @@
           ],
           imagenes: ["Carga de Recursos - Total Weight Digital Suite.png", "Ver Conflicto de Programación - Total Weight Digital Suite.png"] },
 
-        // ─── MÓDULO 9: ÓRDENES DE SERVICIO ──────────────────────────────────────
-        { seccion: "MÓDULO 9: ÓRDENES DE SERVICIO", id: "HU-40", titulo: "Creación, Edición y Anulación de Orden de Servicio",
-          rol: "Jefe/Asistente de Operaciones", accion: "crear, editar o anular una Orden de Servicio (OS)",
-          beneficio: "estructurar el trabajo técnico, corregir parámetros logísticos o cancelar servicios inviables.",
+        { id: "HU-45", sprint: 5, titulo: "Gestión de Viáticos y Rendición de Gastos Operativos",
+          rol: "Asistente / Jefe de Operaciones",
+          accion: "asignar viáticos previos al personal técnico asignado a un servicio programado y revisar la rendición de gastos operativos (movilidad, alimentación, insumos) presentados por el técnico desde campo",
+          beneficio: "proveer los fondos necesarios para la ejecución del servicio y controlar económicamente los gastos reales de cada OS/OM.",
           criterios: [
-            "Creación/Edición: Permitir vincular un expediente origen y cargar automáticamente Cliente, RQ, OC y Propuesta. Mostrar validaciones en tiempo real (Cliente Activo, Línea de Crédito, Garantía, SSOMA). En edición, advertir que cambiar la fecha o el responsable requerirá una \"Revalidación Necesaria\" de disponibilidad y conflictos.",
-            "Mostrar un \"Resumen de OS\" lateral con el cálculo automático del Total Estimado (Servicio Base + Traslado + Insumos).",
-            "Anulación: Mostrar alerta de \"Impacto de la Anulación\" sobre la programación y viáticos. Exigir selección de motivo (el select solo debe mostrar los datos tal cual) y justificación detallada obligatoria."
-          ],
-          imagenes: ["Nueva Orden de Servicio - Total Weight Digital Suite.png", "Editar Orden de Servicio - Total Weight Digital Suite.png", "Anular Orden de Servicio - Total Weight Digital Suite.png"] },
-
-        { id: "HU-41", titulo: "Bandeja, Detalle y Vista Previa de Orden de Servicio",
-          rol: "Jefe/Asistente de Operaciones", accion: "visualizar la bandeja general, el detalle específico y la vista previa del expediente de una OS",
-          beneficio: "monitorear el estado del despacho técnico y verificar las validaciones documentales previas.",
-          criterios: [
-            "Mostrar la bandeja principal con tarjetas de estado (OS Activas, Programadas, En Ejecución, Bloqueadas).",
-            "En la vista de Detalle, incluir navegación por pestañas para organizar la información (Resumen, Personal, Viáticos, etc.).",
-            "Mostrar en el resumen un Checklist visual de \"Validaciones Previas\" (OC Adjunta, Expediente Revisado, SSOMA, Repuestos en Stock).",
-            "Proveer una \"Vista Previa del Expediente\" en una ventana emergente para consultas rápidas sin salir de la OS."
-          ],
-          imagenes: ["Bandeja de Órdenes de Servicio - Total Weight Digital Suite.png", "Detalle Orden de Servicio - Total Weight Digital Suite.png", "Vista Previa Expediente - Total Weight Digital Suite.png"] },
-
-        { id: "HU-42", titulo: "Cronograma y Trazabilidad de Hitos de OS",
-          rol: "Jefe/Asistente de Operaciones", accion: "visualizar el cronograma detallado de la Orden de Servicio",
-          beneficio: "monitorear el cumplimiento de los tiempos (SLA) en cada hito del proceso operativo.",
-          criterios: [
-            "Mostrar un \"Historial de Eventos\" cronológico indicando fecha, hora, hito alcanzado y responsable.",
-            "Presentar una tabla de \"Planificación Detallada\" con las etapas operativas (Preparación, SSOMA, Ejecución, Validación).",
-            "Indicar visualmente el estado del SLA para cada hito específico de la tabla (ej. \"En plazo\", \"3h restantes\").",
-            "Calcular y mostrar en tarjetas inferiores la duración total estimada, el porcentaje general de programación y las alertas activas. Permitir la exportación del cronograma en un formato descargable."
-          ],
-          imagenes: ["Ver Cronograma OS - Total Weight Digital Suite.png"] },
-
-        { id: "HU-43", titulo: "Gestión de Personal y Equipos de la OS",
-          rol: "Jefe/Asistente de Operaciones", accion: "asignar, retirar personal técnico y gestionar los equipos a intervenir en una OS",
-          beneficio: "asegurar que el recurso humano adecuado y las herramientas precisas estén vinculados al servicio.",
-          criterios: [
-            "Personal: Mostrar el \"Personal Actual\" asignado con su rol, sede, estado SSOMA y carga laboral diaria. Permitir retirar personal o buscar/agregar nuevos miembros filtrando por especialidad y disponibilidad.",
-            "Equipos: Mostrar un catálogo buscador para asociar los equipos del cliente (Balanzas, Básculas) a la OS.",
-            "Validar y mostrar visualmente si el equipo seleccionado cuenta con \"GARANTÍA ACTIVA\"."
-          ],
-          imagenes: ["Gestionar Personal OS - Total Weight Digital Suite.png", "Gestionar Equipos OS - Total Weight Digital Suite.png"] },
-
-        { id: "HU-44", titulo: "Gestión de Viáticos y Gastos Operativos",
-          rol: "Asistente de Operaciones", accion: "asignar viáticos previos y revisar la rendición de gastos de los técnicos",
-          beneficio: "proveer los fondos necesarios para la movilización y controlar económicamente el servicio.",
-          criterios: [
-            "Viáticos (Asignación): Permitir registrar montos asignados al personal por concepto de movilidad o alimentación. Calcular en tiempo real el Total Asignado, lo Depositado y el \"Pendiente de pago\".",
-            "Gastos (Rendición): Mostrar una tabla con los gastos solicitados/rendidos por el técnico en campo. Mostrar tarjetas resumen de montos: Solicitados, Aprobados, Observados y Pendientes.",
-            "Permitir acciones directas de revisión sobre cada gasto (Aprobar, Observar o Rechazar) visualizando el comprobante físico."
+            "Esta HU vive dentro del Módulo 8 Programación Operativa porque los viáticos se asignan al momento de designar al técnico (lo cual ocurre en HU-36 Asignación de Recursos). El acceso a esta gestión es desde el Detalle del Servicio Programado (HU-37) mediante un botón [💰 Gestionar Viáticos y Gastos].",
+            "VISTA GENERAL: modal con 2 tabs principales: [1] Asignación de Viáticos (previo a ejecución) y [2] Rendición de Gastos (post-ejecución).",
+            "TAB 1 — ASIGNACIÓN DE VIÁTICOS: tabla con el personal asignado al servicio (viene del Módulo 8 HU-36). Columnas: Técnico, Rol, Monto Movilidad (S/), Monto Alimentación (S/), Monto Otros (S/), Subtotal, Estado del Depósito (Pendiente / Depositado / Confirmado). Totales al pie: Total Asignado, Total Depositado, Pendiente de Pago.",
+            "TAB 1 — Acciones: botón [+ Asignar monto] por técnico abre un modal pequeño para ingresar los conceptos y montos. Botón [💳 Marcar como Depositado] registra el depósito con fecha, N° de operación y comprobante opcional.",
+            "TAB 2 — RENDICIÓN DE GASTOS: tabla con todos los gastos presentados por los técnicos desde campo (sincronizados desde la app móvil). Columnas: Fecha, Técnico, Concepto (Movilidad / Alimentación / Insumo / Peaje / Otro), Monto (S/), Comprobante (botón 👁 Ver), Estado (⏳ Pendiente / ✓ Aprobado / ⚠️ Observado / 🚫 Rechazado), Acciones.",
+            "TAB 2 — Cards resumen en el header: Total Solicitado, Total Aprobado, Total Observado, Total Pendiente. Permite al Asistente/Jefe tener control del gasto consolidado del servicio.",
+            "TAB 2 — Acciones por gasto: [✓ Aprobar] (gasto queda OK para reembolso), [⚠️ Observar] (exige comentario, el técnico recibe notificación para ajustar o adjuntar comprobante faltante), [🚫 Rechazar] (exige motivo obligatorio, el gasto no se reembolsa).",
+            "TAB 2 — Vista del comprobante: al presionar [👁 Ver comprobante], se abre modal secundario con la imagen/PDF del comprobante físico (foto de boleta/factura cargada por el técnico desde la app móvil).",
+            "La información consolidada de viáticos y gastos aparece como referencia en el TAB 📅 Programación del Detalle de OS/OM (ver HU-41), con enlace para abrir este modal."
           ],
           imagenes: ["Gestionar Viáticos - Total Weight Digital Suite.png", "Gestionar Gastos - Total Weight Digital Suite.png"] },
 
-        { id: "HU-45", titulo: "Enviar a Ejecución (Despacho a Campo)",
-          rol: "Jefe de Operaciones", accion: "confirmar el envío a ejecución de la Orden de Servicio",
-          beneficio: "habilitar oficialmente la salida del equipo técnico hacia las instalaciones del cliente.",
+        // ─── MÓDULO 9: ÓRDENES DE SERVICIO ──────────────────────────────────────
+        { seccion: "MÓDULO 9: ÓRDENES DE SERVICIO", id: "HU-40", sprint: 4, titulo: "Creación, Edición y Anulación de Orden de Servicio / Orden de Metrología (OS/OM)",
+          rol: "Comercial",
+          accion: "crear, editar o anular una Orden de Servicio (OS) u Orden de Metrología (OM) a partir de una Propuesta aceptada, definiendo los equipos a intervenir, los conceptos del servicio y su vinculación",
+          beneficio: "convertir una venta cerrada en el documento operativo (sin precios ni montos) que habilita la ejecución del servicio y, al emitirse, pasa a Programación Operativa.",
           criterios: [
-            "Al presionar \"Enviar a ejecución\", el sistema debe validar estrictamente el Checklist de Habilitación.",
-            "Si existen bloqueos críticos (ej. SSOMA pendiente o Repuesto por confirmar), mostrar una alerta roja detallando las restricciones e inhabilitando el botón de despacho.",
-            "Si todos los checks están conformes, permitir la confirmación final para cambiar el estado de la OS a \"En Ejecución\"."
+            "ORIGEN: la OS/OM SIEMPRE nace desde una Propuesta aceptada (relación 1:1 — una Propuesta genera UNA OS u UNA OM). Desde el detalle de la Propuesta aceptada aparece el botón [⚙️ Generar OS/OM] que abre la pantalla de creación. El tipo (OS u OM) lo determina automáticamente el tipo de servicio heredado de la Propuesta: si es Metrología → OM, si es cualquier otro servicio → OS.",
+            "LAYOUT GENERAL: ficha full-width (sin panel lateral) organizada en 7 secciones apiladas verticalmente: (1) Datos del Cliente, (2) Propuesta Origen, (3) Datos del Documento, (4) Equipos/Instrumentos, (5) Conceptos del Servicio, (6) Observaciones, (7) Datos para Emisión del Certificado (solo OM). Cabecera superior con título, chip ESTADO (BORRADOR / EMITIDA) y chip N° OS/OM. Footer sticky inferior con 3 botones alineados a la derecha: [Cancelar] [💾 Guardar borrador] [✓ Emitir OS/OM].",
+            "SECCIÓN 1 — DATOS DEL CLIENTE: precargados desde el RQ/Propuesta, no editables excepto el Contacto. Campos: EMPRESA (RUC + Razón Social), DIRECCIÓN, CONTACTO (dropdown con los contactos registrados del cliente — default: el contacto principal del RQ), COMERCIAL RESPONSABLE (nombre completo del comercial autor del RQ/Propuesta).",
+            "SECCIÓN 2 — PROPUESTA ORIGEN: card de solo lectura con 10 campos de contexto: Código + Versión, Estado (chip 'Aceptada'), Tipo de Servicio, Fecha de Aceptación, Comercial que creó la propuesta, Aprobador VB, Monto Total (referencial, informativo), N° de Equipos cotizados, N° de Conceptos cotizados, Condición de Pago. Botón [📄 Ver Propuesta Completa ↗] redirige al Módulo 4.",
+            "SECCIÓN 3 — DATOS DEL DOCUMENTO: N° OS/OM (autogenerado, lectura), Tipo (chip OS u OM), Fecha de Emisión (hoy, lectura), Requerimiento (código RQ con enlace), Propuesta Origen (código con enlace). FECHA PROGRAMADA (SOLO si tipo = OS, NO aplica para OM): rango de fechas obligatorio en 2 inputs lado a lado (Desde — Hasta) con fechas específicas. Es una fecha TENTATIVA; la fecha real la define Operaciones en el Módulo 8. Si el tipo es OM, el campo FECHA PROGRAMADA se oculta por completo.",
+            "SECCIÓN 4 — EQUIPOS / INSTRUMENTOS: tabla única full-width con columnas base + condicionales según tipo. El detalle completo está en HU-43. El catálogo origen es el maestro de Equipos del Cliente (Módulo 2). Alternativa de carga masiva en HU-44 (Importación por Excel).",
+            "SECCIÓN 5 — CONCEPTOS DEL SERVICIO: tabla full-width con los conceptos (Suministros de tipo Servicio del catálogo Maestros) y su vinculación con los equipos. El detalle completo está en HU-43. La OS/OM NO maneja precios ni montos — los conceptos son solo descripciones del servicio a realizar (ej. 'Servicio de Calibración de Balanzas').",
+            "SECCIÓN 6 — OBSERVACIONES: textarea de TEXTO LIBRE para notas adicionales del comercial dirigidas al técnico/metrólogo (ej. 'OJO: Técnico deberá corroborar los datos de los equipos en planta'). En el PDF final del documento, Conceptos y Observaciones salen en secciones separadas.",
+            "SECCIÓN 7 — DATOS PARA EMISIÓN DEL CERTIFICADO (SOLO si tipo = OM): sección condicional que aparece únicamente cuando el tipo es OM. Precarga automática con los datos del cliente del RQ (RAZÓN SOCIAL, RUC, DIRECCIÓN, CONTACTO). COMPORTAMIENTO: si el RQ tiene marcado 'Servicio Tercerizado' → los 4 campos son EDITABLES para que el comercial complete los datos de la empresa a la que se emitirá el certificado (empresa distinta al cliente que contrata); si NO es tercerizado → los campos quedan en lectura (precargados del cliente contratante).",
+            "ESTADOS Y FLUJO DE EMISIÓN: la OS/OM se guarda en estado BORRADOR mientras el comercial sigue editando. Al presionar [✓ Emitir OS/OM], la orden pasa a estado EMITIDA y queda disponible para Programación Operativa (Módulo 8).",
+            "EDICIÓN CON APROBACIÓN DEL JEFE COMERCIAL — FLUJO COMPLETO: (1) Una vez emitida la OS/OM, el comercial NO puede editarla directamente; (2) Si necesita cambios, presiona [✏️ Solicitar Edición] desde el Modal Detalle de la OS/OM (HU-42) o desde la Bandeja (HU-41). Esto abre un modal pequeño donde el comercial captura motivo tipificado + comentario obligatorio y envía la solicitud; (3) El Jefe Comercial recibe notificación (campanita + email). Puede acceder al detalle de la OS/OM de 2 formas: (a) click en la notificación que lo lleva directo al Modal Detalle (HU-42) de esa OS/OM, (b) búsqueda manual desde la Bandeja; (4) En el Modal Detalle de la OS/OM, cuando hay una solicitud de edición pendiente, aparece un CHIP/BANNER AMARILLO en la cabecera del modal con el texto 'Solicitud de edición pendiente de aprobación'. Al hacer click en ese chip, se abre un modal secundario que muestra el motivo + comentario del comercial, con botones [✓ Aprobar edición] y [🚫 Rechazar]; (5) Si el jefe APRUEBA, el comercial recibe notificación y puede entrar a editar la ficha completa (botón [✏️ Editar OS/OM] habilitado en el Modal Detalle y la Bandeja); (6) El comercial edita los campos necesarios en la ficha de Editar OS/OM y confirma los cambios; (7) Si el jefe RECHAZA, el comercial recibe notificación con el motivo de rechazo y la OS/OM queda sin cambios. Esta regla aplica a TODO cambio sin excepción (no se diferencian campos 'sensibles' vs 'no sensibles'). La solicitud, aprobación/rechazo y edición final quedan registradas en el Historial de Auditoría del expediente (Módulo 7).",
+            "ANULACIÓN: botón [🚫 Anular OS/OM] visible según estado y permisos. Se exige motivo tipificado + comentario obligatorio (mínimo 20 caracteres). El catálogo de motivos actual tiene una única opción: 'Disponibilidad de equipos del cliente' (el catálogo podrá ampliarse en el futuro desde el mantenimiento de catálogos). Si la OS/OM ya tiene programación asignada en el Módulo 8, mostrar alerta de 'Impacto de la Anulación' con la lista de recursos reservados que se liberarán al confirmar.",
+            "⚠️ REGLAS DE ANULACIÓN PENDIENTES DE VALIDAR CON EL CLIENTE: (1) ¿En qué ESTADOS puede Comercial anular? Opciones: BORRADOR / EMITIDA (aún no programada) / PROGRAMADA (M8 ya asignó técnico y fecha) / EN EJECUCIÓN (técnico en campo) / FINALIZADA. Propuesta por defecto: solo hasta PROGRAMADA, no se puede anular una vez EN EJECUCIÓN. (2) ¿Anular requiere aprobación del Jefe Comercial igual que Editar? Propuesta por defecto: sí, mismo flujo con Solicitar Anulación → Aprobar/Rechazar. (3) Si la OS/OM ya está PROGRAMADA ¿Operaciones también debe aprobar la anulación (porque afecta su reserva de recursos)? Propuesta por defecto: Operaciones solo recibe notificación informativa, no aprueba. (4) ¿Cuándo se usa Editar vs Anular? Ejemplos a validar: cambio de equipos del listado = editar; cliente ya no necesita servicio = anular; cambio de fecha programada = editar; cambio de contacto = editar. (5) El motivo 'Disponibilidad de equipos del cliente': ¿se usa cuando el cliente avisa que los equipos no están disponibles ese día, o cuando el equipo está averiado y fuera de servicio?",
+            "LA OS/OM NO MANEJA PRECIOS NI MONTOS: no hay Total Estimado, no hay precio unitario por concepto, no hay subtotales, no hay panel financiero. Los montos viven en la OC (Orden de Compra, Módulo 6). La OS/OM es un documento OPERATIVO con lista de equipos + descripción textual de los servicios.",
+            "EL COMERCIAL NO DECIDE FECHAS REALES, NO ASIGNA TÉCNICOS, NO GESTIONA VIÁTICOS: todo lo operativo lo hace Operaciones desde el Módulo 8 Programación. La OS/OM es el 'contrato interno' entre Comercial y Operaciones."
           ],
-          imagenes: ["Enviar a Ejecución - Total Weight Digital Suite.png"] },
+          imagenes: ["Nueva Orden de Servicio - Total Weight Digital Suite.png", "Editar Orden de Servicio - Total Weight Digital Suite.png", "Modal Solicitar Edicion OS - Total Weight Digital Suite.png", "Modal Anular Orden de Servicio - Total Weight Digital Suite.png"] },
+
+        { id: "HU-41", sprint: 4, titulo: "Bandeja de Órdenes de Servicio / Metrología (OS-OM)",
+          rol: "Comercial / Operaciones (consulta)",
+          accion: "visualizar en una bandeja consolidada todas las OS y OM del sistema, filtrarlas por estado, cliente o responsable, y abrir el detalle de cualquier orden específica",
+          beneficio: "monitorear el pipeline unificado de órdenes emitidas por el área comercial, identificar las que esperan programación operativa y acceder rápido al detalle de cualquiera.",
+          criterios: [
+            "Fila superior con cards KPI por estado: [📝 Borradores (N)] [📤 Emitidas (N)] [📅 Programadas (N)] [🚀 En Ejecución (N)] [✓ Finalizadas (N)] [🚫 Anuladas (N)]. Cada card actúa como filtro rápido.",
+            "Barra superior con buscador global (por N° OS/OM, N° Propuesta, Cliente o RUC) + botón [⚙️ Filtros] (Estado, Cliente, Responsable de la Orden, Rango de fechas, Tipo OS/OM) + botón de utilidad [⬇ Exportar XLSX].",
+            "La creación de una nueva OS/OM NO se dispara desde esta bandeja (no hay botón [+ Nueva OS]). Las órdenes nacen únicamente desde una Propuesta aceptada en el Módulo 4 Propuestas (ver HU-40).",
+            "Tabla con 8 columnas (sin Total Estimado porque la OS/OM no maneja montos): [1] N° OS/OM (con chip pequeño adjunto distinguiendo tipo: OS azul u OM violeta), [2] FECHA EMISIÓN, [3] CLIENTE / RUC (razón social + RUC pequeño debajo), [4] PROPUESTA ORIGEN (código clickeable que lleva al Módulo 4), [5] RESPONSABLE DE LA ORDEN (nombre completo del comercial que la emitió, con avatar), [6] N° EQUIPOS (contador: '19 equipos'), [7] N° CONCEPTOS (contador: '2 servicios'), [8] ESTADO (chip de color).",
+            "Columna de acciones al final con [👁 Ver Detalle] (abre el Modal de Detalle definido en HU-42) + menú ⋯ con opciones contextuales según estado y rol: [✏️ Solicitar Edición] (visible para el comercial responsable si la OS/OM aún no está en ejecución), [🚫 Anular] (visible según permisos y estado).",
+            "Click en cualquier fila (o en el código del N° OS/OM, o en el botón [👁 Ver Detalle]) abre el Modal de Detalle (HU-42).",
+            "Paginación en el footer de la tabla: 'Mostrando N-N de N registros' + navegación por páginas.",
+            "La bandeja consolida en una sola vista tanto OS como OM. Los filtros permiten alternar o combinar ambos tipos según necesidad."
+          ],
+          imagenes: ["Bandeja de Ordenes de Servicio OM - Total Weight Digital Suite.png"] },
+
+        { id: "HU-42", sprint: 4, titulo: "Modal de Detalle de OS/OM",
+          rol: "Comercial / Operaciones (consulta)",
+          accion: "consultar en un modal unificado todo el detalle de una Orden de Servicio o de Metrología (datos generales, propuesta origen, equipos/instrumentos con avance de ejecución, conceptos del servicio, observaciones y estado de programación), con acceso directo a los modales reutilizables de Documentos e Historial de Auditoría",
+          beneficio: "disponer de una vista 360° de cualquier OS/OM sin salir de la bandeja, para auditar el servicio, revisar el avance real por equipos y tomar decisiones sobre edición o anulación.",
+          criterios: [
+            "El modal se abre desde la bandeja (HU-41) presionando [👁 Ver Detalle] en cualquier fila o haciendo click en el código N° OS/OM.",
+            "Modal centrado grande (~1200px ancho × 760px alto) con fondo blanco y sombra fuerte sobre overlay oscuro semitransparente (rgba 15,23,42,0.65).",
+            "CABECERA FIJA del modal (altura ~96px): a la izquierda, ícono circular azul claro (bg #DBEAFE) con icono 'description', seguido en columna por: [Chip tipo OS azul u OM violeta] + N° de la orden (ej. 'OS-000791' u 'OM-000045') + Razón social del cliente + línea pequeña con 'Responsable de la Orden: [nombre completo del comercial]' + Chip de Estado global (BORRADOR / EMITIDA / PROGRAMADA / EN EJECUCIÓN / FINALIZADA / ANULADA). NO se muestra Total Estimado porque la OS/OM no maneja montos.",
+            "CABECERA — FILA DE ACCIONES RÁPIDAS alineada a la derecha: [📎 Documentos] (abre Modal HU-31 del Módulo 7, componente reutilizable), [📜 Historial de Auditoría] (abre Modal HU-32 del Módulo 7, componente reutilizable), [✏️ Solicitar Edición] (visible para el comercial responsable cuando la OS/OM está EMITIDA — abre el modal de solicitud de edición al Jefe Comercial, ver HU-40), [✏️ Editar OS/OM] (visible solo cuando el comercial tiene una solicitud APROBADA pendiente de ejecutar — abre la ficha de edición), [🚫 Anular] (abre modal de anulación — ver HU-40). El botón 'close' (X) va al extremo derecho.",
+            "CHIP/BANNER DE SOLICITUD DE EDICIÓN PENDIENTE: cuando hay una solicitud de edición activa sobre esta OS/OM, en la cabecera del modal aparece un chip/banner amarillo con el texto 'Solicitud de edición pendiente de aprobación' + icono clickeable. Visible para: (a) el Jefe Comercial — al hacer click se abre el modal secundario de Aprobar/Rechazar con el motivo + comentario del comercial y 2 botones [✓ Aprobar edición] [🚫 Rechazar]; (b) el comercial que solicitó — al hacer click se abre un popover informativo con el estado 'Esperando aprobación de [Jefe Comercial]' y la fecha de envío. Este chip desaparece una vez que la solicitud es resuelta.",
+            "6 TABS internos: [📊 Resumen] [📄 Propuesta Origen] [⚙️ Equipos/Instrumentos (N)] [🛠️ Conceptos (N)] [📝 Observaciones] [📅 Programación]. En el caso de las OM se agrega un 7mo tab [🎖️ Certificado] al final (ver criterio específico). Documentos y Auditoría NO son tabs (se acceden desde los botones de la cabecera, mismo patrón que HU-30 del Módulo 7).",
+            "TAB 📊 Resumen (por defecto): panel superior con DATOS GENERALES en grid de 2 columnas (N° OS/OM, Tipo chip OS u OM, Fecha emisión, Fecha programada tentativa SI es OS — se oculta completamente si es OM, Empresa, RUC, Dirección, Contacto principal del cliente, Comercial Responsable). NO lleva panel 'Resumen Financiero' porque la OS/OM no tiene montos.",
+            "TAB 📊 Resumen — BLOQUE DESTACADO 'AVANCE POR EQUIPOS': tabla compacta con la lista de equipos/instrumentos del servicio y el estado individual de ejecución. Columnas: EQUIPO (Tipo + Marca/Modelo + N° Serie), ESTADO (chip ⏳ Pendiente / 🟡 En Proceso / ✓ Ejecutado / ⚠️ Observado), FECHA EJECUCIÓN (si ya se ejecutó, viene del Módulo 11 Ejecución). Al pie: barra de PROGRESO GENERAL del servicio: '✓ 3 de 19 equipos ejecutados (16%)' con progress bar visual. Esta sección es SOLO LECTURA — se actualiza automáticamente desde el Módulo 11 Ejecución conforme el técnico marca cada equipo como atendido.",
+            "TAB 📄 Propuesta Origen: vista de solo lectura con los 10 campos de contexto de la Propuesta aceptada (Código + Versión, Estado, Tipo de Servicio, Fecha de Aceptación, Comercial, Aprobador VB, Monto Total referencial, N° Equipos cotizados, N° Conceptos cotizados, Condición de Pago). Botón [Ver Propuesta Completa ↗] redirige al Módulo 4 Propuestas.",
+            "TAB ⚙️ Equipos/Instrumentos (N): vista consultiva del listado unificado de equipos/instrumentos del servicio (ver HU-43 para la gestión completa). Columnas base: Item, Tipo (Equipo/Instrumento), Marca, Modelo, N° Serie, Código TW, Alcance, Ubicación, Conceptos aplicados. Columnas condicionales: si Equipo → + d, e, Clase; si Instrumento → + Escala, Puntos de calibración.",
+            "TAB 🛠️ Conceptos (N): vista consultiva de los conceptos del servicio (Suministros tipo Servicio del catálogo Maestros). Columnas: Concepto (descripción), Equipos aplicados (lista de códigos TW o chip 'General' si aplica a toda la OS). NO se muestran precios, categorías ni totales (la OS/OM no maneja montos).",
+            "TAB 📝 Observaciones: visualización del texto libre que el comercial escribió como notas adicionales (dirigidas al técnico o metrólogo). Solo lectura.",
+            "TAB 📅 Programación: resumen de la programación operativa asignada en el Módulo 8 (técnico asignado, fecha/hora real de ejecución, estado de preparación, viáticos asignados). Si aún no hay programación, mostrar mensaje: 'Esta OS/OM está pendiente de programación. Operaciones la verá en el Módulo 8 Programación Operativa.' Botón [Ir a Programación] redirige al Módulo 8 Detalle del Servicio Programado (HU-37).",
+            "TAB 🎖️ Certificado (SOLO si tipo = OM): vista de los Datos para Emisión del Certificado. Muestra: Razón Social, RUC, Dirección y Contacto a los que se emitirá el certificado. Si el RQ marcó 'Servicio Tercerizado', se destaca con un chip 'Tercerizado' indicando que los datos no son del cliente contratante sino de la empresa beneficiaria.",
+            "Carga perezosa (lazy load): solo el tab 'Resumen' carga al abrir el modal. Los demás tabs cargan su data al ser seleccionados por primera vez.",
+            "El modal es puramente consultivo (SOLO LECTURA). Las ediciones de equipos/conceptos requieren pasar por el flujo de 'Solicitar Edición' con aprobación del Jefe Comercial (ver HU-40).",
+            "FOOTER del modal (altura ~64px): contador 'Última actualización: DD/MM/AAAA HH:MM por [usuario]' alineado a la izquierda, botón [Cerrar] alineado a la derecha.",
+            "Lógica condicional OS vs OM: una sola implementación del modal maneja ambos tipos. Las únicas diferencias visibles son: (a) si es OM, el campo 'Fecha Programada' del tab Resumen se oculta por completo; (b) si es OM, aparece el 7mo tab 🎖️ Certificado al final. Todo lo demás es idéntico."
+          ],
+          imagenes: ["Modal Detalle Orden de Servicio OM - Total Weight Digital Suite.png"] },
+
+        { id: "HU-43", sprint: 4, titulo: "Gestión de Equipos/Instrumentos, Conceptos y su Relación en la OS/OM",
+          rol: "Comercial",
+          accion: "capturar y gestionar los equipos e instrumentos del cliente que serán intervenidos, los conceptos del servicio (suministros de tipo Servicio) y vincular cada concepto con los equipos a los que aplica (relación 1:N)",
+          beneficio: "definir con precisión el alcance operativo del servicio: qué activos del cliente se van a intervenir y qué servicio específico se realizará sobre cada uno. La OS/OM NO maneja montos — solo describe el trabajo a realizar.",
+          criterios: [
+            "ALCANCE: esta HU gobierna 2 secciones del formulario de Nueva/Editar OS/OM (HU-40): (a) la sección 'Conceptos del Servicio' (va PRIMERO) y (b) la sección 'Equipos/Instrumentos' (va DESPUÉS). Ambas van full-width (sin panel lateral). El flujo obligatorio del comercial es: primero agregar los Conceptos del Servicio → luego agregar los Equipos/Instrumentos → al agregar cada equipo, el comercial selecciona INLINE en la misma fila cuál o cuáles conceptos aplican a ese equipo (desde un dropdown multiselect que lista solo los conceptos ya agregados a la OS).",
+            "PRECARGA DESDE LA PROPUESTA: si la Propuesta origen tiene equipos y/o conceptos listados, se precargan automáticamente al abrir la Nueva OS/OM como SUGERENCIAS editables. El comercial puede confirmar los sugeridos, quitar los que no apliquen, o agregar nuevos del catálogo del cliente. Si la Propuesta no tiene listado, el comercial agrega todo desde cero.",
+            "LISTADO UNIFICADO DE EQUIPOS/INSTRUMENTOS: tabla única full-width que contiene AMBOS tipos (Equipo e Instrumento) en una sola vista con columnas condicionales según el tipo de cada fila. Esto evita duplicar tablas y permite un manejo unificado.",
+            "COLUMNAS BASE (siempre visibles para toda fila): [☐] checkbox, Item, TIPO (chip 'Equipo' azul o 'Instrumento' morado), MARCA, MODELO, N° SERIE, CÓDIGO TW, ALCANCE, UBICACIÓN (sede/local del cliente donde está el equipo), CONCEPTO(S) (dropdown multiselect INLINE con los conceptos ya agregados a la OS — el comercial puede elegir uno o varios, o dejarlo vacío si el equipo no tiene concepto asignado), ACCIONES (botón 🗑 Quitar).",
+            "COLUMNAS CONDICIONALES por tipo (se muestran según el tipo de la fila): si TIPO = Equipo → columnas adicionales 'd' (resolución, ej. '0,01 kg'), 'e' (escala verificación), 'CLASE' (I/II/III/IV/N.A según OIML R76). Si TIPO = Instrumento → columnas adicionales 'ESCALA' y 'PUNTOS DE CALIBRACIÓN' (ej. '95°C y 105°C').",
+            "BOTÓN [+ Agregar equipo/instrumento]: abre un modal buscador con el CATÁLOGO DE EQUIPOS REGISTRADOS DEL CLIENTE (del Módulo 2 Clientes, HU-88, para este cliente específico). El buscador filtra por: código TW, marca, modelo, N° serie, ubicación. Al seleccionar un equipo, se agrega a la tabla con todos sus datos técnicos.",
+            "SECCIÓN CONCEPTOS DEL SERVICIO (va PRIMERO): tabla principal con columnas: [☐] checkbox, CONCEPTO (descripción del servicio, viene del catálogo de Suministros tipo Servicio — ej. 'Servicio de Calibración de Balanzas', 'Servicio de Mantenimiento y Ajuste'), EQUIPOS APLICADOS (columna DERIVADA/CALCULADA automáticamente: muestra la lista de códigos TW de los equipos que tienen este concepto asignado en la tabla de Equipos — ej. 'GAL-ECJ5-LB-006 · INS-POS1-LB-010' o chip gris 'General' si ningún equipo lo ha seleccionado todavía), ACCIONES (botón 🗑 Quitar).",
+            "SECCIÓN CONCEPTOS — Botón [+ Agregar concepto]: abre un modal buscador con el CATÁLOGO MAESTRO de Suministros filtrado por tipo = Servicio (mantenido en el Módulo Maestros). El buscador filtra por descripción o código. Al seleccionar un concepto(s), se agrega a la tabla. La columna 'Equipos aplicados' queda inicialmente como chip gris 'General' hasta que algún equipo lo seleccione en su propio dropdown inline.",
+            "VINCULACIÓN CONCEPTO ↔ EQUIPOS (relación 1:N, INLINE desde el lado del EQUIPO — ESTA ES NUESTRA MEJORA sobre el formato actual del PDF): la vinculación se hace EN LA MISMA FICHA DE REGISTRO, SIN modal secundario. En la tabla de Equipos/Instrumentos, cada fila tiene un dropdown multiselect INLINE en la columna CONCEPTO(S) que lista los conceptos ya agregados a la OS. El comercial elige uno, varios o ninguno. La columna 'Equipos aplicados' de la tabla de Conceptos se actualiza automáticamente en tiempo real (se calcula a partir de las selecciones de los equipos). Si un concepto no fue elegido por ningún equipo, muestra chip gris 'General' = aplica a toda la OS como servicio general.",
+            "OS/OM SIN EQUIPOS: es un caso válido (servicios documentales, consultorías, metrología sin activos específicos). En ese caso solo hay Conceptos y todos aparecen como 'General'. La sección Equipos puede quedar vacía sin bloquear el guardado.",
+            "DOBLE REGISTRO DE EQUIPO: si un equipo está siendo atendido en otra OS/OM activa, al intentarlo el sistema muestra advertencia: 'Este equipo ya forma parte de la orden OS-NNNN-YYYY (Estado: XXXX). ¿Desea asociarlo también a esta orden?' con [Cancelar] y [Sí, asociar de todas formas].",
+            "EDICIÓN POSTERIOR A LA EMISIÓN: una vez la OS/OM está EMITIDA, cualquier cambio en Equipos/Instrumentos, Conceptos o su relación requiere el flujo de 'Solicitar Edición' con aprobación del Jefe Comercial (ver HU-40).",
+            "ALTERNATIVA DE CAPTURA MASIVA: en lugar de agregar equipos y conceptos uno por uno, el comercial puede usar el botón [📥 Importar desde Excel] (ubicado en el header de ambas secciones) que lo lleva al flujo definido en la HU-44.",
+            "LA OS/OM NO MANEJA PRECIOS: ni los conceptos ni los equipos tienen precio unitario, cantidad facturable, subtotal ni total. Los montos viven en la OC (Orden de Compra, Módulo 6). Aquí solo se describe QUÉ se va a hacer, no CUÁNTO cuesta.",
+            "La lista final de equipos/instrumentos de la OS/OM es la que viajará al Módulo 11 Ejecución, donde el técnico marcará el estado individual de cada equipo (Pendiente / En Proceso / Ejecutado / Observado). Ese estado se reflejará en el bloque 'Avance por Equipos' del Modal de Detalle de la OS/OM (ver HU-42)."
+          ],
+          imagenes: ["Modal Agregar Equipo o Instrumento - Total Weight Digital Suite.png", "Modal Agregar Concepto del Servicio - Total Weight Digital Suite.png"] },
+
+        { id: "HU-44", sprint: 4, titulo: "Importación por Excel de Equipos, Conceptos y su Relación en la OS/OM",
+          rol: "Comercial",
+          accion: "cargar masivamente desde un archivo Excel los conceptos del servicio, los equipos a intervenir y la relación entre ambos (qué conceptos aplican a qué equipos), como alternativa a la captura manual uno por uno",
+          beneficio: "acelerar la construcción del alcance de la OS/OM cuando hay muchos equipos y conceptos, evitando errores de digitación y aprovechando plantillas que el cliente o el comercial ya tienen preparadas en Excel.",
+          criterios: [
+            "El import se dispara desde el botón [📥 Importar desde Excel] ubicado en los headers de las secciones Conceptos y Equipos del formulario Nueva/Editar OS/OM (ver HU-43). Ambos botones abren el MISMO modal (es un único flujo, no dos).",
+            "Modal centrado grande (~900px ancho) con header: ícono 'upload_file' azul + título 'Importar Equipos y Conceptos desde Excel' + subtítulo 'Carga masiva del alcance del servicio'.",
+            "PASO 1 — DESCARGA DE PLANTILLA: el modal muestra en la parte superior un bloque informativo con texto 'Antes de subir tu archivo, descarga la plantilla oficial para asegurar el formato correcto' + botón outline [⬇ Descargar plantilla Excel]. La plantilla tiene 2 hojas: (a) 'Conceptos' con una sola columna [Concepto] (nombre del Suministro tipo Servicio del catálogo), (b) 'Equipos' con columnas [Código TW, Conceptos Aplicados] donde en 'Conceptos Aplicados' se listan los nombres de conceptos separados por punto y coma (ej. 'Servicio de Calibración; Servicio de Mantenimiento y Ajuste'). La plantilla NO tiene columnas de precio ni cantidad porque la OS/OM no maneja montos.",
+            "PASO 2 — UPLOAD: zona de drag-and-drop grande con texto 'Arrastra tu archivo .xlsx o haz click para seleccionar'. Acepta solo .xlsx y .xls. Tamaño máximo 5 MB. Al soltar el archivo, se muestra barra de progreso de carga.",
+            "PASO 3 — PROCESAMIENTO AUTOMÁTICO: una vez subido, el sistema procesa el Excel y: (a) valida que los conceptos existan en el catálogo maestro de Suministros tipo Servicio (si no existen, los marca como 'no encontrado' con error — no se permite crear conceptos nuevos desde aquí), (b) valida que los códigos TW de equipo existan en el catálogo del cliente del Módulo 2 (si no existen, muestra error específico), (c) arma automáticamente la relación concepto↔equipo según la columna 'Conceptos Aplicados' del Excel.",
+            "PASO 4 — PREVIEW ANTES DE CONFIRMAR: el modal muestra una vista previa en 2 tabs: [⚙️ Equipos (N)] y [🛠️ Conceptos (N)] con las tablas completas tal como quedarían. Chips de estado por fila: 🟢 OK, 🟡 Advertencia (ej. 'Equipo con doble registro — ya existe en otra OS activa'), 🔴 Error (ej. 'Equipo no existe en el catálogo del cliente' o 'Concepto no encontrado en el catálogo maestro').",
+            "PASO 4 — PANEL DE RESUMEN DE VALIDACIÓN: lateral derecho con contador: 'Conceptos: N OK · N Advertencias · N Errores' / 'Equipos: N OK · N Errores' / 'Relaciones concepto↔equipo: N validadas'. Si hay errores, el botón de confirmación queda deshabilitado hasta corregir el archivo.",
+            "PASO 5 — MANEJO DE DUPLICADOS CON PRECARGA EXISTENTE: si la OS/OM ya tiene conceptos/equipos (precargados de la Propuesta o agregados manualmente antes), el modal pregunta cómo proceder: (a) 'Reemplazar todo' (borra lo existente y carga lo del Excel), (b) 'Fusionar' (mantiene lo existente y agrega lo nuevo, evitando duplicados por código), (c) 'Cancelar' (no importa nada).",
+            "PASO 6 — CONFIRMAR: botón [✓ Confirmar importación] sólido azul en el footer del modal. Al presionar, el sistema aplica los conceptos, equipos y relación a la OS/OM y cierra el modal, volviendo al formulario de Nueva/Editar OS/OM con las tablas de Conceptos y Equipos ya llenas.",
+            "AUDITORÍA: la importación por Excel queda registrada en el timeline de la OS/OM (visible en el Modal Historial de Auditoría HU-32 del Módulo 7) con: fecha, usuario, nombre del archivo cargado, cantidad de conceptos/equipos/relaciones importadas, resumen de advertencias/errores manejados.",
+            "LÍMITES: por performance, la importación acepta hasta 500 filas en Conceptos y 1000 filas en Equipos por archivo. Si se excede, mostrar error claro: 'El archivo excede el límite permitido. Divide la carga en varios archivos.'",
+            "FUERA DE ALCANCE DE ESTA HU: la IA que lee Excel de formato libre (sin plantilla) es una funcionalidad posterior. Esta HU solo contempla el import con la PLANTILLA OFICIAL estructurada."
+          ],
+          imagenes: ["Modal Importar desde Excel OS - Total Weight Digital Suite.png"] },
 
         // ─── MÓDULO 10: SSOMA ────────────────────────────────────────────────────
         { seccion: "MÓDULO 10: SSOMA", id: "HU-46", titulo: "Bandeja de Gestión y Matriz de Requisitos SSOMA",
@@ -1040,7 +1201,131 @@
             "Mostrar los \"Documentos Adjuntos\" (Ej. PDF de la Propuesta Técnica, Cuadro de Costos en Excel) permitiendo su previsualización.",
             "Habilitar la acción \"Enviar Propuesta al Cliente\" (icono de correo) para desencadenar el envío externo."
           ],
-          imagenes: ["Propuestas por enviar.png"] }
+          imagenes: ["Propuestas por enviar.png"] },
+
+        // ─── MÓDULO 15: MANTENIMIENTO DE MAESTROS ───────────────────────────────
+        { seccion: "MÓDULO 15: MANTENIMIENTO DE MAESTROS", id: "HU-79", sprint: 1, titulo: "Mantenimiento de Clientes",
+          rol: "Jefe Comercial / Administrador", accion: "gestionar el catálogo de clientes registrados en el sistema",
+          beneficio: "mantener actualizada la base de datos de empresas y personas con las que opera Total Weight, asegurando la integridad de toda la cadena comercial y operativa.",
+          criterios: [
+            "Mostrar un listado paginado de clientes con filtros por Razón Social, RUC, Tipo de Persona, Canal, Categoría y Estado. El select solo debe mostrar los datos tal cual.",
+            "Permitir crear un nuevo cliente mediante un formulario que capture: Razón Social, RUC, Tipo de Documento, Tipo de Persona, Canal de Captación, Categoría y Condición de Pago.",
+            "Permitir editar los datos de un cliente existente, mostrando una advertencia si el cambio afecta requerimientos o expedientes activos vinculados.",
+            "En la vista de detalle del cliente, mostrar las sedes registradas y los contactos asociados, con acceso rápido para gestionarlos.",
+            "Permitir activar o desactivar un cliente, registrando el motivo del cambio de estado."
+          ],
+          imagenes: ["Mantenimiento de clientes - Total Weight Digital Suite.png"] },
+
+        { id: "HU-80", sprint: 1, titulo: "Mantenimiento de Sedes de Cliente",
+          rol: "Jefe Comercial / Administrador", accion: "gestionar las sedes o puntos de atención vinculados a un cliente",
+          beneficio: "tener la información de las instalaciones del cliente correctamente registradas para planificar servicios, asignar zonas y gestionar la logística de campo.",
+          criterios: [
+            "Mostrar el listado de sedes registradas para un cliente, indicando nombre, dirección, ubigeo (Departamento, Provincia, Distrito) y estado.",
+            "Permitir registrar una nueva sede capturando: Nombre de sede, Referencia de domicilio, Ubigeo, y opcionalmente las coordenadas geográficas.",
+            "Permitir editar los datos de una sede existente. Si hay servicios programados activos en esa sede, mostrar una advertencia informativa.",
+            "Permitir desactivar una sede, bloqueando su selección en nuevos requerimientos pero preservando el historial existente.",
+            "Mostrar los contactos vinculados a cada sede con acceso directo para gestionarlos."
+          ],
+          imagenes: ["Modal Mantenimiento de sedes - Total Weight Digital Suite.png"] },
+
+        { id: "HU-81", sprint: 1, titulo: "Mantenimiento de Contactos",
+          rol: "Jefe Comercial / Administrador", accion: "gestionar los contactos vinculados a un cliente y sus sedes",
+          beneficio: "contar con la información de las personas de contacto actualizada para registrar requerimientos, realizar seguimiento comercial y gestionar comunicaciones.",
+          criterios: [
+            "Mostrar el listado de contactos de un cliente con filtros por Sede, Cargo y Estado. El select solo debe mostrar los datos tal cual.",
+            "Permitir registrar un nuevo contacto capturando: Nombres, Apellidos, Cargo, Área y vincularlo al Cliente y opcionalmente a una Sede específica.",
+            "Permitir registrar datos de comunicación del contacto: correo electrónico, teléfono y número de WhatsApp.",
+            "Permitir editar los datos de un contacto existente y desactivarlo si ya no es referente activo, preservando el historial en requerimientos previos.",
+            "En la selección de contacto desde el formulario de requerimiento, el buscador debe filtrar los contactos activos del cliente seleccionado."
+          ],
+          imagenes: ["Modal Mantenimiento de Contactos - Total Weight Digital Suite.png"] },
+
+        { id: "HU-82", sprint: 2, titulo: "Listado Unificado de Usuarios y Suplencias",
+          rol: "Administrador", accion: "visualizar y gestionar el listado de usuarios internos del sistema y las asignaciones de suplencias comerciales desde una única vista con pestañas",
+          beneficio: "centralizar el control de accesos y coberturas del equipo, evitando navegar entre vistas separadas para gestionar usuarios y sus suplencias.",
+          criterios: [
+            "Presentar la vista con dos pestañas (tabs) navegables: \"Usuarios\" y \"Suplentes\". Al cambiar de pestaña, se reinician filtros y paginación.",
+            "En la pestaña \"Usuarios\": mostrar un listado paginado con filtros por Nombre/Correo, Rol del sistema y Estado. Cada fila muestra avatar con iniciales, nombre completo, correo, rol (badge), área comercial, último acceso (formato relativo tipo \"Hace 2 horas\") y estado.",
+            "En la pestaña \"Suplentes\": mostrar un listado paginado con filtros por Titular/Suplente y Estado. Cada fila muestra: Titular (avatar azul), Suplente (avatar verde), Fecha de inicio, Fecha de fin (o etiqueta \"Sin límite\" en itálica) y Estado.",
+            "Permitir activar o desactivar un usuario o una asignación de suplencia directamente desde el listado sin eliminar el registro.",
+            "Al hacer clic en \"Editar\" en cualquier fila (usuario o suplencia), redirigir a la ficha del usuario correspondiente: en la pestaña Suplentes, el botón editar dirige a la ficha del titular de la asignación."
+          ],
+          imagenes: ["Mantenimiento de Usuarios - Listado Maestro.png", "Mantenimiento de Usuarios - Gestión de Suplentes (Tab Activo).png"] },
+
+        { id: "HU-83", sprint: 2, titulo: "Ficha de Creación y Edición de Usuario",
+          rol: "Administrador", accion: "registrar un nuevo usuario o editar los datos, permisos técnicos, seguridad y suplencias de uno existente en un único flujo estructurado por secciones",
+          beneficio: "mantener el equipo interno completamente actualizado (roles, permisos INACAL, seguridad MFA y coberturas de suplencia) sin afectar el historial de operaciones.",
+          criterios: [
+            "Presentar el formulario como un flujo por secciones numeradas: 01 Información Personal y Credenciales Básicas, 02 Asignación Operativa y Rol de Sistema, 03 Credenciales de Certificación Técnica (INACAL), 04 Seguridad y Notificación de Alta.",
+            "En modo Edición, agregar una sección adicional \"05 Suplencias y Delegación Comercial\" al final del formulario, con dos sub-bloques: (a) \"Suplentes que lo cubren\" (perspectiva titular, editable) y (b) \"Personas a las que suple\" (perspectiva suplente, solo lectura con indicador de candado).",
+            "En el sub-bloque \"Suplentes que lo cubren\", permitir listar las asignaciones activas e inactivas donde el usuario es titular, activar/desactivar cada una y agregar nuevas mediante un formulario inline con dropdown de suplente, fechas de vigencia, checkbox \"Sin fecha de fin\" y toggle de activación inmediata.",
+            "En el sub-bloque \"Personas a las que suple\", mostrar solo lectura con indicador visual (candado) que informa que la asignación se gestiona desde la ficha del titular correspondiente.",
+            "Validar que el correo electrónico no esté duplicado, que el suplente asignado no sea el mismo usuario, y que las fechas de vigencia sean coherentes (fin ≥ inicio).",
+            "Al guardar cambios, mostrar toast de confirmación y redirigir al listado de usuarios."
+          ],
+          imagenes: ["Mantenimiento de Usuarios - Nuevo Usuario.png", "Mantenimiento de Usuarios - Editar Usuario (Con Suplencias).png"] },
+
+        { id: "HU-84", sprint: 2, titulo: "Gestión de Suplentes Comerciales (integrada)",
+          rol: "Administrador / Jefe Comercial", accion: "asignar temporalmente a un comercial como suplente de otro durante un período definido, desde el contexto natural de la ficha del usuario titular",
+          beneficio: "garantizar la continuidad en la gestión de requerimientos y propuestas durante ausencias, sin perder visibilidad ni control del equipo, y sin duplicar vistas de mantenimiento.",
+          criterios: [
+            "La gestión de suplencias vive integrada dentro del módulo de Usuarios (HU-82 y HU-83), no como un mantenimiento aparte.",
+            "Ofrecer dos puntos de acceso complementarios: (a) la pestaña \"Suplentes\" del listado de usuarios muestra el maestro global de todas las asignaciones activas e inactivas; (b) la sección \"05 Suplencias y Delegación Comercial\" dentro de la ficha del usuario permite gestionar en contexto las asignaciones donde ese usuario es titular.",
+            "Al crear una nueva asignación desde la ficha del titular, el sistema fija automáticamente el Titular como el usuario en edición y solo requiere seleccionar Suplente, Fecha de inicio, Fecha de fin (opcional) y Estado inicial.",
+            "Permitir marcar la asignación como \"Sin fecha de fin\" (vigencia indefinida hasta desactivación manual), en cuyo caso el campo Fecha de fin queda deshabilitado.",
+            "Validar en el momento del guardado que: el suplente no sea el mismo usuario titular, la fecha de fin (cuando exista) sea posterior o igual a la fecha de inicio, y el suplente sea un comercial activo.",
+            "Permitir activar o desactivar cualquier asignación existente desde la fila del listado o desde el sub-bloque \"Suplentes que lo cubren\" de la ficha del titular. Las asignaciones de perspectiva inversa (\"Personas a las que suple\") solo se gestionan desde la ficha del titular correspondiente.",
+            "Las asignaciones activas otorgan permisos operativos temporales al suplente (responder RQs, generar cotizaciones, consultar expedientes del titular). Ver HU-12 y HU-13 para el impacto en el flujo de Visto Bueno."
+          ],
+          imagenes: ["Mantenimiento de Usuarios - Gestión de Suplentes (Tab Activo).png", "Mantenimiento de Usuarios - Editar Usuario (Con Suplencias).png"] },
+
+        { id: "HU-85", sprint: 2, titulo: "Mantenimiento de Textos Base",
+          rol: "Administrador", accion: "gestionar el catálogo maestro de textos base reutilizables en propuestas, documentos y comunicaciones del sistema",
+          beneficio: "acelerar la elaboración de propuestas y estandarizar los textos legales, técnicos y comerciales, evitando la duplicación de contenido y garantizando consistencia en toda la organización.",
+          criterios: [
+            "Mostrar un listado maestro paginado de textos base con filtros por Tipo, Categoría, Estado y búsqueda por título o contenido.",
+            "Permitir crear un nuevo texto base mediante un formulario que capture: Título, Tipo (Legal / Técnico / Comercial / Cláusula / Otro), Categoría, Contenido enriquecido y Estado.",
+            "Permitir editar el contenido y los metadatos de un texto base existente, dejando registro de la versión anterior en la auditoría.",
+            "Permitir activar o desactivar un texto base sin eliminarlo, para preservar la trazabilidad en propuestas ya generadas que lo referencian.",
+            "Registrar en la auditoría cada creación, edición y cambio de estado con usuario, fecha y hora."
+          ],
+          imagenes: ["Mantenimiento de Textos Base - Catálogo Maestro.png", "Mantenimiento de Textos Base - Nuevo Registro.png"] },
+
+        { id: "HU-86", sprint: 2, titulo: "Mantenimiento de Suministros",
+          rol: "Administrador", accion: "gestionar el catálogo maestro de suministros, equipos, instrumentos y servicios que pueden incluirse en las propuestas comerciales",
+          beneficio: "mantener actualizado el inventario técnico ofertable, estandarizar códigos y descripciones, y agilizar la elaboración de propuestas y cotizaciones.",
+          criterios: [
+            "Mostrar un listado maestro paginado con filtros por Tipo (Suministro / Equipo / Instrumento / Servicio), Categoría, Marca, Estado y búsqueda por código o descripción.",
+            "Permitir crear un nuevo registro mediante un formulario que capture: Código, Tipo, Categoría, Descripción, Marca, Modelo, Unidad de medida, Precio referencial y Estado.",
+            "Permitir editar los datos de un registro existente, dejando en la auditoría el usuario, fecha y campos modificados.",
+            "Permitir activar o desactivar un registro sin eliminarlo, para preservar la trazabilidad en propuestas históricas.",
+            "Validar la unicidad del Código dentro de los registros activos."
+          ],
+          imagenes: ["Mantenimiento de Suministros - Catálogo Maestro.png", "Mantenimiento de Suministros - Nuevo Registro.png"] },
+
+        { id: "HU-87", sprint: 2, titulo: "Mantenimiento de Procedimientos",
+          rol: "Administrador / Jefe Técnico", accion: "gestionar el catálogo maestro de procedimientos técnicos aplicables a calibraciones, verificaciones y servicios",
+          beneficio: "asegurar la trazabilidad normativa y estandarizar la ejecución de los servicios, garantizando el cumplimiento de las normas técnicas vigentes.",
+          criterios: [
+            "Mostrar un listado maestro paginado de procedimientos con filtros por Categoría, Norma aplicada, Estado y búsqueda por código o nombre.",
+            "Permitir crear un nuevo procedimiento mediante un formulario que capture: Código, Nombre, Categoría, Norma aplicada, Alcance, Descripción, Versión y Estado.",
+            "Permitir editar los datos de un procedimiento existente, incrementando la versión y dejando registro histórico.",
+            "Permitir activar o desactivar un procedimiento sin eliminarlo, preservando la referencia en informes técnicos y certificados ya emitidos.",
+            "Validar la unicidad del Código dentro de los procedimientos activos."
+          ],
+          imagenes: ["Mantenimiento de Procedimientos - Lista Maestra.png", "Mantenimiento de Procedimientos - Nuevo Registro.png"] },
+
+        { id: "HU-88", sprint: 2, titulo: "Mantenimiento de Equipos del Cliente",
+          rol: "Administrador / Comercial", accion: "gestionar el catálogo de equipos registrados a nombre de cada cliente para su uso posterior en propuestas y órdenes de servicio",
+          beneficio: "mantener actualizado el inventario de activos de cada cliente, facilitando la generación rápida de propuestas y evitando el doble registro de equipos ya conocidos.",
+          criterios: [
+            "Mostrar un listado maestro paginado de equipos del cliente con filtros por Cliente, Sede, Tipo de equipo, Marca, Modelo y Estado.",
+            "Permitir crear un nuevo equipo mediante un formulario que capture: Cliente, Sede, Tipo, Marca, Modelo, Número de Serie, Código TW y Estado.",
+            "Permitir editar únicamente los campos de ubicación y estado; el Número de Serie, Marca y Modelo quedan bloqueados tras el registro inicial para preservar la trazabilidad técnica.",
+            "Permitir activar o desactivar un equipo sin eliminarlo, manteniendo la referencia en propuestas y órdenes de servicio históricas.",
+            "Validar la unicidad del Número de Serie dentro de los equipos activos de un mismo cliente."
+          ],
+          imagenes: ["Mantenimiento de Equipos de Cliente - Listado Maestro.png", "Mantenimiento de Equipos - Nuevo Registro.png"] }
     ];
 
     const listContainer = document.getElementById('hu-list');
@@ -1059,11 +1344,12 @@
                 currentSection = item.seccion;
                 if (!moduleSections.includes(currentSection)) {
                     moduleSections.push(currentSection);
+                    const seccionValor = currentSection;
                     const optBtn = document.createElement('button');
                     optBtn.className = 'custom-select-option';
-                    optBtn.dataset.value = currentSection;
-                    optBtn.textContent = currentSection;
-                    optBtn.onclick = () => selectModulo(currentSection, currentSection);
+                    optBtn.dataset.value = seccionValor;
+                    optBtn.textContent = seccionValor;
+                    optBtn.onclick = () => selectModulo(seccionValor, seccionValor);
                     modOptions.appendChild(optBtn);
                 }
                 const sectionHeader = document.createElement('div');
@@ -1209,6 +1495,7 @@
     function setPill(type, btn) {
         document.getElementById(`${type}-pills`).querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
+        if (type === 'sprint') filtrarOpcionesModulo();
         applyFilters();
     }
 
@@ -1240,6 +1527,55 @@
         });
         if (lastSection) lastSection.style.display = lastSectionHasVisible ? '' : 'none';
         updateFilterBadge();
+        updateHuCount();
+        marcarPrimerVisible();
+    }
+
+    function marcarPrimerVisible() {
+        const items = Array.from(listContainer.children);
+        items.forEach(el => el.classList.remove('first-visible'));
+        const primero = items.find(el => el.style.display !== 'none');
+        if (primero && primero.classList.contains('menu-section')) {
+            primero.classList.add('first-visible');
+        }
+    }
+
+    function filtrarOpcionesModulo() {
+        const sprint = (document.querySelector('#sprint-pills .pill-btn.active') || {}).dataset?.value || '';
+        const modulosConHU = new Set();
+        let currentModulo = '';
+        data.forEach(item => {
+            if (item.seccion) currentModulo = item.seccion;
+            if (!item.id || !currentModulo) return;
+            const itemSprint = item.sprint ? String(item.sprint) : '';
+            const matchSprint = !sprint || (sprint === 'sin' ? !itemSprint : itemSprint === sprint);
+            if (matchSprint) modulosConHU.add(currentModulo);
+        });
+
+        document.querySelectorAll('#modulo-options .custom-select-option').forEach(opt => {
+            if (opt.dataset.value === '') return;
+            opt.style.display = modulosConHU.has(opt.dataset.value) ? '' : 'none';
+        });
+
+        const currentSelected = document.getElementById('modulo-selected-value').value;
+        if (currentSelected && !modulosConHU.has(currentSelected)) {
+            selectModulo('', 'Todos los módulos');
+        }
+    }
+
+    function updateHuCount() {
+        const total = document.querySelectorAll('.hu-item').length;
+        const visible = document.querySelectorAll('.hu-item:not([style*="display: none"])').length;
+        const el = document.getElementById('hu-count');
+        if (!el) return;
+        const sprintActive = (document.querySelector('#sprint-pills .pill-btn.active') || {}).dataset?.value || '';
+        const moduloActive = document.getElementById('modulo-selected-value').value;
+        const pantallasActive = (document.querySelector('#pantallas-pills .pill-btn.active') || {}).dataset?.value || '';
+        const search = document.getElementById('hu-search').value.trim();
+        const hayFiltro = sprintActive || moduloActive || pantallasActive || search;
+        el.innerHTML = hayFiltro
+            ? `<strong>${visible}</strong> de ${total} · filtrado`
+            : `<strong>${total}</strong> historias · total`;
     }
 
     function showCard(index, itemElement) {
@@ -1254,6 +1590,7 @@
     }
 
     renderDocument();
+    updateHuCount();
 </script>
 </body>
 </html>

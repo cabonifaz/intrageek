@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eliminar tu cuenta y tus datos · Ranked</title>
+<meta name="description" content="Cómo pedir que Ranked elimine tu cuenta y tus datos personales.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700&family=Barlow+Semi+Condensed:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --noche: #0D1C27;
+    --lima: #C6E13A;
+    --fondo: #F5F7F8;
+    --texto: #1B2730;
+    --suave: #5B6873;
+    --linea: #DDE3E7;
+    --pendiente: #FFF3B0;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    margin: 0; background: var(--fondo); color: var(--texto);
+    font-family: 'Barlow', 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 17px; line-height: 1.65;
+  }
+  a { color: var(--noche); text-decoration-color: var(--lima); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+  a:hover { text-decoration-color: var(--noche); }
+  a:focus-visible { outline: 3px solid var(--lima); outline-offset: 2px; border-radius: 2px; }
+
+  /* Cabecera con las franjas diagonales de la app */
+  .cabecera {
+    position: relative; overflow: hidden;
+    background: var(--noche); color: #FFFFFF;
+    padding: 28px 24px 56px;
+  }
+  .cabecera::before, .cabecera::after {
+    content: ''; position: absolute; top: -60%; width: 260px; height: 260%;
+    background: rgba(255,255,255,0.045); transform: rotate(32deg);
+  }
+  .cabecera::before { left: 8%; }
+  .cabecera::after { left: 55%; background: rgba(255,255,255,0.03); }
+  .cabecera-interior { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; }
+  .marca {
+    display: inline-block; font-family: 'Barlow Semi Condensed', 'Barlow', sans-serif;
+    font-weight: 800; font-size: 26px; letter-spacing: -0.5px; color: #FFFFFF; text-decoration: none;
+    border-bottom: 3px solid var(--lima); padding-bottom: 2px; margin-bottom: 40px;
+  }
+  h1 {
+    font-family: 'Barlow Semi Condensed', 'Barlow', sans-serif;
+    font-weight: 800; font-size: clamp(36px, 6vw, 58px); line-height: 1.02;
+    letter-spacing: -1px; margin: 0 0 14px; max-width: 16ch;
+  }
+  .bajada { margin: 0; max-width: 60ch; color: rgba(255,255,255,0.8); font-size: 18px; }
+  .vigencia { margin: 18px 0 0; font-size: 14px; color: rgba(255,255,255,0.65); }
+
+  .contenedor { max-width: 1080px; margin: 0 auto; padding: 40px 24px 72px; }
+  .contenido { max-width: 70ch; }
+
+  h2 {
+    font-family: 'Barlow Semi Condensed', 'Barlow', sans-serif;
+    font-weight: 700; font-size: 27px; line-height: 1.2; color: var(--noche);
+    margin: 48px 0 12px; scroll-margin-top: 24px;
+  }
+  h3 { font-size: 18px; margin: 24px 0 6px; color: var(--noche); }
+  p, ul, ol { margin: 0 0 14px; }
+  ul { padding-left: 22px; }
+  li { margin-bottom: 6px; }
+  li::marker { color: var(--suave); }
+  strong { color: var(--noche); }
+
+  .pendiente {
+    background: var(--pendiente); padding: 1px 5px; border-radius: 3px;
+    font-weight: 600; color: #5A4A00;
+  }
+  .aviso-pendientes {
+    border-left: 4px solid #E0B800; background: #FFFBE6;
+    padding: 12px 16px; margin: 0 0 32px; font-size: 15px; border-radius: 0 6px 6px 0;
+  }
+
+  .tabla-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; margin: 6px 0 18px; font-size: 15.5px; }
+  th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--linea); }
+  th { font-weight: 700; color: var(--noche); background: #EAEFF2; }
+
+  .pie {
+    border-top: 1px solid var(--linea); padding: 24px; text-align: center;
+    font-size: 14px; color: var(--suave);
+  }
+  .pie a { margin: 0 8px; }
+
+  /* Pasos numerados: es un proceso en orden */
+  .pasos { list-style: none; counter-reset: paso; padding: 0; margin: 8px 0 24px; }
+  .pasos li {
+    counter-increment: paso; position: relative;
+    padding: 0 0 22px 60px; margin: 0;
+  }
+  .pasos li::before {
+    content: counter(paso);
+    position: absolute; left: 0; top: -2px;
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--noche); color: var(--lima);
+    font-family: 'Barlow Semi Condensed', 'Barlow', sans-serif; font-weight: 800; font-size: 21px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .pasos li:not(:last-child)::after {
+    content: ''; position: absolute; left: 19px; top: 44px; bottom: 4px;
+    width: 2px; background: var(--linea);
+  }
+  .pasos strong { display: block; font-size: 18px; margin-bottom: 2px; }
+  .correo-destacado {
+    background: #FFFFFF; border: 1px solid var(--linea); border-left: 4px solid var(--lima);
+    border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 4px 0 8px;
+  }
+  .correo-destacado span.etiqueta { display: block; font-size: 14px; color: var(--suave); }
+  .correo-destacado .dato { font-size: 19px; font-weight: 700; color: var(--noche); }
+</style>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="privacidad.html">Ranked</a>
+    <h1>Eliminar tu cuenta y tus datos</h1>
+    <p class="bajada">Puedes pedir en cualquier momento que eliminemos tu cuenta de Ranked y tus datos personales. Así funciona el proceso.</p>
+    <p class="vigencia">Última actualización: 2 de octubre de 2026</p>
+  </div>
+</header>
+
+<main class="contenedor">
+  <div class="contenido">
+
+    <h2 id="como">Cómo pedir la eliminación</h2>
+    <ol class="pasos">
+      <li>
+        <strong>Escríbenos desde el correo de tu cuenta</strong>
+        Envía un correo a la dirección de abajo con el asunto “Eliminar mi cuenta de Ranked”. Usa el mismo correo con el que te registraste, así podemos confirmar que la cuenta es tuya.
+        <div class="correo-destacado">
+          <span class="etiqueta">Correo para solicitudes de privacidad</span>
+          <span class="dato">operaciones.desarrollo@geeky-tech.es</span>
+        </div>
+      </li>
+      <li>
+        <strong>Indica cómo inicias sesión</strong>
+        Cuéntanos si entras a Ranked con correo y contraseña, con Google o con Facebook. Si usas Google o Facebook, escribe desde el correo de esa cuenta.
+      </li>
+      <li>
+        <strong>Confirmamos que eres el titular</strong>
+        Te responderemos para confirmar que recibimos tu solicitud. Si el correo no coincide con ninguna cuenta, te pediremos algún dato adicional para identificarla.
+      </li>
+      <li>
+        <strong>Eliminamos tu cuenta y te avisamos</strong>
+        Eliminamos tu cuenta y tus datos en un plazo máximo de 10 días hábiles y te enviamos un correo cuando el proceso termine.
+      </li>
+    </ol>
+
+    <h2 id="que-se-elimina">Qué eliminamos</h2>
+    <ul>
+      <li>Tu cuenta y tus datos de registro: nombre, apellidos, correo, contraseña, celular, edad y género.</li>
+      <li>Tu foto de perfil.</li>
+      <li>Tu perfil deportivo: nivel, puntaje, posición en el ranking, cuestionario de nivel y, si eras profesor, tu descripción y tarifa.</li>
+      <li>Tu lista de amigos y tus solicitudes de amistad.</li>
+      <li>Tus mensajes en los chats de partidos y clases.</li>
+      <li>Tus inscripciones a ligas y las calificaciones que diste o recibiste.</li>
+      <li>Los datos que recibimos de Google o Facebook al iniciar sesión.</li>
+    </ul>
+
+    <h2 id="que-se-conserva">Qué conservamos y por qué</h2>
+    <ul>
+      <li><strong>Resultados de partidos con otros jugadores:</strong> se conservan de forma anónima, sin tu nombre ni tu foto, para no alterar el historial ni las tablas de las ligas de los demás.</li>
+      <li><strong>Registros de pagos de inscripción:</strong> si pagaste una cuota de liga, conservamos el monto y el número de operación durante el tiempo que exige la ley para fines contables y tributarios.</li>
+    </ul>
+
+    <h2 id="google-facebook">Si iniciabas sesión con Google o Facebook</h2>
+    <p>Eliminar tu cuenta de Ranked no cambia nada en tu cuenta de Google o de Facebook. Si además quieres quitarle a Ranked el acceso a tu cuenta, puedes hacerlo tú mismo:</p>
+    <ul>
+      <li><strong>Facebook:</strong> en Configuración y privacidad → Configuración → Apps y sitios web, elige Ranked y presiona Eliminar.</li>
+      <li><strong>Google:</strong> en tu Cuenta de Google → Seguridad → Tus conexiones con apps y servicios de terceros, elige Ranked y quita el acceso.</li>
+    </ul>
+    <p>Quitar el acceso desde Facebook o Google no borra tus datos de Ranked. Para eso, sigue los pasos del inicio de esta página.</p>
+
+    <h2 id="mas">Más información</h2>
+    <p>Para saber qué datos recogemos y cómo los usamos, revisa nuestra <a href="privacidad.html">política de privacidad</a>. Si tienes dudas sobre el proceso, escríbenos a operaciones.desarrollo@geeky-tech.es.</p>
+  </div>
+</main>
+
+<footer class="pie">
+  <a href="privacidad.html">Política de privacidad</a>
+  <a href="eliminar-datos.html">Eliminar tu cuenta y tus datos</a>
+</footer>
+</body>
+</html>

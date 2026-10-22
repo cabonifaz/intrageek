@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Política de privacidad · Ranked</title>
+<meta name="description" content="Cómo Ranked recoge, usa y protege tus datos personales.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700&family=Barlow+Semi+Condensed:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --noche: #0D1C27;
+    --lima: #C6E13A;
+    --fondo: #F5F7F8;
+    --texto: #1B2730;
+    --suave: #5B6873;
+    --linea: #DDE3E7;
+    --pendiente: #FFF3B0;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    margin: 0; background: var(--fondo); color: var(--texto);
+    font-family: 'Barlow', 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 17px; line-height: 1.65;
+  }
+  a { color: var(--noche); text-decoration-color: var(--lima); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+  a:hover { text-decoration-color: var(--noche); }
+  a:focus-visible { outline: 3px solid var(--lima); outline-offset: 2px; border-radius: 2px; }
+
+  /* Cabecera con las franjas diagonales de la app */
+  .cabecera {
+    position: relative; overflow: hidden;
+    background: var(--noche); color: #FFFFFF;
+    padding: 28px 24px 56px;
+  }
+  .cabecera::before, .cabecera::after {
+    content: ''; position: absolute; top: -60%; width: 260px; height: 260%;
+    background: rgba(255,255,255,0.045); transform: rotate(32deg);
+  }
+  .cabecera::before { left: 8%; }
+  .cabecera::after { left: 55%; background: rgba(255,255,255,0.03); }
+  .cabecera-interior { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; }
+  .marca {
+    display: inline-block; font-family: 'Barlow Semi Condensed', 'Barlow', sans-serif;
+    font-weight: 800; font-size: 26px; letter-spacing: -0.5px; color: #FFFFFF; text-decoration: none;
+    border-bottom: 3px solid var(--lima); padding-bottom: 2px; margin-bottom: 40px;
+  }
+  h1 {
+    font-family: 'Barlow Semi Condensed', 'Barlow', sans-serif;
+    font-weight: 800; font-size: clamp(36px, 6vw, 58px); line-height: 1.02;
+    letter-spacing: -1px; margin: 0 0 14px; max-width: 16ch;
+  }
+  .bajada { margin: 0; max-width: 60ch; color: rgba(255,255,255,0.8); font-size: 18px; }
+  .vigencia { margin: 18px 0 0; font-size: 14px; color: rgba(255,255,255,0.65); }
+
+  .contenedor { max-width: 1080px; margin: 0 auto; padding: 40px 24px 72px; }
+  .contenido { max-width: 70ch; }
+
+  h2 {
+    font-family: 'Barlow Semi Condensed', 'Barlow', sans-serif;
+    font-weight: 700; font-size: 27px; line-height: 1.2; color: var(--noche);
+    margin: 48px 0 12px; scroll-margin-top: 24px;
+  }
+  h3 { font-size: 18px; margin: 24px 0 6px; color: var(--noche); }
+  p, ul, ol { margin: 0 0 14px; }
+  ul { padding-left: 22px; }
+  li { margin-bottom: 6px; }
+  li::marker { color: var(--suave); }
+  strong { color: var(--noche); }
+
+  .pendiente {
+    background: var(--pendiente); padding: 1px 5px; border-radius: 3px;
+    font-weight: 600; color: #5A4A00;
+  }
+  .aviso-pendientes {
+    border-left: 4px solid #E0B800; background: #FFFBE6;
+    padding: 12px 16px; margin: 0 0 32px; font-size: 15px; border-radius: 0 6px 6px 0;
+  }
+
+  .tabla-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; margin: 6px 0 18px; font-size: 15.5px; }
+  th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--linea); }
+  th { font-weight: 700; color: var(--noche); background: #EAEFF2; }
+
+  .pie {
+    border-top: 1px solid var(--linea); padding: 24px; text-align: center;
+    font-size: 14px; color: var(--suave);
+  }
+  .pie a { margin: 0 8px; }
+
+  /* Índice fijo a la izquierda en pantallas grandes */
+  .disposicion { display: grid; grid-template-columns: 1fr; gap: 32px; }
+  .indice { font-size: 15px; }
+  .indice p { font-weight: 700; color: var(--noche); margin: 0 0 8px; }
+  .indice ol { list-style: none; padding: 0; margin: 0; border-left: 2px solid var(--linea); }
+  .indice li { margin: 0; }
+  .indice a { display: block; padding: 5px 0 5px 14px; color: var(--suave); text-decoration: none; margin-left: -2px; border-left: 2px solid transparent; }
+  .indice a:hover { color: var(--noche); border-left-color: var(--lima); }
+  @media (min-width: 900px) {
+    .disposicion { grid-template-columns: 230px 1fr; gap: 56px; }
+    .indice { position: sticky; top: 24px; align-self: start; }
+  }
+</style>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="privacidad.html">Ranked</a>
+    <h1>Política de privacidad</h1>
+    <p class="bajada">Qué datos recogemos cuando usas Ranked, para qué los usamos, quién puede verlos y cómo puedes pedir que los eliminemos.</p>
+    <p class="vigencia">Última actualización: 2 de octubre de 2026</p>
+  </div>
+</header>
+
+<main class="contenedor">
+  <div class="disposicion">
+    <nav class="indice" aria-label="Contenido">
+      <p>Contenido</p>
+      <ol>
+      <li><a href="#responsable">Quién es responsable de tus datos</a></li>
+      <li><a href="#datos">Qué datos recogemos</a></li>
+      <li><a href="#uso">Para qué usamos tus datos</a></li>
+      <li><a href="#visible">Qué ven otros jugadores</a></li>
+      <li><a href="#terceros">Con quién compartimos tus datos</a></li>
+      <li><a href="#conservacion">Cuánto tiempo guardamos tus datos</a></li>
+      <li><a href="#derechos">Tus derechos</a></li>
+      <li><a href="#seguridad">Cómo protegemos tus datos</a></li>
+      <li><a href="#menores">Menores de edad</a></li>
+      <li><a href="#cambios">Cambios en esta política</a></li>
+      </ol>
+    </nav>
+    <div class="contenido">
+    <section>
+      <h2 id="responsable">Quién es responsable de tus datos</h2>
+<p>Ranked es una aplicación para encontrar compañeros de juego, retar a otros jugadores, participar en ligas de ranking y tomar clases de frontón y otros deportes de raqueta.</p>
+<p>El responsable del tratamiento de tus datos personales es GEEKY TECH S.A.C., con RUC 20608337602 y domicilio en Calle Soldado Manuel Castañeda, Dpto. 1202, Lima, Perú. Para cualquier consulta sobre tus datos puedes escribirnos a operaciones.desarrollo@geeky-tech.es.</p>
+    </section>
+    <section>
+      <h2 id="datos">Qué datos recogemos</h2>
+<h3>Datos que nos das al crear tu cuenta</h3>
+<ul>
+  <li>Nombre, apellidos y correo electrónico.</li>
+  <li>Contraseña, que guardamos cifrada: nadie del equipo puede leerla.</li>
+  <li>Edad. Ranked es solo para mayores de 18 años.</li>
+  <li>Género, que puedes dejar como “Prefiero no decirlo”.</li>
+  <li>Número de celular, si decides agregarlo.</li>
+  <li>Tus respuestas al cuestionario de nivel (nivel de juego, partidos y clases por semana, condición física), que usamos para calcular tu nivel inicial.</li>
+  <li>Si te registras como profesor, la descripción de tus logros y tu tarifa.</li>
+</ul>
+<h3>Datos que recibimos de Google o Facebook</h3>
+<p>Si inicias sesión con Google o con Facebook, recibimos de ese servicio tu <strong>nombre</strong>, tu <strong>correo electrónico</strong> y tu <strong>foto de perfil</strong>. No accedemos a tus contactos, publicaciones, amigos ni mensajes, y Ranked nunca publica nada en tu nombre.</p>
+<h3>Datos que se generan al usar la app</h3>
+<ul>
+  <li>Tu foto de perfil, si decides subirla.</li>
+  <li>Partidos que creas, retos que envías o recibes, resultados y sets de cada partido.</li>
+  <li>Tu nivel, puntaje, posición en el ranking y puntos en cada liga.</li>
+  <li>Calificaciones y comentarios que das o recibes después de un partido o una clase.</li>
+  <li>Tu lista de amigos y las solicitudes de amistad.</li>
+  <li>Los mensajes del chat de cada partido o clase.</li>
+  <li>Las clases que solicitas o dictas.</li>
+  <li>Tus inscripciones a ligas y, si la liga tiene cuota, el monto y el número de operación del pago. No guardamos datos de tarjetas.</li>
+  <li>El idioma que eliges en la app, que se guarda solo en tu teléfono.</li>
+</ul>
+<h3>Datos técnicos</h3>
+<p>Nuestros servidores registran datos técnicos básicos de cada conexión, como la dirección IP y la fecha y hora de cada solicitud, para mantener el servicio funcionando y protegerlo de usos indebidos.</p>
+    </section>
+    <section>
+      <h2 id="uso">Para qué usamos tus datos</h2>
+<ul>
+  <li><strong>Darte acceso a tu cuenta</strong> e identificarte cuando inicias sesión.</li>
+  <li><strong>Hacer funcionar la app:</strong> mostrar partidos disponibles, enviar y recibir retos, registrar resultados, armar las tablas de las ligas y coordinar clases.</li>
+  <li><strong>Calcular tu nivel, puntaje y ranking</strong> a partir del cuestionario inicial y de tus resultados.</li>
+  <li><strong>Permitir la comunicación</strong> entre los jugadores de un partido o entre profesor y alumno, mediante el chat.</li>
+  <li><strong>Gestionar las inscripciones a ligas</strong> y validar los pagos de las cuotas.</li>
+  <li><strong>Mantener la seguridad</strong> de la plataforma y atender reportes de mal uso.</li>
+</ul>
+<p>No vendemos tus datos personales ni los usamos para publicidad de terceros.</p>
+    </section>
+    <section>
+      <h2 id="visible">Qué ven otros jugadores</h2>
+<p>Ranked es una comunidad deportiva, así que parte de tu información es visible para otros usuarios:</p>
+<div class="tabla-scroll"><table>
+  <tr><th>Información</th><th>Quién la ve</th></tr>
+  <tr><td>Nombre, foto de perfil, nivel, puntaje, posición en el ranking y estadísticas de partidos</td><td>Todos los usuarios de Ranked</td></tr>
+  <tr><td>Tus calificaciones promedio como jugador o profesor</td><td>Todos los usuarios de Ranked</td></tr>
+  <tr><td>Resultados de partidos de liga y tu posición en la tabla de cada liga</td><td>Todos los usuarios de Ranked</td></tr>
+  <tr><td>Partidos amistosos que publicas buscando rival (cancha, fecha y hora)</td><td>Todos los usuarios de Ranked</td></tr>
+  <tr><td>Mensajes del chat de un partido o clase</td><td>Solo los participantes de ese partido o clase</td></tr>
+  <tr><td>Correo electrónico, celular, edad, género y contraseña</td><td>Nadie más. No se muestran a otros usuarios.</td></tr>
+</table></div>
+    </section>
+    <section>
+      <h2 id="terceros">Con quién compartimos tus datos</h2>
+<p>Solo compartimos datos con los proveedores que necesitamos para que Ranked funcione, y únicamente para ese fin:</p>
+<ul>
+  <li><strong>Proveedor de servidores:</strong> aloja la base de datos y el sistema de la app.</li>
+  <li><strong>Cloudinary:</strong> almacena las fotos de perfil.</li>
+  <li><strong>Google y Meta (Facebook):</strong> solo si eliges iniciar sesión con ellos, para verificar tu identidad.</li>
+</ul>
+<p>Algunos de estos proveedores pueden almacenar datos en servidores ubicados fuera del Perú, por ejemplo en Estados Unidos. Al usar Ranked aceptas esta transferencia, que realizamos con proveedores que aplican medidas de seguridad adecuadas.</p>
+<p>También podemos entregar datos a una autoridad cuando una ley o una orden judicial nos obligue a hacerlo.</p>
+    </section>
+    <section>
+      <h2 id="conservacion">Cuánto tiempo guardamos tus datos</h2>
+<p>Guardamos tus datos mientras tu cuenta esté activa. Si pides eliminar tu cuenta, borramos tus datos personales siguiendo el proceso descrito en <a href="eliminar-datos.html">Eliminar tu cuenta y tus datos</a>.</p>
+<p>Los resultados de partidos en los que participaron otros jugadores pueden conservarse de forma anónima, sin tu nombre ni tu foto, para no alterar el historial ni las tablas de las ligas de los demás.</p>
+    </section>
+    <section>
+      <h2 id="derechos">Tus derechos</h2>
+<p>De acuerdo con la Ley N.° 29733, Ley de Protección de Datos Personales del Perú, y su reglamento, puedes en cualquier momento:</p>
+<ul>
+  <li><strong>Acceder</strong> a los datos que tenemos sobre ti.</li>
+  <li><strong>Rectificar</strong> datos incorrectos o desactualizados. Muchos puedes cambiarlos tú mismo desde Editar perfil.</li>
+  <li><strong>Cancelar</strong> tus datos, es decir, pedir que los eliminemos.</li>
+  <li><strong>Oponerte</strong> a un uso determinado de tus datos.</li>
+</ul>
+<p>Para ejercer cualquiera de estos derechos, escríbenos a operaciones.desarrollo@geeky-tech.es desde el correo con el que te registraste. Si consideras que no atendimos tu solicitud correctamente, puedes presentar un reclamo ante la Autoridad Nacional de Protección de Datos Personales del Ministerio de Justicia y Derechos Humanos.</p>
+    </section>
+    <section>
+      <h2 id="seguridad">Cómo protegemos tus datos</h2>
+<p>Las contraseñas se guardan cifradas, la comunicación entre la app y nuestros servidores viaja cifrada y el acceso a la base de datos está restringido al equipo que la administra. Aun así, ningún sistema es completamente infalible: si detectamos un problema de seguridad que afecte tus datos, te lo comunicaremos.</p>
+    </section>
+    <section>
+      <h2 id="menores">Menores de edad</h2>
+<p>Ranked está dirigido a mayores de 18 años y no permite registrarse a menores. Si sabes que un menor creó una cuenta, escríbenos y la eliminaremos.</p>
+    </section>
+    <section>
+      <h2 id="cambios">Cambios en esta política</h2>
+<p>Si cambiamos esta política de forma importante, te lo avisaremos en la app antes de que el cambio entre en vigor. La fecha de la última actualización aparece al inicio de esta página.</p>
+    </section>
+    </div>
+  </div>
+</main>
+
+<footer class="pie">
+  <a href="privacidad.html">Política de privacidad</a>
+  <a href="eliminar-datos.html">Eliminar tu cuenta y tus datos</a>
+</footer>
+</body>
+</html>

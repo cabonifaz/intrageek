@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propuesta Técnica - App Servicio de Campo</title>
+    <style>
+        :root {
+            --primary: #004aad;
+            --secondary: #e60000;
+            --bg-light: #f4f7f6;
+            --text-dark: #202124;
+            --text-muted: #5f6368;
+            --border: #dadce0;
+            --sidebar-bg: #ffffff;
+            --card-bg: #ffffff;
+        }
+        body, html {
+            margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            height: 100vh; background-color: var(--bg-light); color: var(--text-dark);
+            overflow: hidden;
+        }
+        .app-container { display: flex; height: 100vh; flex-direction: row; position: relative; }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 260px; background-color: var(--sidebar-bg); border-right: 1px solid var(--border);
+            display: flex; flex-direction: column; box-shadow: 2px 0 10px rgba(0,0,0,0.03);
+            z-index: 10; flex-shrink: 0;
+        }
+        .brand { padding: 25px 20px; border-bottom: 1px solid var(--border); text-align: center; }
+        .brand p { margin: 10px 0 0; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;}
+        
+        .hu-list { flex-grow: 1; overflow-y: auto; padding: 10px 0; }
+        .menu-section { padding: 15px 20px 5px 20px; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        
+        .hu-item { padding: 12px 20px; cursor: pointer; border-left: 4px solid transparent; transition: all 0.2s; border-bottom: 1px solid #f8f9fa; display: flex; flex-direction: column; }
+        .hu-item:hover { background-color: #f1f3f4; }
+        .hu-item.active { background-color: #eff6ff; border-left-color: var(--primary); }
+        .hu-id { font-size: 0.75rem; font-weight: 900; color: var(--primary); }
+        .hu-item.active .hu-id { color: var(--secondary); }
+        .hu-title { font-size: 0.85rem; font-weight: 600; margin-top: 4px; color: var(--text-dark); }
+        
+        /* Main Content */
+        .main-content { flex-grow: 1; overflow-y: auto; padding: 40px; box-sizing: border-box; }
+        .card { background: var(--card-bg); border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); padding: 40px; width: 100%; box-sizing: border-box; display: none; border-top: 5px solid var(--primary); }
+        .card.active { display: block; animation: fadeIn 0.3s ease-out; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Typography & Layout inside Cards */
+        .detail-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid var(--border); padding-bottom: 20px; margin-bottom: 25px; }
+        .detail-header h2 { margin: 0; font-size: 1.6rem; font-weight: 800; color: var(--text-dark); }
+        .badge { background: #fee2e2; color: var(--secondary); padding: 6px 15px; border-radius: 20px; font-size: 0.9rem; font-weight: 800; letter-spacing: 0.5px; }
+        
+        .story-block { background-color: #f8f9fa; border-left: 4px solid var(--secondary); padding: 20px; margin-bottom: 30px; border-radius: 0 8px 8px 0; }
+        .story-block p { margin: 8px 0; font-size: 1rem; line-height: 1.5; color: #3c4043; }
+        .story-block strong { color: var(--primary); font-weight: 800; display: inline-block; width: 70px; }
+        
+        h3 { color: var(--primary); font-size: 1.1rem; margin-top: 30px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        ul.criteria { padding-left: 25px; margin-top: 15px; }
+        ul.criteria li { margin-bottom: 12px; color: #3c4043; font-size: 0.95rem; line-height: 1.6; }
+        
+        .image-gallery { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 30px; justify-content: center; }
+        .img-container { flex: 1 1 calc(50% - 20px); min-width: 320px; text-align: center; background: #f1f3f4; padding: 15px; border-radius: 12px; border: 1px dashed var(--border); }
+        .img-container img { max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 8px 16px rgba(0,0,0,0.1); border: 1px solid var(--border); }
+        .img-name { font-size: 0.75rem; color: var(--text-muted); margin-top: 10px; font-family: monospace; }
+
+        /* Portada / Cover Styles */
+        .cover-page { text-align: center; padding: 40px 20px; }
+        .cover-page h1 { font-size: 2.2rem; color: var(--primary); margin-bottom: 5px; margin-top: 20px; }
+        .cover-page h2 { font-size: 1.4rem; color: var(--text-muted); font-weight: 400; margin-top: 0; margin-bottom: 50px; }
+        .cover-table { width: 100%; max-width: 600px; margin: 0 auto; border-collapse: collapse; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .cover-table th, .cover-table td { padding: 15px 20px; border: 1px solid var(--border); font-size: 1rem; }
+        .cover-table th { background-color: #f8f9fa; color: var(--primary); width: 40%; font-weight: 700; }
+        
+        /* Mobile Navbar */
+        .mobile-header { display: none; background-color: var(--primary); color: white; padding: 15px 20px; align-items: center; justify-content: space-between; box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 20; }
+        .mobile-header img { height: 30px; width: auto; filter: brightness(0) invert(1); }
+        .menu-btn { background: rgba(255,255,255,0.2); color: white; border: none; padding: 8px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .app-container { flex-direction: column; }
+            .mobile-header { display: flex; }
+            .sidebar { position: fixed; top: 60px; left: -100%; width: 100%; height: calc(100vh - 60px); transition: left 0.3s ease; box-shadow: none; border-right: none; }
+            .sidebar.open { left: 0; }
+            .brand { display: none; }
+            .main-content { padding: 20px 15px; }
+            .card { padding: 25px 20px; border-radius: 8px; }
+            .detail-header { flex-direction: column; gap: 10px; align-items: flex-start; }
+            .story-block { padding: 15px; margin-bottom: 20px; }
+            .img-container { flex: 1 1 100%; max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="mobile-header">
+    <img src="totalweight-logo.png" alt="Total Weight">
+    <button class="menu-btn" onclick="toggleMenu()">☰ Menú</button>
+</div>
+
+<div class="app-container">
+    <div class="sidebar" id="sidebar">
+        <div class="brand">
+            <img src="totalweight-logo.png" alt="Logo Total Weight" style="width: 100%; max-width: 220px; height: auto;">
+            <p>Documentación Ágil v1.0</p>
+        </div>
+        <div class="hu-list" id="hu-list"></div>
+    </div>
+    <div class="main-content" id="main-content"></div>
+</div>
+
+<script>
+    const data = [
+        {
+            id: "PORTADA", titulo: "Portada de Documento", isCover: true,
+            cliente: "TOTAL WEIGHT SAC", contacto: "Jorge García", version: "1.0", creacion: "14/07/26", modificacion: "14/07/26"
+        },
+        { seccion: "MÓDULO 1: ACCESO Y SINCRONIZACIÓN", id: "HU-01", titulo: "Acceso Seguro y Modo Offline", rol: "Técnico de Campo", accion: "iniciar sesión en la aplicación con mis credenciales", beneficio: "acceder a mi agenda de servicios y poder trabajar incluso sin conexión a internet.", criterios: ["El sistema debe permitir el ingreso con usuario/correo y contraseña, mostrando un icono para visualizar la clave.", "Debe incluir una opción de 'Recordar sesión' y un enlace funcional para 'Recuperar contraseña'.", "Debe incluir un botón 'Ingresar en modo offline' que permita acceder usando la sesión local almacenada si el dispositivo no tiene red."], imagenes: ["Login - Total Weight.png"] },
+        { id: "HU-02", titulo: "Menú Principal y Accesos Operativos", rol: "Técnico de Campo", accion: "visualizar un menú principal estructurado", beneficio: "navegar rápidamente hacia mis herramientas principales como rutas, procedimientos y viáticos.", criterios: ["Mostrar un diseño de cuadrícula (grid) con iconos descriptivos para cada módulo.", "Las tarjetas deben mostrar indicadores dinámicos (ej. '8 Asignados' en Servicios, '3 Servicios' en Ruta del Día).", "Incluir un banner inferior destacado para indicar el 'Próximo Hit' o servicio más urgente de la jornada."], imagenes: ["Menú Principal - Total Weight.png"] },
+        { id: "HU-21", titulo: "Centro de Sincronización y Conflictos", rol: "Técnico de Campo", accion: "visualizar y gestionar el estado de sincronización de mi información local", beneficio: "asegurar que todos mis informes, fotografías y registros GPS se envíen correctamente al servidor.", criterios: ["Mostrar un panel de estado indicando claramente si la aplicación está trabajando en 'Modo Offline' y el tiempo transcurrido desde la última actualización.", "Detallar una lista de los elementos pendientes de envío (Fotos, Informes, Video, Eventos GPS) con sus respectivos pesos en MB y una barra de progreso general.", "Habilitar botones de acción primaria para 'Reintentar fallidos' y 'Sincronizar ahora'.", "Si el sistema detecta que un informe fue modificado desde otro dispositivo, debe generar una alerta crítica de 'Conflicto de información', bloqueando la sobreescritura automática y exigiendo 'Revisar conflicto'."], imagenes: ["Centro de Sincronización.png"] },
+        
+        { seccion: "MÓDULO 2: CONTROL DE RUTAS Y GPS", id: "HU-03", titulo: "Agenda de Servicios Programados", rol: "Técnico de Campo", accion: "visualizar mi lista de servicios programados", beneficio: "conocer mis destinos, clientes y el estado de preparación de cada expediente.", criterios: ["Mostrar pestañas de filtrado rápido en la parte superior: Todos, Hoy, Pendientes.", "Presentar tarjetas por cada servicio indicando: Cliente, Fecha/Hora programada, N° de RQ y OS.", "Incluir etiquetas de estado general en la esquina de la tarjeta: LISTO, PENDIENTE o BLOQUEADO.", "Mostrar indicadores visuales (check verde, alerta naranja) para reflejar si el cliente está confirmado o si hay alertas predictivas."], imagenes: ["Servicios Programados - Total Weight.png"] },
+        { id: "HU-04", titulo: "Detalle del Servicio y Checklist de Pre-Salida", rol: "Técnico de Campo", accion: "revisar los detalles del servicio y completar un checklist de validación", beneficio: "asegurar que llevo los repuestos, herramientas y EPP necesarios antes de salir hacia la planta.", criterios: ["Mostrar la información completa del destino, contacto y documentos asociados.", "Mostrar un panel de 'Riesgos Identificados' (ej. Carga suspendida, Superficies calientes).", "Exigir la validación de un 'Checklist Obligatorio' (Expediente descargado, EPP revisado, Herramientas listas).", "Bloquear el botón de 'Iniciar traslado' si existen repuestos pendientes de asignar o alertas predictivas sin resolver."], imagenes: ["Detalle del Servicio - Alicorp S.A.A..png", "Validación antes de salir.png"] },
+        { id: "HU-05", titulo: "Registro de Demoras en Ruta", rol: "Técnico de Campo", accion: "reportar un incidente o demora durante mi traslado", beneficio: "recalcular automáticamente mi tiempo estimado de llegada (ETA) y notificar al área de operaciones.", criterios: ["Capturar automáticamente la ubicación GPS y la hora de registro.", "Requerir la selección del Tipo de Demora y la duración estimada en minutos.", "Mostrar un panel de 'Impacto Estimado' que calcule e indique la 'ETA original' vs la 'ETA recalculada'.", "Permitir la captura opcional de una foto como evidencia del incidente."], imagenes: ["Registro de Demoras.png"] },
+        { id: "HU-06", titulo: "Registro de Llegada y Hard Stop", rol: "Técnico de Campo", accion: "registrar mi llegada a la planta del cliente validada por GPS", beneficio: "habilitar la ejecución de mis tareas y demostrar que estoy en la ubicación correcta.", criterios: ["Capturar la coordenada GPS del técnico e indicar el rango de precisión de la ubicación.", "Comparar la ubicación actual con la coordenada del cliente. Si es conforme, mostrar validación verde.", "Implementar un 'Hard Stop' (bloqueo modal): Si el técnico intenta acceder a los objetivos sin confirmar su llegada, el sistema debe mostrar un candado rojo bloqueando la acción."], imagenes: ["Registrar llegada.png", "Hard Stop sin llegada - Modal.png"] },
+        
+        { seccion: "MÓDULO 3: EJECUCIÓN Y ENSAYOS", id: "HU-07", titulo: "Lista de Objetivos y Selección de Equipos", rol: "Técnico de Campo", accion: "visualizar mis objetivos del día y seleccionar el equipo a intervenir", beneficio: "iniciar mis labores de mantenimiento de forma controlada.", criterios: ["Mostrar un panel superior con contadores: Completados, Pendientes, Observados.", "Listar los equipos de la OS, mostrando etiquetas sobre su estado (EJECUTANDO, POR INICIAR, PAUSADO).", "Proveer una vista de 'Seleccionar Equipo' que permita buscar por serie/código o usar la cámara para escanear el QR del activo."], imagenes: ["Lista de objetivos.png", "Selección de Equipo - Total Weight.png"] },
+        { id: "HU-08", titulo: "Llenado del Informe Técnico", rol: "Técnico de Campo", accion: "registrar los datos, detalles técnicos y repuestos utilizados", beneficio: "documentar el trabajo realizado y dejar constancia de las fallas encontradas.", criterios: ["Proveer un formulario estructurado con navegación por pestañas (Datos, Detalle, Observaciones, Conclusiones).", "Permitir registrar la configuración del equipo y seleccionar mediante listas desplegables el componente en falla y el tipo de falla.", "Incluir botones de alternancia para indicar si 'Requiere precotización', 'Aplica garantía' o 'Requiere Jefatura'.", "Mostrar una barra de progreso dinámica en la parte inferior para guiar al técnico hasta el 100%."], imagenes: ["Informe de Mantenimiento - Pestaña Datos.png", "Detalle del Servicio - Informe de Mantenimiento.png"] },
+        { id: "HU-09", titulo: "Registro de Variables Ambientales", rol: "Técnico de Campo", accion: "registrar las condiciones ambientales del entorno", beneficio: "cumplir con los requisitos metrológicos obligatorios antes de proceder con el pesaje.", criterios: ["Exigir el ingreso obligatorio de Temperatura (°C) y Humedad (%).", "Capturar y bloquear automáticamente los metadatos: Fecha, Hora, GPS ('Capturado') y Sync.", "Mostrar mensaje informativo indicando que estos campos son obligatorios para la etapa de pesaje."], imagenes: ["Variables Ambientales.png"] },
+        { id: "HU-10", titulo: "Ejecución de Ensayos y Calibración", rol: "Técnico de Campo", accion: "registrar las lecturas de los ensayos de pesaje y excentricidad", beneficio: "validar digitalmente que el equipo cumple con las tolerancias y la clase metrológica.", criterios: ["Mostrar interfaz por pestañas (Pesaje, Excentricidad) con datos técnicos base (Unidad, Clase, Máxima).", "Proveer una matriz de datos donde el sistema calcule el 'Error' automáticamente y lo compare con el EMP.", "Mostrar visualmente el estado de validación (Check azul o Error Crítico rojo).", "Bloquear la finalización si existe un error crítico y exigir 'Repetir ensayo'."], imagenes: ["Ensayos y Calibración.png"] },
+        
+        { seccion: "MÓDULO 4: FOTOGRAFÍA E INTELIGENCIA ARTIFICIAL", id: "HU-11", titulo: "Registro Fotográfico y Validación IA", rol: "Técnico de Campo", accion: "tomar las fotografías obligatorias utilizando la cámara de la app", beneficio: "dejar evidencia visual del trabajo, validada automáticamente por Inteligencia Artificial.", criterios: ["Mostrar un panel (grid) con todos los requerimientos fotográficos pendientes.", "Deshabilitar estrictamente la carga de imágenes desde la galería del teléfono (solo captura en vivo).", "Ejecutar un modelo de IA en tiempo real ('Analizando...'). Si es exitosa, mostrar etiqueta verde 'Aprobada'.", "Si la IA rechaza la foto, mostrar modal rojo de 'Evidencia rechazada' detallando el motivo y obligando a 'Repetir foto'."], imagenes: ["Registro Fotográfico y Finalización.png", "Resultado IA - Evidencia Aprobada.png", "Resultado IA - Evidencia Rechazada.png"] },
+        { id: "HU-12", titulo: "Override de Evidencia Fotográfica", rol: "Técnico de Campo", accion: "forzar la aceptación de una fotografía rechazada por la IA", beneficio: "continuar el trabajo en situaciones excepcionales donde es imposible obtener una mejor toma.", criterios: ["Mostrar un modal de advertencia crítica indicando las consecuencias (Registro de excepción, impacto en scorecard).", "Exigir obligatoriamente la selección de un 'Motivo del override' desde una lista desplegable antes de habilitar 'Forzar continuación'.", "Registrar la acción en la bitácora de auditoría del expediente."], imagenes: ["Confirmación de Override - Modal Crítico.png"] },
+        { id: "HU-13", titulo: "Captura de Microvideo de Encendido", rol: "Técnico de Campo", accion: "grabar un microvideo del encendido del equipo", beneficio: "evidenciar digitalmente el correcto funcionamiento del display.", criterios: ["Habilitar la cámara de video con restricción de tiempo requerida (de 3 a 5 segundos).", "Mostrar marco de enfoque y ejecutar análisis de video en vivo ('Analizando display').", "Incrustar marca de agua automática (watermark) con GPS, UTC y Timestamp (TS).", "Cambiar estado a 'Aprobado' cuando la IA valide el display."], imagenes: ["Validación de Encendido - Microvideo.png"] },
+        
+        { seccion: "MÓDULO 5: CIERRE Y FIRMAS", id: "HU-15", titulo: "Observaciones y Diagnóstico Final", rol: "Técnico de Campo", accion: "registrar las recomendaciones y clasificar la falla", beneficio: "documentar el estado técnico y sugerir acciones correctivas al cliente.", criterios: ["Permitir el ingreso de recomendaciones inmediatas en texto libre.", "Requerir selección de 'Severidad' (Baja, Media, Alta, Crítica).", "Permitir clasificación de la falla y especificar componente afectado.", "Incluir switches para revisión de jefatura, precotización o segunda visita."], imagenes: ["Informe de Mantenimiento - Pestaña Observaciones.png"] },
+        { id: "HU-16", titulo: "Hard Stop de Cierre de Servicio", rol: "Técnico de Campo", accion: "que el sistema valide todos los requisitos antes de finalizar", beneficio: "evitar cerrar una orden con información incompleta o sin firmas.", criterios: ["Verificar el completado del 100% de los requisitos al presionar 'Finalizar'.", "Si faltan datos, mostrar modal crítico indicando 'No es posible cerrar el servicio'.", "Listar elementos pendientes (Foto final, Ensayo, Firma) con icono de alerta rojo.", "Proveer botón 'Revisar pendientes' que dirija al usuario a completar la información."], imagenes: ["Hard Stop de Cierre - Modal Crítico.png"] },
+        { id: "HU-17", titulo: "Constancia y Firma Digital", rol: "Técnico de Campo", accion: "generar la constancia y capturar la firma del cliente", beneficio: "obtener la conformidad oficial del trabajo en planta.", criterios: ["Mostrar resumen con datos generales y equipos intervenidos.", "Proveer lienzo digital para que el cliente dibuje su firma en la pantalla.", "Incluir opciones de firma alternativas: Enviar link, Generar QR, Cliente ausente o Formato físico.", "Mostrar indicador de 'Aceptación tácita activa' con cronómetro.", "Contar con bandeja de 'Firma de Informes' para agilizar documentos pendientes."], imagenes: ["Constancia de Servicio y Conformidad.png", "Firma de Informes - Total Weight.png"] },
+        
+        { seccion: "MÓDULO 6: HERRAMIENTAS AUXILIARES", id: "HU-14", titulo: "Solicitud de Correlativo a Metrología", rol: "Técnico de Campo", accion: "solicitar un número correlativo de certificación", beneficio: "vincular un certificado oficial al equipo sin salir de la planta.", criterios: ["Mostrar datos clave del equipo intervenido.", "Permitir seleccionar 'Tipo de certificado' y añadir observaciones.", "Crear un Ticket de seguimiento en tiempo real visible en pantalla.", "Habilitar botón 'Usar correlativo' solo cuando el supervisor de Metrología apruebe la solicitud."], imagenes: ["Solicitud de Correlativo - Total Weight.png"] },
+        { id: "HU-19", titulo: "Asistente IA y Procedimientos", rol: "Técnico de Campo", accion: "consultar manuales apoyado por Inteligencia Artificial", beneficio: "obtener instrucciones precisas en el momento de la reparación.", criterios: ["Proveer chat interactivo para búsquedas por texto o voz.", "La IA debe extraer información de manuales oficiales, citando fuente y sección.", "Mostrar recuadros de 'Advertencia de Seguridad' críticos antes de los pasos operativos.", "Permitir guardar la respuesta o descargar fragmentos para modo Offline."], imagenes: ["Asistente IA Técnico.png"] },
+        { id: "HU-20", titulo: "Reloj Marcador de Jornada", rol: "Técnico de Campo", accion: "registrar el inicio/fin de mis labores y descansos", beneficio: "llevar control exacto de mi jornada y facilitar la gestión de planillas.", criterios: ["Mostrar reloj digital en tiempo real y estado actual.", "Proveer botones de marcación distintivos (Inicio, Refrigerio, Fin).", "Bloquear lógicamente los botones según el avance del día.", "Mostrar panel inferior de 'Actividad del día' con la línea de tiempo registrada."], imagenes: ["Reloj Marcador - Total Weight.png"] },
+        { id: "HU-24", titulo: "Biblioteca de Procedimientos", rol: "Técnico de Campo", accion: "acceder a manuales y guías de calibración", beneficio: "consultar especificaciones durante la ejecución de los servicios.", criterios: ["Proveer buscador y filtros (Descargados, Mantenimiento).", "Mostrar tarjetas por procedimiento con Versión y Actualización.", "Indicar si el documento está 'DISPONIBLE OFFLINE' o 'SOLO ONLINE'.", "Habilitar visualización o descarga de manuales individuales."], imagenes: ["Procedimientos Técnicos.png"] },
+        { id: "HU-25", titulo: "Rendición de Viáticos", rol: "Técnico de Campo", accion: "visualizar el saldo de viáticos y fondos asignados", beneficio: "controlar mis gastos de ruta y preparar mis rendiciones.", criterios: ["Mostrar listado de fondos asignados agrupados por servicio.", "Para viáticos 'ACTIVOS', mostrar Asignado, Saldo Disponible y botón 'Rendir Gasto'.", "Para viáticos 'FINALIZADOS', mostrar saldo final y enlace 'Ver Detalle Rendición'."], imagenes: ["Viáticos Asignados.png"] },
+        { id: "HU-26", titulo: "Solicitudes de Gastos", rol: "Técnico de Campo", accion: "visualizar el historial de mis solicitudes de reembolso", beneficio: "realizar seguimiento a la aprobación de mis gastos.", criterios: ["Proveer listado filtrable por estado (Pendientes, Aprobadas).", "Mostrar tarjetas resumen indicando Concepto, Monto y Moneda.", "Incluir etiquetas visuales de estado (PENDIENTE, APROBADO).", "Proveer botón flotante '+' para iniciar una nueva solicitud."], imagenes: ["Solicitud de Gastos.png"] },
+        { id: "HU-27", titulo: "Nueva Solicitud de Gasto", rol: "Técnico de Campo", accion: "registrar un nuevo gasto y adjuntar el comprobante", beneficio: "solicitar el reembolso o sustentar el viático.", criterios: ["Requerir datos obligatorios: Concepto, Monto, Moneda y Fecha.", "Exigir captura obligatoria de la 'Foto comprobante' usando estrictamente la cámara.", "Mostrar nota recordando que los datos deben coincidir con la foto para evitar retrasos."], imagenes: ["Nueva Solicitud de Gasto.png"] },
+        { id: "HU-22", titulo: "Ingreso de Equipos (OS)", rol: "Técnico de Campo", accion: "registrar el ingreso de un equipo vinculado a mi OS", beneficio: "iniciar formalmente su mantenimiento y capturar sus datos.", criterios: ["Permitir buscar equipo manualmente o escanear QR/Código de Barras.", "Mostrar 'Información del Activo' autocompletada.", "Requerir selección del 'Estado de Ingreso' antes de 'Registrar equipo'."], imagenes: ["Ingreso de Equipos OS.png"] },
+        { id: "HU-23", titulo: "Recepción de Instrumentos (OM)", rol: "Técnico de Metrología", accion: "registrar recepción de instrumentos en el taller", beneficio: "dejar constancia de las condiciones de entrega del cliente.", criterios: ["Mostrar resumen de la OM, Cliente, Equipo y trazabilidad de entrega.", "Requerir selección del 'Estado físico' e ingreso de 'Observaciones'.", "Incluir panel inferior para capturar fotos como evidencia de recepción (cámara viva)."], imagenes: ["Recepción de Instrumentos OM.png"] },
+        
+        { seccion: "MÓDULO 7: CONTINGENCIA", id: "HU-18", titulo: "Protocolo Zero-Device", rol: "Técnico de Campo", accion: "activar el modo de contingencia física y digitalizarlo", beneficio: "poder trabajar en áreas restringidas (ATEX) sin uso de celulares.", criterios: ["Permitir descargar formato físico con QR único.", "Mostrar alerta roja crítica y exigir confirmación para 'Activar contingencia'.", "Proveer flujo de 'Digitalización' post-servicio en 3 pasos: Escanear QR, Tomar foto de formato, Transcribir datos.", "Validar carga fotográfica antes de enviar a revisión."], imagenes: ["Modo Zero-Device - Preparación.png", "Confirmación de Contingencia - Zero-Device.png", "Digitalización de Contingencia - Zero-Device.png"] }
+    ];
+
+    const listContainer = document.getElementById('hu-list');
+    const contentContainer = document.getElementById('main-content');
+    const sidebar = document.getElementById('sidebar');
+
+    function toggleMenu() { sidebar.classList.toggle('open'); }
+
+    function renderDocument() {
+        data.forEach((item, index) => {
+            if (item.seccion) {
+                const sectionHeader = document.createElement('div');
+                sectionHeader.className = 'menu-section';
+                sectionHeader.textContent = item.seccion;
+                if (index > 0) sectionHeader.style.marginTop = '10px';
+                listContainer.appendChild(sectionHeader);
+            }
+
+            const listItem = document.createElement('div');
+            listItem.className = `hu-item ${index === 0 ? 'active' : ''}`;
+            listItem.onclick = () => showCard(index, listItem);
+            
+            if(item.isCover) {
+                listItem.innerHTML = `<div class="hu-title" style="color:var(--primary); font-weight:800;">${item.titulo}</div>`;
+            } else {
+                listItem.innerHTML = `<div class="hu-id">${item.id}</div><div class="hu-title">${item.titulo}</div>`;
+            }
+            listContainer.appendChild(listItem);
+
+            const card = document.createElement('div');
+            card.className = `card ${index === 0 ? 'active' : ''}`;
+            card.id = `card-${index}`;
+            
+            if(item.isCover) {
+                card.innerHTML = `
+                    <div class="cover-page">
+                        <img src="totalweight-logo.png" alt="Total Weight" style="max-width: 300px; margin-bottom: 20px;">
+                        <h1>PROPUESTA TÉCNICA DE HISTORIAS DE USUARIO Y PROTOTIPADO</h1>
+                        <h2>Análisis y diseño de sistema<br>Aplicación Móvil de Servicio de Campo</h2>
+                        <table class="cover-table">
+                            <tr><th>Propuesta elaborada para:</th><td>${item.cliente}</td></tr>
+                            <tr><th>Contacto:</th><td>${item.contacto}</td></tr>
+                            <tr><th>Versión:</th><td>${item.version}</td></tr>
+                            <tr><th>Fecha de creación:</th><td>${item.creacion}</td></tr>
+                            <tr><th>Fecha de modificación:</th><td>${item.modificacion}</td></tr>
+                        </table>
+                    </div>
+                `;
+            } else {
+                let imagesHtml = '';
+                if(item.imagenes && item.imagenes.length > 0) {
+                    imagesHtml = `<div class="image-gallery">`;
+                    item.imagenes.forEach(img => {
+                        imagesHtml += `
+                        <div class="img-container">
+                            <img src="${img}" alt="${img}" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'400\\' height=\\'250\\'><rect width=\\'100%\\' height=\\'100%\\' fill=\\'%23f1f3f4\\' /><text x=\\'50%\\' y=\\'50%\\' font-family=\\'Arial\\' font-weight=\\'bold\\' font-size=\\'14\\' fill=\\'%235f6368\\' text-anchor=\\'middle\\'>IMAGEN PENDIENTE</text><text x=\\'50%\\' y=\\'65%\\' font-family=\\'Arial\\' font-size=\\'12\\' fill=\\'%235f6368\\' text-anchor=\\'middle\\'>${img}</text></svg>'">
+                            <div class="img-name">${img}</div>
+                        </div>`;
+                    });
+                    imagesHtml += `</div>`;
+                }
+
+                card.innerHTML = `
+                    <div class="detail-header">
+                        <div><h2>${item.titulo}</h2></div>
+                        <div class="badge">${item.id}</div>
+                    </div>
+                    <div class="story-block">
+                        <p><strong>COMO</strong> ${item.rol}</p>
+                        <p><strong>QUIERO</strong> ${item.accion}</p>
+                        <p><strong>PARA</strong> ${item.beneficio}</p>
+                    </div>
+                    <h3>Criterios de Aceptación:</h3>
+                    <ul class="criteria">
+                        ${item.criterios.map(c => `<li>${c}</li>`).join('')}
+                    </ul>
+                    <h3>Desarrollo Visual (Pantallas):</h3>
+                    ${imagesHtml}
+                `;
+            }
+            contentContainer.appendChild(card);
+        });
+    }
+
+    function showCard(index, itemElement) {
+        document.querySelectorAll('.hu-item').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.card').forEach(el => el.classList.remove('active'));
+        
+        itemElement.classList.add('active');
+        document.getElementById(`card-${index}`).classList.add('active');
+        
+        sidebar.classList.remove('open');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    renderDocument();
+</script>
+</body>
+</html>

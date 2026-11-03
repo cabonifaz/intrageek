@@ -192,6 +192,7 @@
             <button class="pill-btn" data-value="2" onclick="setPill('sprint', this)">Sprint 2</button>
             <button class="pill-btn" data-value="3" onclick="setPill('sprint', this)">Sprint 3</button>
             <button class="pill-btn" data-value="4" onclick="setPill('sprint', this)">Sprint 4</button>
+            <button class="pill-btn" data-value="5" onclick="setPill('sprint', this)">Sprint 5</button>
             <button class="pill-btn" data-value="sin" onclick="setPill('sprint', this)">Sin sprint</button>
         </div>
     </div>
@@ -461,7 +462,8 @@
             "Para Registro General: Permitir seleccionar el tipo de seguimiento, resultado y registrar notas de la conversación.",
             "Para Llamadas: Registrar fecha, hora, duración y resultado de la llamada de forma específica.",
             "Para Correos: Proveer una interfaz de envío de email con soporte para plantillas predefinidas y editor de texto enriquecido.",
-            "En todos los casos, incluir un interruptor (toggle) para habilitar la programación obligatoria de una \"Próxima acción\" (Tipo de tarea, fecha, hora y prioridad)."
+            "En todos los casos, incluir un interruptor (toggle) para habilitar la programación obligatoria de una \"Próxima acción\" (Tipo de tarea, fecha, hora y prioridad).",
+            "NOTIFICACIÓN ANTICIPADA (obligatorio al programar la Próxima acción): el usuario debe seleccionar un dropdown de 'Notificar X minutos antes' con las opciones 5 / 10 / 15 / 20 / 30 / 60 minutos. Valor por defecto: 15 minutos. El sistema enviará la notificación (campanita + correo) al comercial responsable con esa anticipación respecto a la fecha/hora programada de la acción."
           ],
           imagenes: ["Registrar Seguimiento - Total Weight Digital Suite.png", "Registrar Llamada Comercial - Total Weight Digital Suite.png", "Registrar Correo de Seguimiento - Total Weight Digital Suite.png"] },
 
@@ -472,19 +474,19 @@
             "Mostrar la información de la acción original programada.",
             "Permitir seleccionar una nueva fecha, hora y nivel de prioridad.",
             "Exigir la selección de un motivo de reprogramación mediante botones de opción (radio buttons).",
-            "Requerir un detalle adicional en texto para justificar el cambio."
+            "Requerir un detalle adicional en texto para justificar el cambio.",
+            "NOTIFICACIÓN ANTICIPADA (obligatorio al reprogramar): el usuario debe seleccionar un dropdown de 'Notificar X minutos antes' con las opciones 5 / 10 / 15 / 20 / 30 / 60 minutos. Valor por defecto: 15 minutos. Se mantiene el valor que tenía la acción original pero puede modificarse en la reprogramación."
           ],
           imagenes: ["Reprogramar Próxima Acción - Total Weight Digital Suite.png"] },
 
-        { id: "HU-21", sprint: 3, titulo: "Cierre del Seguimiento (Aceptación, Rechazo o Sin Venta)",
+        { id: "HU-21", sprint: 3, titulo: "Cierre del Seguimiento (Aceptación o Rechazo)",
           rol: "Jefe/Asistente Comercial", accion: "registrar el cierre de la oportunidad comercial",
           beneficio: "avanzar el flujo hacia operaciones o liberar el pipeline de oportunidades perdidas.",
           criterios: [
-            "Para Aceptación: Registrar el contacto que confirma y la fecha/hora. Permitir adjuntar evidencia (correo, carta). Informar que la etapa cambiará a \"Órdenes de Compra\".",
-            "Para Rechazo: Exigir un motivo tipificado (el select solo debe mostrar los datos tal cual) y un comentario justificativo obligatorio.",
-            "Para Cierre sin Venta: Mostrar advertencia de impacto. Exigir motivo y detalle. Habilitar la opción de \"Permitir reactivación futura\" y exigir check de \"Confirmo el cierre\"."
+            "Para Aceptación: Registrar el contacto que confirma y la fecha/hora. EXIGIR adjuntar al menos un archivo de evidencia (correo, carta, orden firmada) como OBLIGATORIO — no se puede guardar la aceptación sin adjuntar al menos un archivo. Informar que la etapa cambiará a \"Órdenes de Compra\".",
+            "Para Rechazo: Exigir un motivo tipificado (el select solo debe mostrar los datos tal cual) y un comentario justificativo obligatorio. El Rechazo cubre tanto el caso de 'cliente rechaza explícitamente' como el de 'cierre sin venta' (ambos flujos quedan unificados — solo existen Aceptar o Rechazar como opciones de cierre)."
           ],
-          imagenes: ["Registrar Aceptación de Propuesta - Total Weight Digital Suite.png", "Registrar Rechazo Comercial - Total Weight Digital Suite.png", "Cerrar Seguimiento sin Venta - Total Weight Digital Suite.png"] },
+          imagenes: ["Registrar Aceptación de Propuesta - Total Weight Digital Suite.png", "Registrar Rechazo Comercial - Total Weight Digital Suite.png"] },
 
         // ─── MÓDULO 6: ÓRDENES DE COMPRA ────────────────────────────────────────
         { seccion: "MÓDULO 6: ÓRDENES DE COMPRA", id: "HU-22", sprint: 4, titulo: "Bandeja de Órdenes de Compra",
@@ -723,74 +725,104 @@
           ] },
 
         // ─── MÓDULO 8: PROGRAMACIÓN OPERATIVA ───────────────────────────────────
-        { seccion: "MÓDULO 8: PROGRAMACIÓN OPERATIVA", id: "HU-35", sprint: 5, titulo: "Bandeja de Programación y Calendario Operativo",
-          rol: "Jefe/Asistente de Operaciones", accion: "visualizar la bandeja de programación con vista de calendario y recursos",
-          beneficio: "planificar las atenciones de servicios, gestionar la disponibilidad del equipo y ubicar solicitudes pendientes.",
+        { seccion: "MÓDULO 8: PROGRAMACIÓN OPERATIVA", id: "HU-35", sprint: 5, titulo: "Bandeja de Programación Operativa",
+          rol: "Jefe/Asistente de Operaciones",
+          accion: "acceder a una bandeja centralizada con 3 tabs (Vista Principal, Pendientes y Programados) para organizar visualmente la carga de trabajo del equipo",
+          beneficio: "planificar las atenciones de servicios, gestionar la disponibilidad de recursos y ubicar rápidamente los pendientes de acción.",
           criterios: [
-            "Mostrar tarjetas resumen de KPIs: Servicios hoy, Pendientes de programar, Con conflicto, Técnicos disponibles y Cupos liberables.",
-            "Proveer vistas intercambiables: Calendario (matriz semanal por recurso), Lista, Carga de Recursos y Backlog.",
-            "En la vista de Calendario, mostrar los bloques asignados a cada técnico diferenciados por color según su estado operativo (Confirmado, Pendiente, Bloqueado, etc.).",
-            "Permitir filtrar el calendario por Área, Tipo de Servicio, Responsable, Técnico, Cliente y Estado. El select solo debe mostrar los datos tal cual."
+            "La bandeja abre por default en el tab VISTA PRINCIPAL — dashboard operativo con: KPIs del día/semana (Servicios hoy, Pendientes por programar, Pendientes conf. cliente, Programados, Con conflicto, Técnicos disponibles), calendario semanal por técnico con bloques coloreados por estado, sección CARGA DE RECURSOS con la matriz semanal (filas = técnicos, columnas = días, chip Óptimo/Alta/Sobrecarga), y lista de alertas (conflictos sobrevenidos, solicitudes de reprogramación pendientes, SSOMA venciendo).",
+            "Tab PENDIENTES — lista unificada de Programaciones que requieren acción de Operaciones. Cada fila muestra un chip visible del sub-estado: Pendiente por programar (OS que todavía no tiene Programación activa), Pendiente confirmación cliente (ya programada internamente, falta OK del cliente), Pendiente de reprogramación (hay solicitud de un Asistente esperando aprobación del Jefe) o Pendiente SSOMA (una validación de SSOMA bloquea la Programación).",
+            "Tab PROGRAMADOS — lista de Programaciones ya confirmadas por el cliente, listas para ejecutar. Se usan como insumo del Módulo 11 Control de Campo cuando llega el día del servicio.",
+            "Filtros globales aplicables a las 3 tabs: Cliente, Tipo de Servicio (OS/OM), Área, Técnico asignado, Zona/Sede (planta). Los selects muestran únicamente datos existentes en el sistema (no se inventan opciones).",
+            "Filtros específicos por tab: en PENDIENTES se agrega filtro de Sub-estado; en PROGRAMADOS se agrega Rango de fecha de ejecución (hoy / esta semana / próxima semana / rango custom). La Vista Principal no tiene filtros porque es un dashboard global.",
+            "Buscador general en todas las tabs por N° OS, cliente, RUC o técnico.",
+            "Cada fila de las listas expone acciones directas según su estado y el rol del usuario: Programar, Ver detalle, Reprogramar / Solicitar reprogramación, Cancelar."
           ],
-          imagenes: ["Programación Operativa - Total Weight Digital Suite.png"] },
+          imagenes: ["Bandeja de Programación Operativa.png", "Bandeja de Programación - Pendientes.png", "Bandeja de Programación - Programados.png"] },
 
-        { id: "HU-36", sprint: 5, titulo: "Generación de Orden de Servicio y Asignación de Recursos",
-          rol: "Jefe/Asistente de Operaciones", accion: "generar una Orden de Servicio (OS) a partir de un expediente liberado y asignarle recursos",
-          beneficio: "definir el cronograma operativo, designar al técnico responsable y reservar los equipos necesarios para la ejecución.",
+        { id: "HU-36", sprint: 5, titulo: "Programación de OS y Asignación de Recursos",
+          rol: "Asistente de Operaciones",
+          accion: "abrir la ficha de programación de una OS pendiente, definir el cronograma operativo y asignar los recursos (técnico y equipos) necesarios para su ejecución",
+          beneficio: "crear la Programación activa de la OS, dejarla lista para su confirmación con el cliente y asegurar que todos los recursos estén reservados.",
           criterios: [
-            "Al generar la OS, heredar automáticamente los datos base del Expediente, RQ y Propuesta.",
-            "Exigir la captura del Cronograma Operativo: Fecha de Ejecución, Hora de Inicio y Hora Fin Estimada.",
-            "Para la \"Asignación de Recursos\", mostrar un buscador de técnicos que filtre la disponibilidad. Al seleccionar, mostrar un panel lateral con el \"Detalle del Recurso\" (Carga del día, Habilitación SSOMA y Scorecard).",
-            "Mostrar un checklist dinámico de \"Validaciones de Workflow\" que bloquee la confirmación si existen pendientes críticos (Ej. SSOMA Pendiente). En ese caso, solo permitir \"Guardar tentativa\"."
+            "CONCEPTO: la OS (entidad del Módulo 9) permanece EMITIDA. Lo que se crea aquí es una PROGRAMACIÓN (entidad del Módulo 8) asociada a esa OS. Una OS puede tener en el tiempo múltiples Programaciones (si se canceló la primera, se crea otra), pero solo una Programación activa a la vez.",
+            "La ficha de Programación hereda automáticamente los datos de la OS, el Expediente, la Propuesta origen y el cliente (razón social, sede, ubicación, equipos a intervenir, conceptos del servicio).",
+            "CRONOGRAMA OPERATIVO (obligatorio): Fecha de Ejecución, Hora de Inicio, Hora Fin Estimada.",
+            "ASIGNACIÓN DE TÉCNICO(S): buscador que filtra por disponibilidad en el rango horario elegido. Al seleccionar un técnico se muestra un panel lateral con su carga del día, habilitaciones SSOMA vigentes para el cliente/zona y scorecard operativo.",
+            "ASIGNACIÓN DE EQUIPOS: lista con los equipos de la OS (vienen heredados del Módulo 9) para confirmar o ajustar la selección si fuera necesario.",
+            "VALIDACIÓN SSOMA: el checklist consulta las habilitaciones requeridas por el cliente/zona (certificados, SCTR, inducciones, etc.) y bloquea el botón 'Programar' si hay algún requisito no cumplido. Muestra el detalle de qué falta y permite derivar al área SSOMA desde el mismo bloque. La OC NO es validación: se puede programar con o sin OC, incluso con OC observada.",
+            "VALIDACIÓN DE DISPONIBILIDAD DE TÉCNICO: un técnico no puede tener dos Programaciones (servicios a clientes) en el mismo rango horario. Si se detecta solapamiento al momento de guardar, se muestra alerta inline y se impide la Programación hasta que se elija otro técnico o se ajuste el horario.",
+            "RESULTADO: al programar correctamente, se crea la Programación activa de la OS con estado 'PENDIENTE CONFIRMACIÓN CLIENTE'. Aparece automáticamente en el tab PENDIENTES de la bandeja con ese sub-estado.",
+            "Checklist visible durante la carga: Técnico(s) asignado(s) · Equipos reservados · SSOMA habilitado · Cronograma válido."
           ],
-          imagenes: ["Generar Orden de Servicio - Total Weight Digital Suite.png", "Asignar Recurso - Total Weight Digital Suite.png", "Programar Servicio - Total Weight Digital Suite.png"] },
+          imagenes: ["Ficha de Creación - Programar Servicio.png", "Modal Asignar Recurso - Total Weight.png"] },
 
-        { id: "HU-37", sprint: 5, titulo: "Detalle de Servicio, Confirmación y Bloqueos de Ejecución",
-          rol: "Jefe/Asistente de Operaciones", accion: "revisar el detalle de un servicio programado y confirmar la visita con el cliente",
-          beneficio: "asegurar que todas las condiciones operativas y de seguridad estén listas antes de enviar al equipo técnico.",
+        { id: "HU-37", sprint: 5, titulo: "Detalle de la Programación y Registro de Confirmación con Cliente",
+          rol: "Asistente/Jefe de Operaciones",
+          accion: "entrar al detalle de una Programación activa para revisar sus condiciones, registrar la respuesta del cliente tras la coordinación externa y disparar la siguiente acción",
+          beneficio: "mantener el historial completo de la Programación, dejar trazabilidad del canal usado con el cliente y encauzar el flujo según su respuesta (aceptación, reprogramación o cancelación).",
           criterios: [
-            "En la vista de \"Detalle de Servicio Programado\", mostrar un \"Check-list de Validación\" claro con el estado de OC, Confirmación de Cliente, SSOMA y Asignación de Técnico.",
-            "Permitir \"Confirmar Visita con Cliente\" registrando el Canal (Correo, WhatsApp, Llamada) y previsualizando el cuerpo del mensaje antes del envío.",
-            "Si el servicio no cumple con los requisitos mínimos de seguridad (SCTR vencido, Inducción pendiente, etc.), mostrar una alerta crítica de \"Servicio no habilitado\" y bloquear el botón de confirmación de ejecución, permitiendo solo \"Guardar como tentativa\" o derivar a SSOMA para su resolución."
+            "La vista de detalle se abre al clickear una Programación desde cualquiera de los tabs de la bandeja. Muestra 3 bloques: DATOS DE LA PROGRAMACIÓN (OS, cliente, fecha, hora, técnico(s), equipos, estado actual, próximo paso); CHECKLIST DE VALIDACIÓN (técnico asignado, equipos reservados, SSOMA habilitado, cronograma válido — mismo checklist de HU-36 pero visible siempre); y TIMELINE (historial completo de cambios de estado, reprogramaciones, aprobaciones y motivos).",
+            "REGISTRO DE CONFIRMACIÓN CON CLIENTE: la coordinación con el cliente ocurre FUERA del sistema (teléfono, correo, WhatsApp, visita presencial — a elección del Operaciones). Lo que se registra en el sistema es el resultado de esa comunicación. NO se envía nada automáticamente por Brevo ni por WhatsApp Business.",
+            "Al presionar 'Registrar respuesta del cliente', se abre un modal con 3 campos: Canal utilizado (Correo / WhatsApp / Llamada / Presencial), Resultado (Aceptó / Pidió reprogramar / Canceló) y Comentario opcional.",
+            "Si el resultado es ACEPTÓ: la Programación pasa a estado 'PROGRAMADO'. Se habilita el botón [💰 Gestionar Viáticos] (HU-45) para que el Jefe de Operaciones registre los montos a adelantar al técnico.",
+            "Si el resultado es PIDIÓ REPROGRAMAR: se abre el flujo de reprogramación (HU-38). Dependiendo del rol del usuario, el flujo es directo (Jefe) o requiere solicitud (Asistente).",
+            "Si el resultado es CANCELÓ: se abre el flujo de cancelación (HU-38) con motivo tipificado obligatorio.",
+            "Alertas de SSOMA sobrevenidas: si al abrir el detalle el sistema detecta que una habilitación SSOMA venció después de la Programación (ej. SCTR del técnico vencido ayer), se muestra una alerta crítica 'Habilitación SSOMA vencida' con los detalles y acceso directo para reasignar técnico o reprogramar.",
+            "Enlaces cruzados: desde el bloque Datos se puede abrir la OS origen (Módulo 9), el Expediente Digital (Módulo 7) y la Propuesta aceptada (Módulo 3) en nueva pestaña."
           ],
-          imagenes: ["Detalle de Servicio Programado - Total Weight Digital Suite.png", "Confirmar Visita con Cliente - Total Weight Digital Suite.png", "Bloquear Servicio por Falta de Habilitación - Total Weight Digital Suite.png"] },
+          imagenes: ["Modal Detalle de la Programación - Total Weight.png", "Modal Registrar Respuesta del Cliente - Total Weight.png"] },
 
-        { id: "HU-38", sprint: 5, titulo: "Reprogramación, Liberación de Cupos y Sugerencia de Backlog",
-          rol: "Jefe/Asistente de Operaciones", accion: "reprogramar un servicio o liberar un cupo en la agenda",
-          beneficio: "reaccionar ante cancelaciones de clientes o imprevistos técnicos, optimizando los espacios libres.",
+        { id: "HU-38", sprint: 5, titulo: "Reprogramación y Cancelación de la Programación",
+          rol: "Asistente/Jefe de Operaciones",
+          accion: "modificar o anular la Programación activa de una OS, con el circuito de permisos correspondiente según el rol que ejecute la acción",
+          beneficio: "poder reaccionar a pedidos del cliente, imprevistos operativos o cancelaciones, manteniendo trazabilidad completa y evitando ediciones no autorizadas.",
           criterios: [
-            "Para reprogramar, mostrar la fecha/hora actual y exigir el ingreso de las nuevas condiciones, así como un motivo tipificado obligatorio (el select solo debe mostrar los datos tal cual).",
-            "Al liberar un cupo (por cancelación o reprogramación de un cliente), el sistema debe mostrar un \"Backlog sugerido compatible\" buscando automáticamente solicitudes pendientes que coincidan en Zona y Duración con el espacio liberado.",
-            "Permitir asignar directamente un servicio sugerido del Backlog al cupo recién liberado con un solo clic."
+            "REGLA GENERAL — Toda modificación sobre una Programación activa (cambio de técnico, fecha, hora o recursos) requiere pasar por el circuito de reprogramación con los permisos del rol que ejecuta. La ficha de Programación está siempre BLOQUEADA para edición directa salvo que el rol lo permita.",
+            "REPROGRAMACIÓN POR EL JEFE DE OPERACIONES: puede abrir la ficha de Programación en modo edición directa, modificar cualquier campo (técnico, fecha, hora, equipos) y guardar. El cambio queda registrado en el timeline con su firma como 'edición directa del Jefe'. No requiere aprobación de nadie más.",
+            "REPROGRAMACIÓN POR EL ASISTENTE DE OPERACIONES: debe primero crear una SOLICITUD DE REPROGRAMACIÓN con motivo tipificado obligatorio + comentario + propuesta de nueva fecha/hora/técnico. La Programación NO se congela: sigue tal cual hasta que el Jefe apruebe o rechace. Mientras hay solicitud pendiente, se muestra un ícono de alerta en la fila de la bandeja (misma lógica que la Solicitud de Edición de OS/OM en el Módulo 9).",
+            "APROBACIÓN O RECHAZO DE LA SOLICITUD: el Jefe de Operaciones recibe la solicitud y debe aprobar o rechazar. Si aprueba: la ficha se habilita para edición y se aplican los cambios propuestos; si rechaza: la Programación sigue tal cual estaba y el motivo del rechazo queda en el timeline.",
+            "EFECTO DEL CAMBIO SOBRE EL ESTADO: si la reprogramación modifica fecha u hora, la Programación VUELVE automáticamente a 'PENDIENTE CONFIRMACIÓN CLIENTE' y hay que re-registrar la respuesta del cliente (HU-37). Si el cambio es solo de técnico/recursos (misma fecha/hora), el estado se mantiene porque el cliente no se entera del cambio interno.",
+            "CANCELACIÓN DE LA PROGRAMACIÓN: permitida desde cualquier estado y por cualquier rol (Asistente o Jefe), sin aprobación previa. Exige motivo tipificado obligatorio + comentario opcional.",
+            "EFECTO DE LA CANCELACIÓN: la Programación pasa a estado terminal CANCELADA. La OS asociada SIGUE EMITIDA en el Módulo 9 (no se anula la OS original). La OS vuelve a aparecer en el tab PENDIENTES de la bandeja con sub-estado 'Pendiente por programar' → se puede crear una nueva Programación cuando se decida.",
+            "HISTORIAL DE PROGRAMACIONES POR OS: desde el detalle de la OS en Módulo 9 y desde el detalle de la Programación activa (HU-37), se puede acceder al listado completo de Programaciones (activas y canceladas) con su timeline. Reprogramaciones permitidas sin límite."
           ],
-          imagenes: ["Reprogramar Servicio - Total Weight Digital Suite.png", "Liberar Cupo y Sugerir Backlog - Total Weight Digital Suite.png"] },
+          imagenes: ["Ficha de Reprogramación - Total Weight.png", "Modal Aprobar Solicitud de Reprogramación - Total Weight.png", "Modal Cancelar Programación - Total Weight.png"] },
 
-        { id: "HU-39", sprint: 5, titulo: "Gestión de Carga de Recursos y Resolución de Conflictos",
-          rol: "Jefe de Operaciones", accion: "analizar la matriz de utilización semanal y resolver conflictos de horario",
-          beneficio: "evitar la sobrecarga del equipo técnico y solucionar solapamientos en las asignaciones.",
+        { id: "HU-39", sprint: 5, titulo: "Carga de Recursos y Alertas de Conflicto Sobrevenido",
+          rol: "Jefe de Operaciones",
+          accion: "visualizar la matriz de carga semanal del equipo técnico y detectar conflictos sobrevenidos a la Programación (ausencias, vencimientos SSOMA, solapamientos post-reprogramación) para disparar las acciones correctivas",
+          beneficio: "mantener el equipo técnico equilibrado, anticipar los problemas que aparecen después de haber programado y resolver cada conflicto por el circuito correcto (reprogramar/reasignar/cancelar).",
           criterios: [
-            "Mostrar una \"Matriz de Utilización Semanal\" con el total de horas asignadas por técnico y un \"Ranking de Utilización\" visual (Óptimo, Alta, Sobrecarga).",
-            "Si el sistema detecta que un técnico tiene dos servicios asignados en el mismo rango horario, generar una alerta de \"Conflicto de Programación\".",
-            "Al abrir un conflicto, mostrar visualmente el solapamiento y ofrecer opciones de resolución directas: \"Cambiar técnico\" (sugiriendo recursos disponibles), \"Cambiar horario\" o \"Reprogramar servicio en conflicto\"."
+            "Esta HU no es una pantalla aparte: se integra como UNA SECCIÓN dentro del tab VISTA PRINCIPAL de la bandeja (HU-35).",
+            "MATRIZ DE CARGA SEMANAL: filas = técnicos, columnas = días de la semana. Cada celda muestra el total de horas asignadas al técnico ese día + un chip con el ranking de utilización: 🟢 Óptimo (6-8 h/día) · 🟡 Alta (9-10 h/día) · 🔴 Sobrecarga (>10 h/día o solapamiento).",
+            "Al clickear una celda de la matriz, se abre un panel lateral con la lista de Programaciones asignadas a ese técnico ese día.",
+            "DETECCIÓN AUTOMÁTICA DE CONFLICTOS SOBREVENIDOS — el sistema analiza continuamente las Programaciones activas y lista como alertas los casos: (a) Técnico de baja/ausencia que tiene Programaciones pendientes; (b) Habilitación SSOMA del técnico vencida después de haber programado; (c) Solapamiento horario entre dos Programaciones del mismo técnico generado por una reprogramación aprobada; (d) Extensión de duración de una Programación que pisa a otra ya existente.",
+            "La validación inicial de HU-36 ya previene los conflictos AL MOMENTO DE PROGRAMAR. Esta HU se centra en los que aparecen DESPUÉS (sobrevenidos) por factores externos a la programación original.",
+            "LISTA DE ALERTAS: ubicada arriba de la matriz. Cada alerta muestra el conflicto, los servicios afectados y un botón 'Resolver' que abre el flujo correspondiente de HU-38 con el motivo autocompletado según el conflicto detectado (ej. 'SSOMA vencido del técnico Juan Pérez').",
+            "SELECTOR DE ROL para disparar el flujo correcto: si el usuario es Asistente de Operaciones → se abre el modal de Solicitud de Reprogramación. Si es Jefe de Operaciones → la ficha se abre en modo edición directa. En ambos casos, la cancelación directa está siempre disponible como alternativa.",
+            "La HU no otorga permisos adicionales: respeta la misma matriz de roles de HU-38 (Asistente solicita, Jefe edita directo). Solo centraliza el acceso a los conflictos."
           ],
-          imagenes: ["Carga de Recursos - Total Weight Digital Suite.png", "Ver Conflicto de Programación - Total Weight Digital Suite.png"] },
+          imagenes: ["Modal Resolver Conflicto de Programación - Total Weight.png"] },
 
-        { id: "HU-45", sprint: 5, titulo: "Gestión de Viáticos y Rendición de Gastos Operativos",
-          rol: "Asistente / Jefe de Operaciones",
-          accion: "asignar viáticos previos al personal técnico asignado a un servicio programado y revisar la rendición de gastos operativos (movilidad, alimentación, insumos) presentados por el técnico desde campo",
-          beneficio: "proveer los fondos necesarios para la ejecución del servicio y controlar económicamente los gastos reales de cada OS/OM.",
+        { id: "HU-45", sprint: 5, titulo: "Asignación de Viáticos y Rendición de Gastos Operativos",
+          rol: "Jefe de Operaciones",
+          accion: "registrar los montos de viáticos a adelantar al personal técnico de una Programación confirmada y revisar la rendición de gastos presentados por el técnico desde la app móvil post-ejecución",
+          beneficio: "proveer los fondos necesarios para la ejecución del servicio, mantener control económico del gasto real y disparar la notificación a Contabilidad para el depósito.",
           criterios: [
-            "Esta HU vive dentro del Módulo 8 Programación Operativa porque los viáticos se asignan al momento de designar al técnico (lo cual ocurre en HU-36 Asignación de Recursos). El acceso a esta gestión es desde el Detalle del Servicio Programado (HU-37) mediante un botón [💰 Gestionar Viáticos y Gastos].",
+            "MODELO DE VIÁTICOS APLICADO: Modelo B — Adelanto + Rendición. El Jefe de Operaciones asigna un monto por concepto como adelanto; el técnico lo usa en campo y rinde cada gasto con comprobante; al cierre se calcula si hay devolución (gastó menos) o reembolso adicional (gastó más dentro de lo autorizado).",
+            "ACCESO: desde el Detalle de la Programación (HU-37) mediante el botón [💰 Gestionar Viáticos]. Solo visible cuando la Programación está en estado PROGRAMADO (ya confirmada por el cliente).",
             "VISTA GENERAL: modal con 2 tabs principales: [1] Asignación de Viáticos (previo a ejecución) y [2] Rendición de Gastos (post-ejecución).",
-            "TAB 1 — ASIGNACIÓN DE VIÁTICOS: tabla con el personal asignado al servicio (viene del Módulo 8 HU-36). Columnas: Técnico, Rol, Monto Movilidad (S/), Monto Alimentación (S/), Monto Otros (S/), Subtotal, Estado del Depósito (Pendiente / Depositado / Confirmado). Totales al pie: Total Asignado, Total Depositado, Pendiente de Pago.",
-            "TAB 1 — Acciones: botón [+ Asignar monto] por técnico abre un modal pequeño para ingresar los conceptos y montos. Botón [💳 Marcar como Depositado] registra el depósito con fecha, N° de operación y comprobante opcional.",
-            "TAB 2 — RENDICIÓN DE GASTOS: tabla con todos los gastos presentados por los técnicos desde campo (sincronizados desde la app móvil). Columnas: Fecha, Técnico, Concepto (Movilidad / Alimentación / Insumo / Peaje / Otro), Monto (S/), Comprobante (botón 👁 Ver), Estado (⏳ Pendiente / ✓ Aprobado / ⚠️ Observado / 🚫 Rechazado), Acciones.",
-            "TAB 2 — Cards resumen en el header: Total Solicitado, Total Aprobado, Total Observado, Total Pendiente. Permite al Asistente/Jefe tener control del gasto consolidado del servicio.",
-            "TAB 2 — Acciones por gasto: [✓ Aprobar] (gasto queda OK para reembolso), [⚠️ Observar] (exige comentario, el técnico recibe notificación para ajustar o adjuntar comprobante faltante), [🚫 Rechazar] (exige motivo obligatorio, el gasto no se reembolsa).",
-            "TAB 2 — Vista del comprobante: al presionar [👁 Ver comprobante], se abre modal secundario con la imagen/PDF del comprobante físico (foto de boleta/factura cargada por el técnico desde la app móvil).",
-            "La información consolidada de viáticos y gastos aparece como referencia en el TAB 📅 Programación del Detalle de OS/OM (ver HU-41), con enlace para abrir este modal."
+            "TAB 1 — ASIGNACIÓN DE VIÁTICOS: tabla con el personal asignado a la Programación. Columnas: Técnico, Concepto, Monto (S/), Subtotal, Estado del Depósito (Pendiente / Depositado por Contabilidad). Botón [+ Agregar concepto] por técnico abre un modal pequeño para ingresar nombre del concepto (Movilidad / Alimentación / Peaje / Hospedaje / Otro — con posibilidad de crear nuevos) y el monto. Totales al pie: Total Asignado, Total Depositado, Pendiente.",
+            "NOTIFICACIÓN A CONTABILIDAD: al guardar la asignación de viáticos, el sistema NOTIFICA automáticamente a Contabilidad (alerta/correo) con la lista consolidada de montos a depositar. El sistema NO marca 'Depositado' desde este módulo: ese estado lo actualiza Contabilidad fuera del Módulo 8 cuando efectúa el depósito. Operaciones solo visualiza el estado 'Pendiente de pago' hasta que Contabilidad confirme.",
+            "TAB 2 — RENDICIÓN DE GASTOS: tabla con todos los gastos presentados por los técnicos desde la app móvil (post-ejecución del servicio). Columnas: Fecha, Técnico, Concepto, Monto (S/), Comprobante (botón 👁 Ver imagen/PDF), Estado (⏳ Pendiente / ✓ Aprobado / ⚠️ Observado / 🚫 Rechazado), Acciones.",
+            "TAB 2 — Cards resumen en el header: Total Solicitado por el técnico, Total Aprobado, Total Observado, Total Pendiente, Saldo vs. Monto Asignado.",
+            "TAB 2 — Acciones por gasto a cargo del Jefe de Operaciones: [✓ Aprobar] el gasto queda OK, cuadra con el adelanto; [⚠️ Observar] exige comentario, el técnico recibe notificación en el móvil para ajustar o adjuntar comprobante faltante; [🚫 Rechazar] exige motivo obligatorio, el gasto no se reembolsa.",
+            "VISTA DEL COMPRobante: al presionar [👁 Ver comprobante] se abre modal secundario con la imagen/PDF del comprobante físico (foto de boleta/factura cargada por el técnico desde la app móvil).",
+            "CIERRE DE RENDICIÓN: al cerrar la rendición del servicio, el sistema calcula el saldo final (devolución del técnico si gastó menos, reembolso adicional si gastó más dentro de lo autorizado) y lo notifica a Contabilidad.",
+            "REFERENCIA EN OTROS MÓDULOS: la información consolidada de viáticos y gastos aparece como referencia (solo lectura) en el tab Programación del Detalle de OS/OM (HU-41) y en el Expediente Digital (Módulo 7), con enlace directo para abrir este modal."
           ],
-          imagenes: ["Gestionar Viáticos - Total Weight Digital Suite.png", "Gestionar Gastos - Total Weight Digital Suite.png"] },
+          imagenes: ["Modal Gestión de Viáticos - Total Weight.png", "Modal Gestión de Viáticos - Rendición de Gastos.png"] },
 
         // ─── MÓDULO 9: ÓRDENES DE SERVICIO ──────────────────────────────────────
         { seccion: "MÓDULO 9: ÓRDENES DE SERVICIO", id: "HU-40", sprint: 4, titulo: "Creación, Edición y Anulación de Orden de Servicio / Orden de Metrología (OS/OM)",
@@ -954,112 +986,148 @@
           imagenes: ["Liberar Servicio para Ejecución - Total Weight Digital Suite.png", "Autorizar Excepción SSOMA - Total Weight Digital Suite.png"] },
 
         // ─── MÓDULO 11: CONTROL DE CAMPO ────────────────────────────────────────
-        { seccion: "MÓDULO 11: CONTROL DE CAMPO", id: "HU-51", titulo: "Panel de Seguimiento en Tiempo Real y Mapa Operativo",
-          rol: "Controlador de Operaciones", accion: "visualizar el panel de seguimiento con el mapa operativo y la lista de servicios activos",
-          beneficio: "monitorear la ubicación de los técnicos, detectar alertas críticas y conocer el estado general del trabajo en campo.",
+        { seccion: "MÓDULO 11: CONTROL DE CAMPO", id: "HU-51", sprint: 5, titulo: "Bandeja de Seguimiento Operativo",
+          rol: "Asistente de Seguimiento (Asistente de Servicio Técnico)",
+          accion: "monitorear en tiempo real todos los servicios programados del día — con los técnicos ya desplazándose o ejecutando en campo — para controlar el avance de cada uno y detectar situaciones que requieran intervención (llamada telefónica al técnico)",
+          beneficio: "mantener un control único y centralizado del día operativo sin tener que entrar servicio por servicio, viendo el estado real de cada técnico, su ubicación GPS y las alertas automáticas generadas por el sistema.",
           criterios: [
-            "Mostrar tarjetas de KPIs superiores: Servicios en ruta, En ejecución, Con demora, Incidencias y Finalizados.",
-            "Proveer un \"Mapa operativo\" interactivo que geolocalice a los técnicos y muestre pines de colores según el estado del servicio (En Ruta, En Ejecución, Demora, Incidencia).",
-            "Mostrar un panel lateral de \"Servicios Activos\" y \"Alertas Críticas\" para acceso rápido.",
-            "Presentar una tabla de \"Detalle de Gestión de Campo\" indicando OS, Cliente, Técnico, Estado, Ubicación, Avance (%) y Alerta activa."
+            "ROL Y ACCIONES: el Asistente de Seguimiento es un rol OBSERVACIONAL. Su acción principal es ver + llamar al técnico por teléfono cuando algo necesita aclaración. Toda intervención dentro del sistema queda registrada como 'registro del Asistente' (ver HU-53). No ejecuta cambios en el servicio mismo salvo en modo crítico (técnico sin móvil operativo).",
+            "DEPENDENCIA: el módulo activa seguimiento cuando una Programación del Módulo 8 pasa a estado PROGRAMADO (confirmada por cliente, día de ejecución llegado) y el técnico marca 'Salida' desde su app móvil (Módulo 11 app).",
+            "ESTRUCTURA EN 4 TABS: la bandeja se organiza en 4 pestañas internas — [1] 🗂 Vista Principal (dashboard visual), [2] 📋 Servicios en Campo (lista completa), [3] 👤 Técnicos Activos (vista por técnico), [4] ⚠️ Incidencias del Día (eventos no planificados).",
+            "KPIs SUPERIORES (visibles en todos los tabs): 6 tarjetas con circular tinted icon + big number: Servicios programados hoy, Técnicos en ruta, En planta, En ejecución, Con demora/incidente, Finalizados.",
+            "FILTROS GLOBALES (visibles en todos los tabs): por Técnico, Cliente, Estado del servicio, Zona/Sede. Buscador por N° OS, cliente, RUC o técnico. Botón 'Filtros' + dropdown de Estado + buscador + refresh/export.",
+            "TAB 1 — 🗂 VISTA PRINCIPAL (dashboard visual del día): se abre por default. Compuesto por 3 secciones apiladas: (a) Mapa Operativo general con pines por técnico (color según estado) + panel lateral derecho con Alertas Críticas (lista de las alertas automáticas más recientes del día con link a HU-52 Detalle y botón 'Ver todas en Centro de Notificaciones' que lleva a Módulo 16). (b) Próximos Hitos Esperados — lista cronológica de 5-6 hitos predictivos de los próximos 60 min (ej. '09:50 Jhonny debería llegar a Antamina — En ruta a 15 km · OS-000791'). El sistema calcula los hitos esperados en base al estado actual de cada servicio. Si ya no hay más hitos esperados en el día, muestra '✅ Todos los hitos del día ya ocurrieron'.",
+            "TAB 2 — 📋 SERVICIOS EN CAMPO (N): lista completa de los servicios del día en formato tabla. Columnas: N° OS/OM + Propuesta origen, Cliente, Técnico (avatar + nombre), Estado actual (chip de color según estado), Última ubicación GPS, Avance (progress bar + 'N / M equipos'), Acciones (icono visibility para abrir HU-52 Detalle). Click en fila también abre el detalle. Filtro adicional específico de este tab: Rango de hora de ejecución (En curso / Finalizados / Sin iniciar).",
+            "TAB 3 — 👤 TÉCNICOS ACTIVOS (N): cambia el eje de la bandeja — en vez de ver por servicio, ve por técnico. Lista de los técnicos asignados al día con avatar grande + nombre + rol + estado actual (chip grande con color) + hora de salida real vs programada + servicios asignados hoy (lista colapsable con los OS que tiene asignados) + habilitación SSOMA + última ubicación GPS. Útil para preguntas tipo '¿qué está haciendo Jhonny ahora?' o '¿quién está con incidente?'. Click en un técnico expande sus servicios del día con mini-cards.",
+            "TAB 4 — ⚠️ INCIDENCIAS DEL DÍA (N): tabla cronológica unificada con TODAS las demoras/incidencias registradas en el día (de todos los técnicos, de todos los servicios). Columnas: Hora, Técnico (avatar + nombre), N° OS, Tipo (chip con categoría del catálogo: Tráfico, Accidente, Falla vehículo, etc.), Descripción resumida, Duración estimada, Impacto (🟡 Retrasa / 🔴 Detiene), Origen (chip 'Técnico' si lo cargó desde app / chip 'Asistente' si lo registró el Asistente en modo fallback desde HU-53). Filtros específicos del tab: por Técnico, por Tipo, por Impacto. Vista rápida para reportes del día.",
+            "AUTO-REFRESH: la bandeja refresca cada 30 segundos para mantener el estado operativo actualizado sin que el Asistente tenga que hacer F5 manualmente. Indicador 'Auto-refresh cada 30s · Última actualización HH:MM' en la esquina superior derecha.",
+            "ETA NO SE CALCULA en esta primera versión. Se muestra únicamente 'Última ubicación: [dirección] · hace X min'. En iteraciones futuras podrá integrarse con un servicio tipo Google Maps."
           ],
-          imagenes: ["Seguimiento Operativo - Total Weight Digital Suite.png"] },
+          imagenes: ["Seguimiento - Bandeja Vista Principal.png", "Seguimiento - Bandeja Servicios en Campo.png", "Seguimiento - Bandeja Tecnicos Activos.png", "Seguimiento - Bandeja Incidencias del Dia.png"] },
 
-        { id: "HU-52", titulo: "Detalle Operativo del Servicio y Cambio de Estado",
-          rol: "Controlador de Operaciones", accion: "revisar el detalle de un servicio en tránsito y actualizar su estado manualmente",
-          beneficio: "controlar el avance del Checklist de servicio y corregir estados si la App móvil del técnico falla.",
+        { id: "HU-52", sprint: 5, titulo: "Detalle del Servicio en Ruta (vista observacional con 5 tabs)",
+          rol: "Asistente de Seguimiento",
+          accion: "ver toda la información en vivo de un servicio específico, con el detalle del avance por equipo, la ubicación GPS del técnico, el timeline del día y las demoras/incidencias registradas",
+          beneficio: "contar con una vista única y completa del servicio para monitorear al técnico de forma informada y decidir si llamarlo por teléfono o registrar algo en nombre del asistente.",
           criterios: [
-            "Mostrar tarjetas superiores con el Estado Actual, ETA estimado, Programado y % de Cumplimiento SLA.",
-            "Incluir un panel con \"Actividad Reciente\" y un \"Checklist de Servicio\" que se actualice según los hitos completados (En Ruta, Llegada a Planta, Ejecución).",
-            "Permitir \"Cambiar Estado Operativo\" manualmente, exigiendo seleccionar el Nuevo Estado, un Motivo de cambio y un Comentario justificativo.",
-            "Indicar que el cambio manual se registrará en el Historial de Estados del Expediente."
+            "LAYOUT: modal grande centrado (max-width 1280px) con header fijo (OS/OM, cliente, técnico, hora programada, chip de estado, botón '📝 Registrar en el servicio' que lleva al tab Registrar, X para cerrar) + body con hasta 7 tabs internos. 6 tabs siempre visibles: 🗂 Resumen · 📋 Avance por Equipos · 🗺 Mapa GPS · 📜 Timeline del Día · ⚠️ Demoras/Incidencias · 📝 Registrar (HU-53). 7mo tab condicional: ✅ Cierre del Servicio (HU-54) que aparece solo cuando el estado del servicio es FINALIZADO. Siguiendo el patrón del sistema TW donde VER DETALLE siempre es modal (consistente con Detalle de Propuesta, Detalle de OS/OM, Detalle de la Programación, Detalle de OC). Los primeros 5 tabs son observacionales (el contenido se actualiza desde la app móvil); el tab Registrar es la zona de acción del Asistente; el tab Cierre es observacional (muestra el resumen del cierre automático del servicio). El Asistente no pierde el contexto de la bandeja al abrirlo.",
+            "TAB 🗂 RESUMEN: datos generales del servicio (Programación origen, OS/OM, Cliente, Dirección de la planta, Tipo de servicio, Equipos a intervenir con sus N° de serie), responsables (técnico líder + técnicos secundarios si hay), hora programada vs hora de salida real, cards de métricas rápidas (Avance total %, Equipos terminados / N, Demoras del día, Alertas activas).",
+            "TAB 📋 AVANCE POR EQUIPOS (checklist por equipo): sección principal del día. Lista de los equipos de la Programación, cada equipo con su propio mini-checklist de etapas: Limpieza → Desmontaje → Pruebas → Montaje → Cierre. Cada etapa tiene hora en que el técnico la marcó + chip de estado (⏳ pendiente / 🔄 en curso / ✅ completada). La actualización es automática según lo que el técnico marca en el app móvil. El Asistente NO edita las etapas, solo observa. Cada equipo expandido muestra 5 tabs internos con drill-down: 📷 Fotos / 📋 Ensayos / 📄 Documentos / 📝 Observaciones / 🔧 Mediciones.",
+            "TAB 🗺 MAPA GPS: mapa interactivo centrado en el técnico (pin de posición actual) con la ruta desde su base hasta la planta del cliente. Panel lateral con última ubicación (dirección), velocidad reportada, hora de última actualización, estado de conexión (📡 GPS activo / ⚠️ GPS parado / 🔴 sin señal). Si el técnico ya está en planta, el mapa muestra el radio de proximidad (300m) y el pin del cliente destacado.",
+            "TAB 📜 TIMELINE: línea de tiempo completa del día con TODOS los eventos ordenados cronológicamente — hitos marcados por el técnico (Salida, Pre-llegada por proximidad, Llegada registrada, Ingreso a planta, Inicio servicio, Fin servicio, Retorno), alertas automáticas disparadas por el sistema (GPS parado, sin ingreso, etc.), demoras/incidencias registradas por el técnico desde el app, y registros manuales del Asistente desde HU-53 (con badge visible).",
+            "TAB ⚠️ DEMORAS / INCIDENCIAS: tabla con todos los eventos no planificados registrados en este servicio durante el día (filtrados solo para esta OS/OM, a diferencia del Tab 4 de la Bandeja HU-51 que muestra las de todos los servicios). Columnas: Hora, Tipo (chip con la categoría del catálogo), Descripción, Duración estimada, Impacto (🟡 Retrasa / 🔴 Detiene), Origen (chip '📱 Técnico' si lo cargó desde la app móvil / chip '👤 Asistente' si lo registró el Asistente desde HU-53 Modo 2), Evidencia (ícono de foto si tiene). Click en una fila → modal con detalle completo (foto a tamaño completo, descripción extendida, link al evento del timeline). Mini-KPIs arriba de la tabla: Total demoras del día · Que retrasan · Que detienen · Registradas por técnico · Registradas por asistente. Botón de exportar como CSV.",
+            "BOTÓN DE ACCIÓN EN HEADER — '📝 Registrar en el servicio': abre el modal de HU-53 (Registro Operativo del Asistente) para que el Asistente deje una nota, una demora/incidente, o excepcionalmente cambie el estado del servicio en modo crítico.",
+            "ESTADOS Y COLORES: el chip del header refleja el estado del servicio en tiempo real: ⚪ Sin salir / 🔵 En ruta / 🟢 En planta / 🟠 En ejecución / 🔴 Con incidente / ✅ Finalizado.",
+            "AUTO-REFRESH: el modal refresca cada 15 segundos para mantener los tabs actualizados sin que el Asistente tenga que recargar manualmente. Un indicador 'Auto-refresh cada 15s · Última actualización HH:MM:SS' es visible en la esquina superior derecha del modal, debajo del botón de cerrar."
           ],
-          imagenes: ["Detalle Operativo Rediseñado - Total Weight Digital Suite.png", "Cambiar Estado Operativo - Total Weight Digital Suite.png"] },
+          imagenes: ["Seguimiento - Modal Resumen.png", "Seguimiento - Modal Avance por Equipos.png", "Seguimiento - Modal Mapa GPS.png", "Seguimiento - Modal Timeline del Dia.png", "Seguimiento - Modal Demoras e Incidencias.png"] },
 
-        { id: "HU-53", titulo: "Monitoreo de Ubicación, Ruta y Demoras",
-          rol: "Controlador de Operaciones", accion: "rastrear la ruta específica del técnico y registrar demoras detectadas",
-          beneficio: "informar al cliente sobre la hora estimada de llegada (ETA) y justificar retrasos en el SLA.",
+        { id: "HU-53", sprint: 5, titulo: "Registro Operativo del Asistente de Seguimiento",
+          rol: "Asistente de Seguimiento",
+          accion: "registrar manualmente desde la intranet observaciones, demoras/incidentes o — en modo crítico — cambios de estado del servicio en nombre del técnico, cuando el técnico no puede hacerlo desde su app móvil",
+          beneficio: "mantener el seguimiento del servicio actualizado incluso cuando el técnico pierde conectividad temporal o en el caso crítico de celular inoperable (robo, batería terminada, equipo dañado), garantizando trazabilidad total.",
           criterios: [
-            "Mostrar un modal interactivo de \"Ubicación y Ruta\" con el trazado GPS desde la base hasta el cliente.",
-            "Mostrar la velocidad actual del técnico, el ETA calculado y alertas de tráfico en tiempo real.",
-            "Permitir \"Registrar Parada / Demora\" seleccionando el Tipo de demora, Hora de inicio y Duración estimada.",
-            "Exigir definir el \"Impacto Operativo\" (Retrasa inicio, Retrasa cierre, Riesgo SLA) y calcular en tiempo real el nuevo ETA estimado tras registrar la demora."
+            "ACCESO: nuevo tab '📝 Registrar' dentro del modal Detalle del Servicio (HU-52), posicionado como 5to tab después de Timeline del Día. El botón '📝 Registrar en el servicio' del header del modal HU-52 funciona como atajo directo a este tab desde cualquier otro tab. Siempre disponible, pero el Asistente debe usarlo solo cuando el técnico no puede hacer el registro desde su app móvil.",
+            "TAB ÚNICO CON 3 MODOS: dentro del tab Registrar, el Asistente elige qué tipo de registro quiere hacer. Un solo radio-select con 3 opciones visibles arriba del formulario. Los campos del formulario cambian dinámicamente según el modo seleccionado. Al confirmar el registro, el Asistente puede saltar directamente al tab Timeline del Día (sin cerrar el modal) para ver su entrada recién agregada.",
+            "MODO 1 — 📝 OBSERVACIÓN / NOTA: campo de texto libre + opcional 'vincular con evento del timeline' (dropdown con los eventos del día). Queda en el timeline con badge '[NOTA DEL ASISTENTE]'. Uso típico: 'El técnico me llamó, dice que está con tráfico, llega 1h tarde'.",
+            "MODO 2 — 🟡 DEMORA / INCIDENTE: formulario con Tipo (dropdown del catálogo gestionado desde tabla_maestra: Tráfico / Accidente propio / Accidente ajeno / Falla vehículo / Clima adverso / Cliente no disponible / Problema de acceso / Falta repuesto / Otros), Duración estimada (minutos, opcional), Descripción obligatoria, Evidencia fotográfica opcional, e Impacto (radio con 2 opciones): 🟡 Retrasa el servicio (sigue hoy, más tarde) / 🔴 Detiene el servicio (no se hace hoy, hay que reprogramar). Si el impacto es 🔴 → notifica automáticamente al Jefe de Operaciones vía el sistema de notificaciones (Módulo 16). Queda en el timeline con badge '[DEMORA — REGISTRO DEL ASISTENTE]'.",
+            "MODO 3 — 🔄 CAMBIO DE ESTADO DEL SERVICIO (modo crítico): advertencia obligatoria y visible '⚠️ Esta acción debe usarse SOLO cuando el técnico NO puede operar su app móvil (celular robado, batería terminada, equipo dañado). El estado quedará marcado como registrado manualmente por el Asistente.' Selector del nuevo estado del servicio (Salida / En Ruta / Llegada / Ingreso / Inicio Servicio / Finalizado), motivo obligatorio y comentario obligatorio justificando por qué se hace el cambio manual. Queda en el timeline con badge '[CAMBIO MANUAL CRÍTICO — ASISTENTE]' y notifica al Jefe de Operaciones.",
+            "AUDITORÍA: toda acción desde este modal queda registrada con el nombre completo del Asistente, fecha-hora exacta, y el modo utilizado. Visible en el Timeline (HU-52) y en el Historial de Auditoría del Expediente (Módulo 7).",
+            "CATÁLOGO DE TIPOS DE DEMORA/INCIDENTE: se mantiene en la tabla genérica tabla_maestra del sistema (patrón ya utilizado para otros catálogos). Se asignará un IdMaestro nuevo al momento de implementar. El seed inicial incluye: Tráfico, Accidente propio, Accidente ajeno, Falla vehículo, Clima adverso, Cliente no disponible, Problema de acceso, Falta repuesto, Otros.",
+            "DIFERENCIA CON EL APP MÓVIL: este modal es exclusivamente para la intranet (uso del Asistente). El técnico también puede registrar demoras/incidentes y marcar hitos desde su app móvil (Módulo 11 app, responsabilidad de Cristopher). Cuando ambos registran por el mismo tema, aparecen como entradas separadas en el timeline (una con badge 'Técnico', otra con 'Asistente').",
+            "NIVELES DE OFFLINE DEL TÉCNICO (contexto operativo): Nivel 1 — Offline temporal (sin señal/datos pero el app sigue andando): el técnico registra todo en su app, se sincroniza al volver la señal. El Asistente puede dejar una Observación paralela desde Modo 1. Nivel 2 — Celular inoperable (robo, batería terminada): el técnico NO puede registrar nada. El Asistente usa Modo 2 y/o Modo 3 para registrar en nombre del técnico tras hablar por teléfono."
           ],
-          imagenes: ["Ubicación y Ruta - Total Weight Digital Suite.png", "Resgitar Parada - Demora Operativa - Total Weight Digital Suite.png"] },
+          imagenes: ["Seguimiento - Modal Registrar Observacion.png", "Seguimiento - Modal Registrar Demora.png", "Seguimiento - Modal Registrar Cambio de Estado.png"] },
 
-        { id: "HU-54", titulo: "Gestión de Incidencias y Reasignación en Ruta",
-          rol: "Controlador de Operaciones", accion: "registrar incidencias operativas, escalar alertas y reasignar técnicos en ruta",
-          beneficio: "resolver problemas de fuerza mayor (accidentes, falta de repuestos) evitando cancelar el servicio.",
+        { id: "HU-54", sprint: 5, titulo: "Vista de Cierre del Servicio (observacional)",
+          rol: "Asistente de Seguimiento",
+          accion: "revisar el resumen del cierre automático del servicio una vez que el técnico lo finalizó desde su app móvil — ver evidencias cargadas, informe técnico autogenerado, resultado del servicio y acceder al historial completo del día para auditoría",
+          beneficio: "contar con una vista única de todo lo que quedó documentado al cierre del servicio para validar que la información que pasa a Revisión Técnica (Módulo 12) está completa y bien respaldada, sin realizar ninguna acción manual de cierre (el cierre lo hace el sistema automáticamente cuando el técnico marca 'Finalicé el servicio').",
           criterios: [
-            "Permitir \"Registrar Incidencia\" capturando: Tipo (ej. Repuesto no disponible), Severidad, Descripción, Impacto (Detiene servicio) y Evidencia fotográfica.",
-            "Proveer la opción de \"Escalar Alerta Operativa\", seleccionando el Motivo, Responsable destino y un Mensaje, indicando que se notificará vía push/correo.",
-            "Permitir \"Reasignar Técnico en Ruta\", mostrando un mapa con técnicos cercanos y una tabla de \"Técnicos Disponibles\" filtrando por ubicación, ETA de llegada al punto, estado SSOMA y carga operativa."
+            "ACCESO Y VISIBILIDAD DEL TAB: tab '✅ Cierre del Servicio' dentro del modal HU-52 Detalle del Servicio en Ruta. Aparece como 7mo tab solo cuando el estado del servicio es FINALIZADO (técnico marcó 'Finalicé' desde su app móvil o el Asistente lo marcó desde HU-53 Modo 3 crítico). Hasta que el servicio no está finalizado, este tab no se muestra.",
+            "CIERRE ES AUTOMÁTICO, NO MANUAL: el cierre del servicio NO lo hace el Asistente. Lo hace el sistema automáticamente cuando el técnico marca 'Finalicé el servicio' desde su app móvil. En ese momento el sistema: (1) genera el Informe Técnico PDF; (2) consolida las evidencias; (3) calcula el resultado del servicio según el checklist completado; (4) dispara la transición al Módulo 12 Revisión Técnica. El tab es puramente OBSERVACIONAL — el Asistente ve lo que pasó, no decide nada.",
+            "ESTRUCTURA DEL TAB — SOLO 3 SECCIONES (diseño simplificado tras feedback del user para evitar duplicación con los otros tabs del modal): no se muestra galería de evidencias (eso vive en Tab Avance por Equipos sub-tab Fotos de cada equipo), no se muestra checklist de requisitos (es info backend, no accionable por el Asistente), no se muestra transición a Revisión Técnica (es automática e invisible para Seguimiento), no se muestran observaciones por separado (viven dentro de cada informe por equipo), no se muestra card de 'equipos pendientes de reprogramación' (los pendientes se destacan como fila ámbar dentro de la tabla principal de equipos).",
+            "SECCIÓN 1 — HEADLINE DEL CIERRE + MÉTRICAS COMBINADAS: card con fondo soft green y borde 1px verde. Top row: badge grande con resultado del cierre (✅ COMPLETADO si los 4 equipos terminaron / 🟡 COMPLETADO PARCIAL si algún equipo quedó pendiente / ❌ CANCELADO si fue abortado) + chip 'Finalizado: HH:MM' + chip 'Duración: Xh Ymin (+/-Zmin)' + avatar y nombre del técnico que finalizó. Subtitle explicativo: 'El técnico marcó Finalicé el servicio a las HH:MM desde su app móvil. El sistema cerró automáticamente el seguimiento operativo'. Tira inline debajo con 5 KPIs compactos (misma pauta que tab Demoras/Incidencias): ⏱ DURACIÓN · ✅ FINALIZADOS X/Y · 📄 INFORMES · ⚠️ DEMORAS · 📝 REG. ASISTENTE.",
+            "SECCIÓN 2 — TABLA DE EQUIPOS DEL SERVICIO: card con header 'Equipos del Servicio' + subtitle 'Estado final de cada equipo al cierre del servicio' + chip con total. Tabla con 4 columnas: EQUIPO (nombre + S/N en gris pequeño) · TIPO SERVICIO (Calibración / Mantenimiento / Verificación) · ESTADO AL CIERRE (chip color-coded según los 5 estados posibles) · INFO (hora fin + link al informe PDF + flag amber '⚠️ Con observaciones' si el informe trae observaciones del técnico, o 'Sin ejecutar · Esperando decisión J.Ops' si está Pendiente). Las filas de equipos pendientes/parciales tienen fondo ámbar soft (#FEF3C7) para destacarlas visualmente sin necesidad de duplicar card separada. Helper note debajo de la tabla: '💡 Click en cualquier fila para ver el detalle del equipo en el Tab Avance por Equipos'. Footer de la card con summary ('✅ X finalizados · 🟡 Y pendiente de decisión del Jefe de Operaciones') + legend de los 5 estados posibles.",
+            "ESTADOS POSIBLES DEL EQUIPO AL CIERRE (5 estados): ✅ Finalizado (técnico lo terminó y hay informe PDF) / ⚠️ Parcial (técnico lo empezó pero no terminó, hay avance registrado pero no informe final) / 🟡 Pendiente (técnico no lo ejecutó, esperando decisión del Jefe de Operaciones desde Mód 8) / ✅ Reprogramado (el Jefe de Operaciones ya le asignó nueva Programación, link a OS/OM nueva) / ❌ Anulado (el Jefe de Operaciones decidió no ejecutarlo). Los estados Reprogramado y Anulado son estados que se setean post-cierre desde Mód 8 — el tab Cierre refleja el estado actual del equipo en todo momento, aunque la decisión se haya tomado después.",
+            "SECCIÓN 3 — ACTA DE CONFORMIDAD DEL CLIENTE: card con icon 'draw' + title 'Acta de Conformidad del Cliente' + chip verde 'Firmada HH:MM' + subtitle 'Firma capturada por el técnico desde su app móvil'. Layout 2 columnas: LEFT con preview de la firma (box 300x120px) mostrando la firma + leyenda 'FIRMA DIGITAL CONFORME'. RIGHT con info-block: 👤 nombre del firmante + cargo (ej. 'Luis Vega · Jefe de Mantenimiento') + 📱 método de captura ('Firma digital en app del técnico') + 🕐 hora + 📍 GPS ('Planta Ventanilla - verificado') + botón ghost '📥 Descargar acta firmada (PDF)'. Pie de card con nota en italic gray: 'Flujo de captura por definir con cliente — por ahora asumimos firma digital en app del técnico'. Esta asunción se valida con cliente antes de construir en Angular; alternativas posibles: doc físico firmado + foto, envío post-servicio por WSP/correo.",
+            "VISIBILIDAD POST-CIERRE: una vez cerrado el servicio, los tabs Resumen, Avance por Equipos, Mapa GPS, Timeline del Día, Demoras/Incidencias quedan en modo solo-lectura (chip 'Modo auditoría post-servicio' arriba del contenido). El tab Registrar queda deshabilitado con tooltip: 'Servicio finalizado — Para registrar observaciones post-cierre, pedir reapertura al Jefe de Operaciones'. El Asistente igual puede seguir viendo toda la info histórica. El header del modal muestra chip grande '✅ FINALIZADO' verde y el strip de auto-refresh cambia a 'Última actualización HH:MM · Servicio cerrado automáticamente por el sistema'."
           ],
-          imagenes: ["Registrar Incidencia Operativa - Total Weight Digital Suite.png", "Registrar Incidencia Operativa - Total Weight Digital Suite (1).png", "Escalar Alerta Operativa - Total Weight Digital Suite.png", "Reasignar Técnico en Ruta - Total Weight Digital Suite.png"] },
-
-        { id: "HU-55", titulo: "Revisión de Evidencias, Cierre y Auditoría",
-          rol: "Controlador de Operaciones", accion: "revisar las evidencias multimedia enviadas desde campo y cerrar el seguimiento operativo",
-          beneficio: "asegurar que el trabajo técnico cuenta con respaldo documental antes de pasar a la revisión final.",
-          criterios: [
-            "Mostrar una galería de \"Evidencias Recibidas\" (Fotos, Documentos, Firmas) subidas por el técnico desde la App Móvil, con marca de tiempo y GPS verificado.",
-            "Para el \"Cierre del Seguimiento\", mostrar un Checklist de cierre (Servicio finalizado, Evidencias, Firma cliente). Alertar si faltan requisitos (ej. \"Firma cliente pendiente\"). Permitir el cierre seleccionando el Resultado del servicio y un comentario.",
-            "Proveer una vista de \"Historial Operativo\" que grafique todos los eventos en ruta (Asignado, En movimiento, Demoras, ETA recalculado) para fines de auditoría."
-          ],
-          imagenes: ["Ver Evidencias Recibidas - Total Weight Digital Suite.png", "Cerrar Seguimiento Operativo - Total Weight Digital Suite.png", "Historial Operativo - Total Weight Digital Suite.png"] },
+          imagenes: ["Seguimiento - Modal Cierre del Servicio.png"] },
 
         // ─── MÓDULO 12: REVISIÓN TÉCNICA ─────────────────────────────────────────
-        { seccion: "MÓDULO 12: REVISIÓN TÉCNICA", id: "HU-56", titulo: "Bandeja y Detalle del Informe Técnico",
-          rol: "Revisor Técnico", accion: "visualizar la bandeja de informes pendientes y revisar el detalle general del diagnóstico",
-          beneficio: "priorizar mi carga de trabajo, controlar los tiempos de revisión (SLA) y conocer el contexto del servicio ejecutado.",
+        { seccion: "MÓDULO 12: REVISIÓN TÉCNICA", id: "HU-56", sprint: 5, titulo: "Bandeja de Revisión de Informes de Servicio Técnico",
+          rol: "Supervisor / Jefe de Servicio Técnico", accion: "visualizar y filtrar la bandeja de informes de servicio técnico que requieren mi revisión",
+          beneficio: "priorizar mi carga de trabajo y controlar los tiempos de atención de los informes que generan mis técnicos.",
           criterios: [
-            "Mostrar tarjetas de KPIs superiores: Informes Pendientes, En Revisión, Observados, Sin Evidencias y Vencidos SLA.",
-            "Mostrar la \"Eficiencia de Revisión\" y la \"Tasa de Observación\" en la bandeja principal.",
-            "En la vista de Detalle, mostrar los Datos del Reporte, un Resumen del Diagnóstico (hallazgo principal) y el checklist de Validaciones del Informe.",
-            "Permitir filtrar el listado por Estado, Cliente, Tipo de Servicio y Técnico. El select solo debe mostrar los datos tal cual."
+            "Mostrar KPIs superiores: Pendientes de revisión, Pendientes de precotización (con observaciones y sin precotización), Revisados sin precotización, Revisados con precotización.",
+            "Mostrar tabla con columnas: Fecha ejecución, OS, Cliente, Equipo, Técnico, chip \"Con observaciones\" / \"Sin observaciones\", Estado y Acciones.",
+            "Estados posibles del informe: Pendiente de revisión, Pendiente de precotización, Revisado.",
+            "Permitir filtrar por Estado, Cliente, Técnico, Tipo de Servicio y Rango de fechas. El select solo debe mostrar los datos tal cual.",
+            "Click en la fila abre el Modal de Detalle del Servicio (HU-57). La columna Acciones incluye el ícono \"Editar\" que lleva directo a la ficha editable (HU-58).",
+            "Mostrar un indicador visual claro en la fila cuando el servicio tiene observaciones registradas por el técnico."
           ],
-          imagenes: ["Bandeja de Revisión Técnica - Total Weight Digital Suite.png", "Detalle de Informe Técnico - Total Weight Digital Suite.png"] },
+          imagenes: ["Revisión Técnica - Bandeja Principal.png"] },
 
-        { id: "HU-57", titulo: "Workspace de Revisión y Control de Evidencias",
-          rol: "Revisor Técnico", accion: "utilizar un entorno de trabajo integrado para contrastar el informe PDF con sus evidencias fotográficas",
-          beneficio: "realizar un control de calidad cruzado, asegurando que el diagnóstico escrito coincida con las pruebas en campo.",
+        { id: "HU-57", sprint: 5, titulo: "Modal de Detalle del Servicio Técnico",
+          rol: "Supervisor / Jefe de Servicio Técnico", accion: "ver un modal con el detalle completo del informe que generó el técnico",
+          beneficio: "decidir si marco el informe como revisado, lo edito o genero una precotización, con toda la información del servicio a la vista.",
           criterios: [
-            "Proveer un \"Workspace de Revisión\" que muestre el documento PDF interactivo lado a lado con un \"Checklist de control técnico\".",
-            "Mostrar alertas de \"Validación Automática\" en el workspace (Ej. Firma ausente, Repuesto sin código).",
-            "Proveer una vista dedicada de \"Evidencias del Servicio\" categorizada (Fotos, Documentos, Firmas, Faltantes).",
-            "Permitir visualizar el detalle de cada evidencia (Metadatos, GPS, fecha/hora) y descargar el paquete completo o solicitar evidencias faltantes."
+            "Modal grande (1280px) con tabs: Resumen, Detalle del Servicio, Descripción Complementaria, Observaciones, Recomendaciones, Ensayos (pesaje + excentricidad), Fotos e Historial.",
+            "Header del modal con datos generales en solo lectura: OS, cliente, equipo, técnico y fecha de ejecución. Nunca editables.",
+            "Cada tab muestra lo registrado por el técnico (checklist marcado, texto, mediciones, galería).",
+            "Footer con botones condicionales según el estado del servicio: sin observaciones → \"Editar\" + \"Registrar Revisión\"; con observaciones sin precotización → \"Editar\" + \"Registrar Precotización\" (NO aparece \"Revisar\"); con precotización ya registrada → \"Editar\" + \"Registrar Revisión\"; ya Revisado → solo lectura (botones ocultos).",
+            "Si el servicio ya fue revisado y generó precotización, mostrar en el header un badge informativo: \"Generó Precotización → Propuesta PROP-XXX\" con link a la propuesta derivada.",
+            "Tab Historial inmutable que registra: ediciones realizadas por el supervisor (sección, valor anterior, valor nuevo, fecha, usuario), el registro de la precotización generada y el registro de la revisión."
           ],
-          imagenes: ["Workspace de Revisión Técnica - Total Weight Digital Suite.png", "Ver Evidencias del Servicio - Total Weight Digital Suite.png"] },
+          imagenes: ["Revisión Técnica - Modal Detalle Sin Observaciones.png", "Revisión Técnica - Modal Detalle Con Observaciones.png", "Revisión Técnica - Modal Detalle Revisado.png"] },
 
-        { id: "HU-58", titulo: "Ciclo de Corrección (Observar, Solicitar y Comparar Versiones)",
-          rol: "Revisor Técnico", accion: "observar informes con errores, solicitar su corrección al técnico y comparar las nuevas versiones",
-          beneficio: "asegurar la exactitud de la información técnica antes de entregarla al cliente final.",
+        { id: "HU-58", sprint: 5, titulo: "Ficha del Servicio Técnico (Edición y Registro de Precotización)",
+          rol: "Supervisor / Jefe de Servicio Técnico", accion: "editar las secciones del informe y registrar la precotización cuando el servicio tenga observaciones",
+          beneficio: "corregir la información registrada por el técnico y canalizar oportunidades comerciales al área comercial sin perder trazabilidad.",
           criterios: [
-            "Observar/Solicitar: Permitir \"Observar Informe Técnico\" exigiendo seleccionar el Motivo y las Secciones Afectadas. Luego, permitir \"Solicitar Corrección\" definiendo qué debe corregirse, un mensaje detallado y un Plazo de entrega. El sistema debe cambiar el estado a \"En Corrección\" y notificar automáticamente al técnico responsable.",
-            "Comparar: Al recibir una nueva versión, proveer una herramienta para \"Comparar Versiones del Informe\" mostrando lado a lado la versión Anterior vs. la Corregida.",
-            "Resaltar visualmente las áreas modificadas y las nuevas evidencias adjuntas en la versión corregida."
+            "Pantalla completa (no modal). Breadcrumb: Bandeja › OS-XXX › Edición.",
+            "Datos generales siempre en solo lectura (cliente, sede, equipo, OS, técnico, fechas). Nunca editables.",
+            "Secciones editables: Detalle del Servicio (checklist), Descripción Complementaria, Observaciones, Recomendaciones, Ensayos (pesaje + excentricidad).",
+            "Fotos del servicio: galería en solo lectura (las sube el técnico desde la app).",
+            "Sección Precotización aparece automáticamente cuando el servicio tiene observaciones (ya sea registradas por el técnico o añadidas por el supervisor durante la edición). Contiene ítems sugeridos precargados por el técnico (descripción, cantidad, comentario) y permite al supervisor añadir, quitar o modificar ítems.",
+            "Dos modos de la ficha: Modo Edición (desde \"Editar\") → todas las secciones editables + sección Precotización condicional; Modo Precotización (desde \"Registrar Precotización\") → servicio en solo lectura + solo sección Precotización editable, con botón \"Editar\" en el header para pasar a modo completo.",
+            "Validación: si hay observaciones y la sección Precotización está vacía, el botón Guardar se bloquea.",
+            "Guardar la ficha persiste los cambios pero NO cambia el estado del servicio a Revisado (eso lo hace HU-59). Al guardar, vuelve al modal de detalle (HU-57)."
           ],
-          imagenes: ["Observar Informe Técnico - Total Weight Digital Suite.png", "Solicitar Corrección de Informe - Total Weight Digital Suite.png", "Comparar Versiones del Informe - Total Weight Digital Suite.png"] },
+          imagenes: ["Revisión Técnica - Ficha Datos y Procedimiento.png", "Revisión Técnica - Ficha Ensayos.png", "Revisión Técnica - Ficha Fotos y Descripción.png", "Revisión Técnica - Ficha Hallazgos y Precotización.png"] },
 
-        { id: "HU-59", titulo: "Aprobación, Liberación y Auditoría del Informe",
-          rol: "Revisor Técnico", accion: "aprobar el informe definitivo, revisar su historial de auditoría y liberarlo a la siguiente etapa",
-          beneficio: "certificar la calidad del servicio y avanzar el flujo hacia la conformidad del cliente.",
+        { id: "HU-59", sprint: 5, titulo: "Registrar Revisión del Informe + Historial",
+          rol: "Supervisor / Jefe de Servicio Técnico", accion: "marcar un informe como revisado y consultar el historial de ediciones del servicio",
+          beneficio: "cerrar formalmente el proceso de control del servicio y mantener trazabilidad completa de las acciones realizadas.",
           criterios: [
-            "Aprobación: Permitir \"Aprobar Informe\" si la lista de validaciones técnicas está completa (Datos, Diagnóstico, Evidencias, Firmas).",
-            "Liberación: Al intentar \"Liberar a Conformidad\", validar el cumplimiento estricto. Si faltan evidencias críticas, mostrar una alerta de bloqueo (\"No es posible liberar el informe\"). Si cumple, mostrar la Siguiente Etapa y avanzar el Progreso del Expediente.",
-            "Auditoría: Proveer un \"Historial del Informe Técnico\" que registre inmutablemente: Revisiones iniciadas, Observaciones registradas, Correcciones solicitadas y Nuevas versiones recibidas."
+            "Modal secundario \"Registrar Revisión\" accesible desde HU-57 solo cuando el servicio no tiene observaciones pendientes de precotizar.",
+            "Mostrar checklist automático de cumplimiento: Fotos obligatorias presentes, Ensayos registrados, Observaciones precotizadas (si aplica).",
+            "Campo opcional \"Nota del supervisor\" (texto libre).",
+            "Botón \"Marcar como Revisado\" habilitado solo si todas las condiciones del checklist se cumplen. Al confirmar, el estado del servicio cambia a Revisado y queda inmutable (no se puede volver a editar).",
+            "Un servicio solo puede revisarse UNA vez.",
+            "Tab Historial dentro del modal de detalle (HU-57) con registro inmutable de: ediciones realizadas por el supervisor (sección, valor anterior, valor nuevo, fecha, usuario), registro de la precotización generada y registro de la revisión (fecha, usuario, nota)."
           ],
-          imagenes: ["Aprobar Informe Técnico - Total Weight Digital Suite.png", "Liberar Informe a Conformidad - Total Weight Digital Suite.png", "Liberar Informe (Bloqueado) - Total Weight Digital Suite.png", "Historial y Auditoría del Informe - Total Weight Digital Suite.png"] },
+          imagenes: ["Revisión Técnica - Modal Registrar Revisión.png", "Revisión Técnica - Modal Historial.png"] },
 
-        { id: "HU-60", titulo: "Derivación a Precotización",
-          rol: "Revisor Técnico", accion: "derivar hallazgos técnicos críticos hacia el área comercial",
-          beneficio: "que el equipo de ventas genere proactivamente una cotización por repuestos o servicios adicionales detectados.",
+        { id: "HU-60", sprint: 5, titulo: "Tab Precotizaciones Técnicas en Bandeja de Propuestas",
+          rol: "Comercial / Supervisor Comercial", accion: "visualizar las precotizaciones generadas por los supervisores de servicio técnico y convertirlas en propuesta",
+          beneficio: "aprovechar oportunidades comerciales detectadas en campo y generar propuestas con información precargada, manteniendo todo asociado al RQ origen.",
           criterios: [
-            "Mostrar el Resumen del Diagnóstico crítico que origina la derivación (Ej. Falla en tarjeta principal).",
-            "Ejecutar una \"Transferencia Automática de Datos\" adjuntando el Expediente, OS, Informe y Evidencias hacia el nuevo requerimiento comercial.",
-            "Permitir listar los \"Ítems sugeridos para cotización\" (Descripción, Cantidad y Disponibilidad en inventario).",
-            "Requerir la asignación de Prioridad y un Comentario para el equipo de precotización."
+            "Añadir un tab adicional dentro de la Bandeja de Propuestas (Mód 2): \"Propuestas\" | \"Precotizaciones (N)\".",
+            "KPIs del tab Precotizaciones: Pendientes y Convertidas en Propuesta.",
+            "Filtros: Cliente, Supervisor, Rango de fechas, Estado. El select solo debe mostrar los datos tal cual.",
+            "Tabla con columnas: Fecha, RQ origen, Cliente, Equipo, Supervisor, N° ítems sugeridos, Estado, Acciones.",
+            "Estados posibles (solo dos): Pendiente, Propuesta.",
+            "Acciones por fila: \"Ver Detalle\" (modal) y \"Generar Propuesta\".",
+            "Modal de Detalle de Precotización (sin fotos — es Comercial): datos de la precotización (RQ origen con link, cliente, sede, equipo, supervisor, fecha), observaciones y recomendaciones del servicio origen (texto), tabla de ítems sugeridos. Botones: \"Descargar Informe Técnico (PDF)\", \"Descargar Precotización (PDF autogenerado)\" y \"Generar Propuesta\". Si la precotización ya se convirtió, mostrar chip verde \"Convertida en Propuesta PROP-XXX\" con link.",
+            "Flujo \"Generar Propuesta\": abre la ficha de nueva propuesta precargada con RQ origen, cliente, sede, equipo, conceptos sugeridos (como líneas) y observaciones del supervisor en nota interna. NO precarga: precios, condiciones de pago, textos base.",
+            "En el header de la ficha de propuesta derivada, mostrar un banner azul \"Nace de Precotización\" con tooltip al hover (resumen rápido: RQ, servicio, supervisor, fecha, N° ítems) y click que abre el modal de detalle de la precotización.",
+            "El estado de la precotización pasa a \"Propuesta\" SOLO cuando el comercial GUARDA la nueva propuesta. Si cierra sin guardar, sigue en Pendiente.",
+            "Trazabilidad bidireccional: la ficha de propuesta muestra el banner \"Nace de Precotización\"; el modal detalle de la precotización muestra \"Convertida en Propuesta PROP-XXX\"; el modal detalle del servicio en Mód 12 muestra el badge \"Generó Precotización → Propuesta PROP-XXX\".",
+            "La reasignación de precotizaciones no se gestiona en esta HU: la cubre el sistema de suplencias existente, que hereda precotizaciones, propuestas y demás pendientes del titular ausente."
           ],
-          imagenes: ["Derivar a Precotización - Total Weight Digital Suite.png"] },
+          imagenes: ["Revisión Técnica - Bandeja Precotizaciones Comercial.png", "Revisión Técnica - Modal Precotización Pendiente.png", "Revisión Técnica - Modal Precotización Convertida.png", "Revisión Técnica - Ficha Propuesta Derivada.png"] },
 
         // ─── MÓDULO 13: METROLOGÍA ───────────────────────────────────────────────
         { seccion: "MÓDULO 13: METROLOGÍA", id: "HU-61", titulo: "Maestro de Equipos por Cliente",
@@ -1199,7 +1267,8 @@
             "Mostrar un listado de propuestas en estado \"POR ENVIAR\", indicando Versión, RQ asociado, Cliente, Moneda y Monto.",
             "Al seleccionar una propuesta, mostrar el \"Detalle de Propuesta\" (Tipo de servicio, Plazo de Entrega, Garantía) y el \"Resumen Comercial\".",
             "Mostrar los \"Documentos Adjuntos\" (Ej. PDF de la Propuesta Técnica, Cuadro de Costos en Excel) permitiendo su previsualización.",
-            "Habilitar la acción \"Enviar Propuesta al Cliente\" (icono de correo) para desencadenar el envío externo."
+            "Habilitar la acción \"Enviar Propuesta al Cliente\" (icono de correo) para desencadenar el envío externo.",
+            "DISPARADOR AUTOMÁTICO: cuando el comercial envía la propuesta por correo al cliente, el sistema debe crear automáticamente la PRIMERA ACCIÓN DE SEGUIMIENTO en el Módulo 5 Seguimiento con los siguientes valores por defecto: Tipo = 'Llamada al cliente', Plazo máximo = 5 minutos a partir del envío, Prioridad = Alta. El comercial puede editar o reprogramar esta acción posteriormente desde el módulo de Seguimiento (HU-20), pero NO puede eliminarla ni dejar sin agendar la primera acción."
           ],
           imagenes: ["Propuestas por enviar.png"] },
 
@@ -1325,7 +1394,29 @@
             "Permitir activar o desactivar un equipo sin eliminarlo, manteniendo la referencia en propuestas y órdenes de servicio históricas.",
             "Validar la unicidad del Número de Serie dentro de los equipos activos de un mismo cliente."
           ],
-          imagenes: ["Mantenimiento de Equipos de Cliente - Listado Maestro.png", "Mantenimiento de Equipos - Nuevo Registro.png"] }
+          imagenes: ["Mantenimiento de Equipos de Cliente - Listado Maestro.png", "Mantenimiento de Equipos - Nuevo Registro.png"] },
+
+        // ─── MÓDULO 16: NOTIFICACIONES Y ALERTAS ────────────────────────────────
+        { seccion: "MÓDULO 16: NOTIFICACIONES Y ALERTAS", id: "HU-90", sprint: 5, titulo: "Centro de Notificaciones del Usuario",
+          rol: "Cualquier usuario del sistema (comercial, operaciones, jefe, admin, etc.)",
+          accion: "consultar en un solo lugar todas las notificaciones y alertas que el sistema genera a lo largo del día desde los distintos módulos",
+          beneficio: "mantener una experiencia unificada de avisos sin tener que revisar módulo por módulo y poder marcar como leídas o archivadas las notificaciones recibidas.",
+          criterios: [
+            "ESTE MÓDULO ES TRANSVERSAL: no genera notificaciones por sí mismo. Las notificaciones se originan en los otros módulos (Propuestas, Visto Bueno, Seguimiento, OC, OS, Programación, Control de Campo, SSOMA, Revisión Técnica, etc.) y son consumidas acá por el usuario destinatario.",
+            "SIN CONFIGURACIÓN POR EL USUARIO: las reglas de qué canales se usan por tipo (correo, push, intranet) y los horarios de silencio son definidos por el sistema. El usuario no puede apagar ni modificar nada; todas las notificaciones funcionan siempre.",
+            "BELL ICON EN EL HEADER: siempre visible, con badge rojo mostrando el número de notificaciones no leídas. Al clickear abre un popover rápido con las últimas 5 notificaciones no leídas (orden cronológico descendente).",
+            "POPOVER DEL BELL: cada fila muestra icono tipo + remitente + resumen corto + tiempo relativo ('hace 15 min'). Las no leídas tienen punto azul izquierdo. Pie del popover con dos acciones: '✓ Marcar las 5 como leídas' (afecta solo las visibles en el popover) y '→ Ir a la bandeja de notificaciones'.",
+            "NAVEGACIÓN DESDE EL POPOVER: click en una notificación → navega a la Bandeja Completa con esa notificación abierta en el panel detalle derecho.",
+            "BANDEJA COMPLETA (ruta propia /notificaciones) — PATRÓN TIPO EMAIL (dos paneles): panel izquierdo con la lista (40% ancho) agrupada por Hoy / Ayer / Esta semana / Más antiguas; panel derecho con el detalle de la notificación seleccionada (60% ancho).",
+            "FILTROS en la cabecera de la bandeja: Módulo origen (multi-select), Tipo de notificación (recordatorio / aprobación pendiente / alerta operativa / cambio de estado / SSOMA / etc.), Estado (no leída / leída / archivada), Rango de fecha (hoy / esta semana / mes / custom), Remitente (usuario específico o 'Sistema'), buscador general por N° de documento, cliente, usuario o palabra clave.",
+            "LISTA IZQUIERDA: cada fila muestra icono tipo + remitente + título corto + preview de mensaje + tiempo relativo. Las no leídas con fondo azul claro y punto azul. La fila seleccionada queda resaltada.",
+            "PANEL DETALLE DERECHO: muestra icono tipo + título + chip módulo origen + chip tipo + fecha/hora completa + remitente (avatar + nombre) + mensaje completo. Dos botones de acción al pie: 'Ir al elemento origen' (abre modal/ficha del documento) y 'Archivar' (solo si está leída).",
+            "AL ABRIR UNA NOTIFICACIÓN EN EL PANEL: se marca automáticamente como leída.",
+            "CHIP VISUAL DIFERENCIADO PARA ALERTAS OPERATIVAS: las alertas del Módulo 11 Control de Campo (GPS parado > 10 min, proximidad detectada 300m, sin ingreso 15 min, pérdida de contacto, incidente crítico, etc.) se muestran con chip rojo 'Alerta operativa' + ícono warning. Visualmente destacadas respecto a notificaciones normales. Los umbrales del sistema son los definidos en el Módulo 11.",
+            "LINK PROFUNDO: cada notificación lleva al usuario al elemento origen con un click (ej. 'OS esperando emisión' abre el Modal Detalle de la OS; 'GPS parado' abre el Detalle del Servicio en el Módulo 11 con el tab de mapa activo; 'Precotización recibida' abre el modal de precotización en la bandeja de Propuestas).",
+            "ESTADOS DE UNA NOTIFICACIÓN: no leída (default) → leída (automático al abrirla) → archivada (acción manual, sale de la bandeja activa pero queda accesible en el filtro 'archivadas')."
+          ],
+          imagenes: ["Notificaciones - Popover del Bell.png", "Notificaciones - Bandeja Principal.png"] }
     ];
 
     const listContainer = document.getElementById('hu-list');
